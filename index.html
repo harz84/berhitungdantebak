@@ -1,18 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="id"> {/* Tambahkan atribut lang */}
 <head>
+    <meta charset="UTF-8"> {/* Tambahkan charset */}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> {/* WAJIB untuk mobile */}
     <title>Aplikasi Belajar Anak</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> {/* Tambahkan Font Awesome untuk ikon */}
     <style>
-        body { background-color: #F4E4BC; text-align: center; font-family: 'Poppins', sans-serif; }
-        h1 { font-size: 96px; }
-        .button { padding: 50px; font-size: 72px; margin: 30px; background-color: #A3D9A5; color: white; border: none; border-radius: 30px; cursor: pointer; }
-        .button:hover { background-color: #8CCB8F; }
+        :root { /* Definisikan variabel warna untuk konsistensi */
+            --bg-color: #fdf0d5; /* Lebih lembut dari F4E4BC */
+            --primary-color: #f08080; /* Light Coral - ceria */
+            --primary-hover: #e57373;
+            --secondary-color: #66d9ef; /* Sky blue - kontras */
+            --secondary-hover: #4fc3f7;
+            --text-color: #333;
+            --white-color: #fff;
+            --border-radius: 15px; /* Lebih kecil dari 30px */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh; /* Pastikan body mengisi layar */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Pusatkan konten vertikal */
+            align-items: center; /* Pusatkan konten horizontal */
+        }
+
+        h1 {
+            /* Gunakan clamp untuk ukuran font responsif */
+            font-size: clamp(2.5rem, 10vw, 4rem); /* min, preferred, max */
+            color: var(--primary-color);
+            margin-bottom: 1.5em; /* Spasi relatif */
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column; /* Tombol tersusun vertikal di mobile */
+            gap: 20px; /* Jarak antar tombol */
+            width: 90%; /* Batasi lebar */
+            max-width: 500px; /* Batas lebar maksimum */
+        }
+
+        .button {
+            padding: 20px 30px; /* Padding lebih kecil */
+            /* Font size responsif */
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--white-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease; /* Animasi halus */
+            display: flex; /* Untuk ikon dan teks */
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Jarak ikon dan teks */
+        }
+        .button:hover {
+            transform: scale(1.03); /* Efek hover sedikit membesar */
+        }
+        .button:active {
+            transform: scale(0.98); /* Efek klik */
+        }
+
+        .button-hitung {
+            background-color: var(--primary-color);
+        }
+        .button-hitung:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .button-tebak {
+            background-color: var(--secondary-color);
+        }
+        .button-tebak:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .button i { /* Styling ikon */
+             font-size: 0.9em; /* Sesuaikan ukuran ikon relatif thd font tombol */
+        }
+
     </style>
 </head>
 <body>
-    <h1>Selamat Datang di Aplikasi Belajar!</h1>
-    <button class="button" onclick="location.href='berhitung.html'">Berhitung</button>
-    <button class="button" onclick="location.href='tebak.html'">Tebak-Tebakan</button>
+    <h1>Yuk, Mulai Belajar!</h1> {/* Judul lebih singkat & ramah */}
+    <div class="menu-container">
+         {/* Tambahkan ikon */}
+        <button class="button button-hitung" onclick="location.href='berhitung.html'">
+            <i class="fas fa-calculator"></i> Berhitung
+        </button>
+        <button class="button button-tebak" onclick="location.href='tebak.html'">
+             <i class="fas fa-question-circle"></i> Tebak-Tebakan
+        </button>
+    </div>
 </body>
 </html>
