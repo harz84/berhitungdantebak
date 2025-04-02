@@ -1,158 +1,446 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Tebak-Tebakan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #F4E4BC; text-align: center; font-family: 'Poppins', sans-serif; }
-        h1 { font-size: 96px; }
-        .button { padding: 50px; font-size: 72px; margin: 30px; background-color: #F7B7A3; color: white; border: none; border-radius: 30px; cursor: pointer; }
-        .button:hover { background-color: #F5A589; }
-        #soal { font-size: 80px; margin: 50px; }
-        .opsi { padding: 30px; font-size: 60px; margin: 20px; background-color: #F7B7A3; color: white; border: none; border-radius: 20px; cursor: pointer; }
-        .opsi:hover { background-color: #F5A589; }
-        .home-btn { background-color: #FFD700; padding: 30px; font-size: 60px; border-radius: 20px; cursor: pointer; }
-        #notifikasi { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 96px; padding: 40px; border-radius: 20px; display: none; }
-        .benar { background-color: #A3D9A5; color: white; animation: fadeInOut 2s; }
-        .salah { background-color: #F28C82; color: white; animation: fadeInOut 2s; }
-        @keyframes fadeInOut { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+        :root { /* Gunakan variabel warna yang sama */
+            --bg-color: #fdf0d5;
+            --primary-color: #66d9ef; /* Warna tema tebak */
+            --primary-hover: #4fc3f7;
+            --secondary-color: #f08080; /* Warna opsi */
+            --secondary-hover: #e57373;
+            --text-color: #333;
+            --white-color: #fff;
+            --correct-color: #81c784; /* Hijau lebih lembut */
+            --wrong-color: #e57373; /* Merah lebih lembut */
+            --border-radius: 15px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            color: var(--primary-color);
+            margin-bottom: 1em;
+            text-align: center;
+        }
+
+        /* Kontainer untuk tombol pilihan awal */
+        #pilihan-kategori {
+             display: flex;
+             flex-direction: column;
+             gap: 20px;
+             width: 90%;
+             max-width: 500px;
+             margin-bottom: 30px;
+        }
+
+        .button-kategori { /* Tombol pilih Hewan/Buah */
+            padding: 20px 30px;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            width: 100%;
+        }
+        .button-kategori:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.03);
+        }
+         .button-kategori:active {
+            transform: scale(0.98);
+        }
+
+
+        /* Kontainer untuk Kuis */
+        #kuis-container {
+            display: none; /* Sembunyikan awalnya */
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        #soal {
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            margin-bottom: 30px;
+            min-height: 3em; /* Beri ruang agar layout stabil */
+            line-height: 1.4;
+        }
+
+        #opsiJawaban {
+            display: flex;
+            flex-direction: column; /* Opsi vertikal */
+            gap: 15px; /* Jarak antar opsi */
+            margin-bottom: 30px;
+        }
+
+        .opsi {
+            padding: 15px 20px;
+            font-size: clamp(1.2rem, 4.5vw, 2rem);
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .opsi:hover {
+            background-color: var(--secondary-hover);
+            transform: scale(1.03);
+        }
+        .opsi:active {
+            transform: scale(0.98);
+        }
+
+        /* Tombol Home */
+         .home-btn {
+            background-color: #ffcc80; /* Warna oranye lembut */
+            color: var(--text-color);
+            padding: 15px 25px;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 20px; /* Jarak dari elemen terakhir */
+            display: inline-flex; /* Agar ikon dan teks sejajar */
+            align-items: center;
+            gap: 8px;
+        }
+        .home-btn:hover {
+            background-color: #ffb74d; /* Oranye lebih gelap */
+            transform: scale(1.05);
+        }
+         .home-btn:active {
+            transform: scale(0.98);
+        }
+
+
+        /* Notifikasi */
+        #notifikasi-overlay { /* Lapisan latar belakang gelap */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi transparan */
+            display: none; /* Sembunyikan awalnya */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Pastikan di atas elemen lain */
+        }
+        #notifikasi {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            padding: 30px 50px;
+            border-radius: var(--border-radius);
+            color: var(--white-color);
+            display: flex; /* Untuk ikon */
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transform: scale(0.5); /* Mulai dari kecil */
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Animasi muncul */
+        }
+         #notifikasi i { /* Ikon di notifikasi */
+             font-size: 1.2em;
+         }
+
+        .benar { background-color: var(--correct-color); }
+        .salah { background-color: var(--wrong-color); }
+
+        /* Animasi untuk show/hide notifikasi */
+        #notifikasi-overlay.show #notifikasi {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Progress Bar (opsional tapi bagus) */
+        #progress-container {
+            width: 80%;
+            max-width: 400px;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px auto; /* Tengah horizontal */
+            overflow: hidden; /* Agar progress bar tidak keluar */
+        }
+        #progress-bar {
+            width: 0%; /* Mulai dari 0 */
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            transition: width 0.5s ease; /* Animasi progress */
+        }
+         #level-info {
+             font-size: clamp(1rem, 3.5vw, 1.3rem);
+             margin-top: 5px;
+             color: var(--text-color);
+         }
+
     </style>
 </head>
 <body>
     <h1>Pilih Tebak-Tebakan</h1>
-    <button class="button" onclick="mulaiLevel('hewan')">Tebak Hewan</button>
-    <button class="button" onclick="mulaiLevel('buah')">Tebak Buah</button>
-    <div id="soal"></div>
-    <div id="opsiJawaban" style="display: none;"></div>
-    <div id="notifikasi"></div>
-    <br>
-    <button class="home-btn" onclick="location.href='index.html'">🏠 Home</button>
+
+    <div id="pilihan-kategori">
+        <button class="button-kategori" onclick="mulaiLevel('hewan')"> <i class="fas fa-paw"></i> Tebak Hewan</button>
+        <button class="button-kategori" onclick="mulaiLevel('buah')"> <i class="fas fa-apple-alt"></i> Tebak Buah</button>
+    </div>
+
+    <div id="kuis-container">
+        <div id="soal"></div>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+         <div id="level-info"></div>
+        <div id="opsiJawaban"></div>
+    </div>
+
+     {/* Pindahkan Notifikasi ke dalam Overlay */}
+    <div id="notifikasi-overlay">
+        <div id="notifikasi">
+            <i class=""></i> {/* Ikon akan diisi JS */}
+            <span id="notifikasi-teks"></span>
+        </div>
+    </div>
+
+    <button class="home-btn" onclick="kembaliKeMenu()"> <i class="fas fa-home"></i> Home</button>
+
     <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
+        const soalPerLevel = 5; // Kurangi jumlah soal per level agar tidak terlalu lama
+        const totalLevel = 3;
+
+        // --- DATA SOAL (CONTOH SUDAH DIPERBAIKI) ---
         const levels = {
             hewan: [
-                [ // Level 1
-                    { soal: "Hewan apa yang punya lelet jalannya?", jawaban: "kura-kura", opsi: ["kura-kura", "kelinci", "burung"] },
-                    { soal: "Hewan apa yang suka nyanyi?", jawaban: "burung", opsi: ["burung", "kucing", "ikan"] },
-                    { soal: "Hewan apa yang besar dan abu-abu?", jawaban: "gajah", opsi: ["gajah", "tikus", "kamera"] },
-                    { soal: "Hewan apa yang suka melompat?", jawaban: "kelinci", opsi: ["kelinci", "kura-kura", "gajah"] },
-                    { soal: "Hewan apa yang punya buntut panjang?", jawaban: "monyet", opsi: ["monyet", "ikan", "burung"] },
-                    { soal: "Hewan apa yang suka berenang?", jawaban: "ikan", opsi: ["ikan", "kucing", "kelinci"] },
-                    { soal: "Hewan apa yang punya empat kaki dan menggonggong?", jawaban: "anjing", opsi: ["anjing", "burung", "tikus"] },
-                    { soal: "Hewan apa yang suka tidur?", jawaban: "kucing", opsi: ["kucing", "gajah", "ikan"] },
-                    { soal: "Hewan apa yang punya sayap?", jawaban: "burung", opsi: ["burung", "kura-kura", "monyet"] },
-                    { soal: "Hewan apa yang kecil dan suka makan keju?", jawaban: "tikus", opsi: ["tikus", "gajah", "anjing"] }
+                [ // Level 1 (Lebih mudah, deskriptif)
+                    { soal: "Aku besar, punya belalai panjang, dan telingaku lebar. Siapakah aku?", jawaban: "gajah", opsi: ["gajah", "badak", "kuda nil"] },
+                    { soal: "Aku suka makan wortel dan melompat dengan telinga panjangku. Siapakah aku?", jawaban: "kelinci", opsi: ["kelinci", "kanguru", "kucing"] },
+                    { soal: "Aku bisa terbang dan suaraku merdu di pagi hari. Siapakah aku?", jawaban: "burung", opsi: ["burung", "ayam", "lebah"] },
+                    { soal: "Aku punya tempurung keras dan jalanku lambat. Siapakah aku?", jawaban: "kura-kura", opsi: ["kura-kura", "kepiting", "semut"] },
+                    { soal: "Aku mengeong dan suka dielus. Siapakah aku?", jawaban: "kucing", opsi: ["kucing", "anjing", "tikus"] }
                 ],
-                [ // Level 2
-                    { soal: "Hewan apa yang bisa terbang tapi bukan burung?", jawaban: "kelelawar", opsi: ["kelelawar", "burung", "ikan"] },
-                    { soal: "Hewan apa yang punya belalai?", jawaban: "gajah", opsi: ["gajah", "tikus", "kucing"] },
-                    { soal: "Hewan apa yang hidup di air dan punya cangkang?", jawaban: "kura-kura", opsi: ["kura-kura", "kelinci", "burung"] },
-                    { soal: "Hewan apa yang suka makan wortel?", jawaban: "kelinci", opsi: ["kelinci", "ikan", "monyet"] },
-                    { soal: "Hewan apa yang punya leher panjang?", jawaban: "jerapah", opsi: ["jerapah", "kucing", "tikus"] },
-                    { soal: "Hewan apa yang suka menggali tanah?", jawaban: "tikus", opsi: ["tikus", "burung", "gajah"] },
-                    { soal: "Hewan apa yang punya tanduk?", jawaban: "kambing", opsi: ["kambing", "ikan", "kelinci"] },
-                    { soal: "Hewan apa yang suka berkokok?", jawaban: "ayam", opsi: ["ayam", "kucing", "burung"] },
-                    { soal: "Hewan apa yang punya bulu tebal?", jawaban: "beruang", opsi: ["beruang", "tikus", "monyet"] },
-                    { soal: "Hewan apa yang suka makan bambu?", jawaban: "panda", opsi: ["panda", "gajah", "ikan"] }
+                [ // Level 2 (Sedikit lebih sulit)
+                    { soal: "Aku raja hutan dengan surai di leherku. Siapakah aku?", jawaban: "singa", opsi: ["singa", "harimau", "beruang"] },
+                    { soal: "Aku berenang di air, punya sirip dan ekor. Siapakah aku?", jawaban: "ikan", opsi: ["ikan", "udang", "katak"] },
+                    { soal: "Aku punya leher sangat panjang untuk makan daun di pohon tinggi. Siapakah aku?", jawaban: "jerapah", opsi: ["jerapah", "unta", "zebra"] },
+                    { soal: "Aku hitam putih dan suka makan bambu. Siapakah aku?", jawaban: "panda", opsi: ["panda", "beruang kutub", "koala"] },
+                    { soal: "Aku menggonggong dan menjaga rumah. Siapakah aku?", jawaban: "anjing", opsi: ["anjing", "serigala", "rubah"] }
                 ],
-                [ // Level 3
-                    { soal: "Hewan apa yang bisa berubah warna?", jawaban: "bunglon", opsi: ["bunglon", "kucing", "burung"] },
-                    { soal: "Hewan apa yang punya kantong di perut?", jawaban: "kanguru", opsi: ["kanguru", "tikus", "ikan"] },
-                    { soal: "Hewan apa yang hidup di kutub dan putih?", jawaban: "beruang kutub", opsi: ["beruang kutub", "gajah", "kelinci"] },
-                    { soal: "Hewan apa yang punya cakar tajam dan terbang?", jawaban: "elang", opsi: ["elang", "kura-kura", "monyet"] },
-                    { soal: "Hewan apa yang suka menyanyi di malam hari?", jawaban: "jangkrik", opsi: ["jangkrik", "burung", "tikus"] },
-                    { soal: "Hewan apa yang punya duri di tubuhnya?", jawaban: "landak", opsi: ["landak", "ikan", "kucing"] },
-                    { soal: "Hewan apa yang hidup di laut dan punya delapan kaki?", jawaban: "gurita", opsi: ["gurita", "kelinci", "gajah"] },
-                    { soal: "Hewan apa yang suka mengendus?", jawaban: "anjing", opsi: ["anjing", "burung", "tikus"] },
-                    { soal: "Hewan apa yang punya bintik-bintik di tubuhnya?", jawaban: "macan tutul", opsi: ["macan tutul", "ikan", "kura-kura"] },
-                    { soal: "Hewan apa yang bisa lari sangat cepat?", jawaban: "cheetah", opsi: ["cheetah", "gajah", "burung"] }
+                [ // Level 3 (Lebih menantang)
+                     { soal: "Aku bisa berubah warna kulit sesuai tempatku. Siapakah aku?", jawaban: "bunglon", opsi: ["bunglon", "cicak", "ular"] },
+                     { soal: "Aku punya kantong di perut untuk membawa anakku. Siapakah aku?", jawaban: "kanguru", opsi: ["kanguru", "koala", "kelinci"] },
+                     { soal: "Aku hidup di kutub, berbulu putih tebal, dan suka ikan. Siapakah aku?", jawaban: "beruang kutub", opsi: ["beruang kutub", "penguin", "anjing laut"] },
+                     { soal: "Aku punya banyak lengan dan hidup di laut dalam. Siapakah aku?", jawaban: "gurita", opsi: ["gurita", "cumi-cumi", "ubur-ubur"] },
+                     { soal: "Aku lari sangat cepat dan punya bintik hitam di tubuhku. Siapakah aku?", jawaban: "cheetah", opsi: ["cheetah", "macan tutul", "jaguar"] }
                 ]
             ],
             buah: [
-                [ // Level 1
-                    { soal: "Buah apa yang kuning dan panjang?", jawaban: "pisang", opsi: ["pisang", "apel", "jeruk"] },
-                    { soal: "Buah apa yang merah dan bulat?", jawaban: "apel", opsi: ["apel", "pisang", "anggur"] },
-                    { soal: "Buah apa yang kecil dan ungu?", jawaban: "anggur", opsi: ["anggur", "jeruk", "semangka"] },
-                    { soal: "Buah apa yang oranye dan bulat?", jawaban: "jeruk", opsi: ["jeruk", "pisang", "ceri"] },
-                    { soal: "Buah apa yang besar dan hijau?", jawaban: "semangka", opsi: ["semangka", "apel", "lemon"] },
-                    { soal: "Buah apa yang kecil dan merah?", jawaban: "ceri", opsi: ["ceri", "jeruk", "pisang"] },
-                    { soal: "Buah apa yang kuning dan asam?", jawaban: "lemon", opsi: ["lemon", "semangka", "anggur"] },
-                    { soal: "Buah apa yang cokelat di luar dan putih di dalam?", jawaban: "kelapa", opsi: ["kelapa", "apel", "ceri"] },
-                    { soal: "Buah apa yang merah dan manis?", jawaban: "tomat", opsi: ["tomat", "pisang", "lemon"] },
-                    { soal: "Buah apa yang hijau dan panjang?", jawaban: "timun", opsi: ["timun", "jeruk", "anggur"] }
-                ],
+                [ // Level 1 (Buah umum)
+                    { soal: "Aku berwarna kuning, panjang, dan disukai monyet. Buah apakah aku?", jawaban: "pisang", opsi: ["pisang", "jagung", "mentimun"] },
+                    { soal: "Aku merah atau hijau, renyah saat digigit. Buah apakah aku?", jawaban: "apel", opsi: ["apel", "semangka", "ceri"] },
+                    { soal: "Aku kecil-kecil bergerombol, bisa ungu atau hijau. Buah apakah aku?", jawaban: "anggur", opsi: ["anggur", "stroberi", "blueberry"] },
+                    { soal: "Aku bulat, berwarna oranye, dan punya banyak air. Buah apakah aku?", jawaban: "jeruk", opsi: ["jeruk", "labu", "melon"] },
+                    { soal: "Aku besar, hijau di luar, merah di dalam, banyak airnya. Buah apakah aku?", jawaban: "semangka", opsi: ["semangka", "melon", "kelapa"] }
+                 ],
                 [ // Level 2
-                    { soal: "Buah apa yang berwarna merah dan ada bijinya di luar?", jawaban: "stroberi", opsi: ["stroberi", "apel", "jeruk"] },
-                    { soal: "Buah apa yang kuning dan ada biji hitam di dalam?", jawaban: "pepaya", opsi: ["pepaya", "pisang", "anggur"] },
-                    { soal: "Buah apa yang hijau di luar dan merah di dalam?", jawaban: "semangka", opsi: ["semangka", "lemon", "ceri"] },
-                    { soal: "Buah apa yang kecil dan cokelat?", jawaban: "kurma", opsi: ["kurma", "jeruk", "tomat"] },
-                    { soal: "Buah apa yang kuning dan berbulu?", jawaban: "kiwi", opsi: ["kiwi", "pisang", "apel"] },
-                    { soal: "Buah apa yang besar dan berduri?", jawaban: "durian", opsi: ["durian", "lemon", "anggur"] },
-                    { soal: "Buah apa yang hijau dan asam?", jawaban: "mangga muda", opsi: ["mangga muda", "jeruk", "semangka"] },
-                    { soal: "Buah apa yang ungu dan besar?", jawaban: "terong", opsi: ["terong", "pisang", "ceri"] },
-                    { soal: "Buah apa yang kuning dan manis?", jawaban: "nanas", opsi: ["nanas", "apel", "tomat"] },
-                    { soal: "Buah apa yang kecil dan hijau?", jawaban: "anggur hijau", opsi: ["anggur hijau", "lemon", "kurma"] }
+                    { soal: "Aku kecil, merah, manis, dan sering ada di atas kue. Buah apakah aku?", jawaban: "ceri", opsi: ["ceri", "stroberi", "tomat"] }, // Tomat sbg pengecoh bisa
+                    { soal: "Kulitku berduri tajam, tapi dagingku kuning dan harum. Buah apakah aku?", jawaban: "durian", opsi: ["durian", "nangka", "salak"] },
+                    { soal: "Aku kuning, kulitku kasar seperti nanas, tapi lebih kecil dan manis. Buah apakah aku?", jawaban: "nanas", opsi: ["nanas", "mangga", "pepaya"] }, // Disesuaikan
+                    { soal: "Aku hijau atau kuning, dagingku lembut dan punya biji besar di tengah. Buah apakah aku?", jawaban: "mangga", opsi: ["mangga", "alpukat", "jambu biji"] },
+                    { soal: "Kulitku coklat berbulu, dagingku hijau dan ada biji hitam kecil. Buah apakah aku?", jawaban: "kiwi", opsi: ["kiwi", "sawo", "markisa"] }
                 ],
                 [ // Level 3
-                    { soal: "Buah apa yang punya mahkota di atasnya?", jawaban: "nanas", opsi: ["nanas", "apel", "jeruk"] },
-                    { soal: "Buah apa yang cokelat di luar dan hijau di dalam?", jawaban: "kiwi", opsi: ["kiwi", "pisang", "semangka"] },
-                    { soal: "Buah apa yang merah dan punya biji besar di tengah?", jawaban: "delima", opsi: ["delima", "lemon", "anggur"] },
-                    { soal: "Buah apa yang kuning dan bentuknya seperti bintang?", jawaban: "belimbing", opsi: ["belimbing", "jeruk", "ceri"] },
-                    { soal: "Buah apa yang hijau dan punya banyak biji kecil?", jawaban: "jambu biji", opsi: ["jambu biji", "tomat", "pisang"] },
-                    { soal: "Buah apa yang kecil dan asam?", jawaban: "cranberry", opsi: ["cranberry", "apel", "nanas"] },
-                    { soal: "Buah apa yang besar dan punya susu di dalam?", jawaban: "kelapa", opsi: ["kelapa", "lemon", "kurma"] },
-                    { soal: "Buah apa yang ungu dan punya daging kuning?", jawaban: "manggis", opsi: ["manggis", "jeruk", "semangka"] },
-                    { soal: "Buah apa yang merah dan bentuknya seperti hati?", jawaban: "stroberi", opsi: ["stroberi", "pisang", "tomat"] },
-                    { soal: "Buah apa yang kuning dan punya banyak duri kecil?", jawaban: "sirsak", opsi: ["sirsak", "apel", "anggur"] }
+                    { soal: "Aku merah, punya banyak biji kecil di luar kulitku. Buah apakah aku?", jawaban: "stroberi", opsi: ["stroberi", "frambos", "delima"] },
+                    { soal: "Bentukku seperti bintang jika dipotong. Buah apakah aku?", jawaban: "belimbing", opsi: ["belimbing", "nanas", "pisang"] },
+                    { soal: "Aku ungu di luar, putih di dalam, rasanya manis asam segar. Buah apakah aku?", jawaban: "manggis", opsi: ["manggis", "anggur", "terong ungu"] }, // Terong sbg pengecoh
+                    { soal: "Aku besar, kulitku keras, airku bisa diminum, dagingku putih. Buah apakah aku?", jawaban: "kelapa", opsi: ["kelapa", "semangka", "melon"] },
+                    { soal: "Aku merah, bijiku banyak dan seperti permata. Buah apakah aku?", jawaban: "delima", opsi: ["delima", "jambu biji", "stroberi"] }
                 ]
             ]
         };
+
+        // Fungsi untuk mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Tukar elemen
+            }
+        }
 
         function mulaiLevel(jenis) {
             jenisSoal = jenis;
             currentLevel = 0;
             currentSoal = 0;
+            document.getElementById('pilihan-kategori').style.display = 'none'; // Sembunyikan pilihan awal
+            document.getElementById('kuis-container').style.display = 'block'; // Tampilkan kuis
             tampilkanSoal();
-            document.getElementById('opsiJawaban').style.display = 'block';
         }
 
         function tampilkanSoal() {
-            if (currentSoal >= 10) {
+            // Cek jika soal di level ini habis
+            if (currentSoal >= soalPerLevel) {
                 currentLevel++;
                 currentSoal = 0;
+                 // Beri pesan antar level (opsional)
+                 if(currentLevel < totalLevel) {
+                    tampilkanNotifikasi(`Level ${currentLevel} Selesai!`, 'lanjut', true); // Tampilkan pesan lanjut
+                    setTimeout(() => { // Tunda soal berikutnya
+                         sembunyikanNotifikasi();
+                         // Tampilkan soal level baru
+                        let soal = levels[jenisSoal][currentLevel][currentSoal];
+                        jawabanBenar = soal.jawaban;
+                        document.getElementById('soal').innerHTML = soal.soal;
+                        let opsiAcak = [...soal.opsi]; // Salin array opsi
+                        shuffleArray(opsiAcak); // Acak opsi
+                        let opsiHtml = '';
+                        opsiAcak.forEach(opsi => {
+                            opsiHtml += `<button class="opsi" onclick="cekJawaban('${opsi}')">${opsi}</button>`;
+                        });
+                        document.getElementById('opsiJawaban').innerHTML = opsiHtml;
+                        updateProgressBar();
+                    }, 2500); // Jeda 2.5 detik
+                    return; // Hentikan eksekusi tampilkanSoal saat ini
+                 }
             }
-            if (currentLevel >= 3) {
-                alert('Selamat! Kamu telah menyelesaikan semua level!');
-                document.getElementById('opsiJawaban').style.display = 'none';
-                document.getElementById('soal').innerHTML = '';
+
+            // Cek jika semua level selesai
+            if (currentLevel >= totalLevel) {
+                tampilkanNotifikasi('Selamat! Semua level selesai!', 'selesai', false); // Tampilkan pesan selesai
+                // Jangan sembunyikan otomatis, tunggu user klik home
+                document.getElementById('kuis-container').style.display = 'none'; // Sembunyikan kuis
                 return;
             }
+
+            // Tampilkan soal normal
             let soal = levels[jenisSoal][currentLevel][currentSoal];
             jawabanBenar = soal.jawaban;
             document.getElementById('soal').innerHTML = soal.soal;
+
+            let opsiAcak = [...soal.opsi]; // Salin array opsi
+            shuffleArray(opsiAcak);       // Acak opsi
+
             let opsiHtml = '';
-            soal.opsi.forEach(opsi => {
+            opsiAcak.forEach(opsi => {
                 opsiHtml += `<button class="opsi" onclick="cekJawaban('${opsi}')">${opsi}</button>`;
             });
             document.getElementById('opsiJawaban').innerHTML = opsiHtml;
+            updateProgressBar(); // Update progress bar setiap soal
         }
 
         function cekJawaban(jawaban) {
-            let notifikasi = document.getElementById('notifikasi');
+             // Nonaktifkan tombol sementara
+             disableOptions(true);
+
             if (jawaban === jawabanBenar) {
-                notifikasi.innerHTML = 'Benar!';
-                notifikasi.className = 'benar';
+                tampilkanNotifikasi('Benar!', 'benar', true);
             } else {
-                notifikasi.innerHTML = 'Salah!';
-                notifikasi.className = 'salah';
+                tampilkanNotifikasi(`Salah! Jawaban: ${jawabanBenar}`, 'salah', true);
             }
-            notifikasi.style.display = 'block';
+
+            // Tunggu notifikasi selesai, baru lanjut
             setTimeout(() => {
-                notifikasi.style.display = 'none';
+                sembunyikanNotifikasi();
                 currentSoal++;
                 tampilkanSoal();
-            }, 2000);
+                 disableOptions(false); // Aktifkan kembali tombol
+            }, 2000); // Sesuaikan durasi tampil notifikasi
         }
+
+         // Fungsi untuk menonaktifkan/mengaktifkan tombol opsi
+         function disableOptions(disabled) {
+             const buttons = document.querySelectorAll('#opsiJawaban .opsi');
+             buttons.forEach(button => {
+                 button.disabled = disabled;
+             });
+         }
+
+        function tampilkanNotifikasi(pesan, tipe, autoHide) {
+            const overlay = document.getElementById('notifikasi-overlay');
+            const notifikasi = document.getElementById('notifikasi');
+            const notifikasiTeks = document.getElementById('notifikasi-teks');
+            const ikon = notifikasi.querySelector('i');
+
+            notifikasiTeks.textContent = pesan;
+            notifikasi.className = ''; // Reset class
+            ikon.className = ''; // Reset ikon class
+
+            if (tipe === 'benar') {
+                notifikasi.classList.add('benar');
+                ikon.classList.add('fas', 'fa-check-circle'); // Ikon centang
+            } else if (tipe === 'salah') {
+                notifikasi.classList.add('salah');
+                ikon.classList.add('fas', 'fa-times-circle'); // Ikon silang
+            } else if (tipe === 'selesai') {
+                notifikasi.classList.add('benar'); // Warna hijau untuk selesai
+                ikon.classList.add('fas', 'fa-trophy'); // Ikon piala
+            } else if (tipe === 'lanjut') {
+                 notifikasi.classList.add('benar'); // Warna hijau untuk lanjut
+                 ikon.classList.add('fas', 'fa-arrow-circle-right'); // Ikon panah
+            }
+
+
+            overlay.style.display = 'flex'; // Tampilkan overlay
+            setTimeout(() => { // Beri sedikit waktu sebelum animasi
+                 overlay.classList.add('show'); // Mulai animasi (CSS)
+            }, 10);
+
+            // Sembunyikan otomatis jika perlu
+            // if (autoHide) { // Hapus autohide dari sini, pindahkan ke cekJawaban
+            //     setTimeout(sembunyikanNotifikasi, 2000); // Durasi tampil notifikasi
+            // }
+        }
+
+        function sembunyikanNotifikasi() {
+            const overlay = document.getElementById('notifikasi-overlay');
+             overlay.classList.remove('show'); // Mulai animasi hide
+            // Tunggu animasi selesai sebelum display none
+             setTimeout(() => {
+                overlay.style.display = 'none';
+             }, 300); // Sesuaikan dengan durasi transisi CSS
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progress-bar');
+            const levelInfo = document.getElementById('level-info');
+            const totalSoalInLevel = soalPerLevel;
+            const progress = (currentSoal / totalSoalInLevel) * 100;
+
+            progressBar.style.width = `${progress}%`;
+             levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${currentSoal + 1}/${totalSoalInLevel}`;
+        }
+
+         function kembaliKeMenu() {
+            // Sembunyikan kuis dan notifikasi jika ada
+             document.getElementById('kuis-container').style.display = 'none';
+             sembunyikanNotifikasi();
+             // Tampilkan lagi pilihan kategori
+            document.getElementById('pilihan-kategori').style.display = 'flex';
+             document.querySelector('h1').textContent = 'Pilih Tebak-Tebakan'; // Kembalikan judul
+         }
+
+         // Panggil kembaliKeMenu saat tombol home diklik
+        // document.querySelector('.home-btn').onclick = kembaliKeMenu; // Atau langsung di HTML
+
     </script>
 </body>
 </html>
