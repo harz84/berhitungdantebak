@@ -4,45 +4,152 @@
     <title>Menu Tebak-Tebakan</title>
     <style>
         body { background-color: #ff99cc; text-align: center; font-family: Comic Sans MS; }
-        h1 { font-size: 48px; } /* Judul lebih besar */
+        h1 { font-size: 48px; }
         .button { padding: 25px; font-size: 36px; margin: 15px; background-color: #ffcc00; color: white; border: none; border-radius: 15px; cursor: pointer; }
         .button:hover { background-color: #ff9900; }
         #soal { font-size: 40px; margin: 25px; }
         input { padding: 15px; font-size: 36px; margin: 15px; }
         .home-btn { background-color: #ffcc00; padding: 15px; font-size: 30px; border-radius: 10px; cursor: pointer; }
+        #notifikasi { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; padding: 20px; border-radius: 10px; display: none; }
+        .benar { background-color: #66ff66; color: white; animation: fadeInOut 2s; }
+        .salah { background-color: #ff6666; color: white; animation: fadeInOut 2s; }
+        @keyframes fadeInOut { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
     </style>
 </head>
 <body>
     <h1>Pilih Tebak-Tebakan</h1>
-    <button class="button" onclick="tampilkanTebakan('hewan')">Tebak Hewan</button>
-    <button class="button" onclick="tampilkanTebakan('buah')">Tebak Buah</button>
+    <button class="button" onclick="mulaiLevel('hewan')">Tebak Hewan</button>
+    <button class="button" onclick="mulaiLevel('buah')">Tebak Buah</button>
     <div id="soal"></div>
-    <div id="inputJawaban">
+    <div id="inputJawaban" style="display: none;">
         <input type="text" id="jawaban" placeholder="Masukkan jawaban">
         <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
     </div>
+    <div id="notifikasi"></div>
     <br>
     <button class="home-btn" onclick="location.href='index.html'">🏠 Home</button>
     <script>
-        const tebakanHewan = [
-            { soal: "Hewan apa yang bisa terbang tapi bukan burung?", jawaban: "kelelawar" },
-            { soal: "Hewan apa yang punya lelet jalannya?", jawaban: "kura-kura" }
-        ];
-        const tebakanBuah = [
-            { soal: "Buah apa yang berwarna merah dan ada bijinya di luar?", jawaban: "stroberi" },
-            { soal: "Buah apa yang kuning dan panjang?", jawaban: "pisang" }
-        ];
-        let jawabanBenar;
-        function tampilkanTebakan(jenis) {
-            let tebakan = jenis === 'hewan' ? tebakanHewan : tebakanBuah;
-            let acak = tebakan[Math.floor(Math.random() * tebakan.length)];
-            jawabanBenar = acak.jawaban;
-            document.getElementById('soal').innerHTML = acak.soal;
+        let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
+        const levels = {
+            hewan: [
+                [ // Level 1: Mudah
+                    { soal: "Hewan apa yang punya lelet jalannya?", jawaban: "kura-kura" },
+                    { soal: "Hewan apa yang suka nyanyi?", jawaban: "burung" },
+                    { soal: "Hewan apa yang besar dan abu-abu?", jawaban: "gajah" },
+                    { soal: "Hewan apa yang suka melompat?", jawaban: "kelinci" },
+                    { soal: "Hewan apa yang punya buntut panjang?", jawaban: "monyet" },
+                    { soal: "Hewan apa yang suka berenang?", jawaban: "ikan" },
+                    { soal: "Hewan apa yang punya empat kaki dan menggonggong?", jawaban: "anjing" },
+                    { soal: "Hewan apa yang suka tidur?", jawaban: "kucing" },
+                    { soal: "Hewan apa yang punya sayap?", jawaban: "burung" },
+                    { soal: "Hewan apa yang kecil dan suka makan keju?", jawaban: "tikus" }
+                ],
+                [ // Level 2: Sedang
+                    { soal: "Hewan apa yang bisa terbang tapi bukan burung?", jawaban: "kelelawar" },
+                    { soal: "Hewan apa yang punya belalai?", jawaban: "gajah" },
+                    { soal: "Hewan apa yang hidup di air dan punya cangkang?", jawaban: "kura-kura" },
+                    { soal: "Hewan apa yang suka makan wortel?", jawaban: "kelinci" },
+                    { soal: "Hewan apa yang punya leher panjang?", jawaban: "jerapah" },
+                    { soal: "Hewan apa yang suka menggali tanah?", jawaban: "tikus" },
+                    { soal: "Hewan apa yang punya tanduk?", jawaban: "kambing" },
+                    { soal: "Hewan apa yang suka berkokok?", jawaban: "ayam" },
+                    { soal: "Hewan apa yang punya bulu tebal?", jawaban: "beruang" },
+                    { soal: "Hewan apa yang suka makan bambu?", jawaban: "panda" }
+                ],
+                [ // Level 3: Sulit
+                    { soal: "Hewan apa yang bisa berubah warna?", jawaban: "bunglon" },
+                    { soal: "Hewan apa yang punya kantong di perut?", jawaban: "kanguru" },
+                    { soal: "Hewan apa yang hidup di kutub dan putih?", jawaban: "beruang kutub" },
+                    { soal: "Hewan apa yang punya cakar tajam dan terbang?", jawaban: "elang" },
+                    { soal: "Hewan apa yang suka menyanyi di malam hari?", jawaban: "jangkrik" },
+                    { soal: "Hewan apa yang punya duri di tubuhnya?", jawaban: "landak" },
+                    { soal: "Hewan apa yang hidup di laut dan punya delapan kaki?", jawaban: "gurita" },
+                    { soal: "Hewan apa yang suka mengendus?", jawaban: "anjing" },
+                    { soal: "Hewan apa yang punya bintik-bintik di tubuhnya?", jawaban: "macan tutul" },
+                    { soal: "Hewan apa yang bisa lari sangat cepat?", jawaban: "cheetah" }
+                ]
+            ],
+            buah: [
+                [ // Level 1: Mudah
+                    { soal: "Buah apa yang kuning dan panjang?", jawaban: "pisang" },
+                    { soal: "Buah apa yang merah dan bulat?", jawaban: "apel" },
+                    { soal: "Buah apa yang kecil dan ungu?", jawaban: "anggur" },
+                    { soal: "Buah apa yang oranye dan bulat?", jawaban: "jeruk" },
+                    { soal: "Buah apa yang besar dan hijau?", jawaban: "semangka" },
+                    { soal: "Buah apa yang kecil dan merah?", jawaban: "ceri" },
+                    { soal: "Buah apa yang kuning dan asam?", jawaban: "lemon" },
+                    { soal: "Buah apa yang cokelat di luar dan putih di dalam?", jawaban: "kelapa" },
+                    { soal: "Buah apa yang merah dan manis?", jawaban: "tomat" },
+                    { soal: "Buah apa yang hijau dan panjang?", jawaban: "timun" }
+                ],
+                [ // Level 2: Sedang
+                    { soal: "Buah apa yang berwarna merah dan ada bijinya di luar?", jawaban: "stroberi" },
+                    { soal: "Buah apa yang kuning dan ada biji hitam di dalam?", jawaban: "pepaya" },
+                    { soal: "Buah apa yang hijau di luar dan merah di dalam?", jawaban: "semangka" },
+                    { soal: "Buah apa yang kecil dan cokelat?", jawaban: "kurma" },
+                    { soal: "Buah apa yang kuning dan berbulu?", jawaban: "kiwi" },
+                    { soal: "Buah apa yang besar dan berduri?", jawaban: "durian" },
+                    { soal: "Buah apa yang hijau dan asam?", jawaban: "mangga muda" },
+                    { soal: "Buah apa yang ungu dan besar?", jawaban: "terong" },
+                    { soal: "Buah apa yang kuning dan manis?", jawaban: "nanas" },
+                    { soal: "Buah apa yang kecil dan hijau?", jawaban: "anggur hijau" }
+                ],
+                [ // Level 3: Sulit
+                    { soal: "Buah apa yang punya mahkota di atasnya?", jawaban: "nanas" },
+                    { soal: "Buah apa yang cokelat di luar dan hijau di dalam?", jawaban: "kiwi" },
+                    { soal: "Buah apa yang merah dan punya biji besar di tengah?", jawaban: "delima" },
+                    { soal: "Buah apa yang kuning dan bentuknya seperti bintang?", jawaban: "belimbing" },
+                    { soal: "Buah apa yang hijau dan punya banyak biji kecil?", jawaban: "jambu biji" },
+                    { soal: "Buah apa yang kecil dan asam?", jawaban: "cranberry" },
+                    { soal: "Buah apa yang besar dan punya susu di dalam?", jawaban: "kelapa" },
+                    { soal: "Buah apa yang ungu dan punya daging kuning?", jawaban: "manggis" },
+                    { soal: "Buah apa yang merah dan bentuknya seperti hati?", jawaban: "stroberi" },
+                    { soal: "Buah apa yang kuning dan punya banyak duri kecil?", jawaban: "sirsak" }
+                ]
+            ]
+        };
+
+        function mulaiLevel(jenis) {
+            jenisSoal = jenis;
+            currentLevel = 0;
+            currentSoal = 0;
+            tampilkanSoal();
+            document.getElementById('inputJawaban').style.display = 'block';
         }
+
+        function tampilkanSoal() {
+            if (currentSoal >= 10) {
+                currentLevel++;
+                currentSoal = 0;
+            }
+            if (currentLevel >= 3) {
+                alert('Selamat! Kamu telah menyelesaikan semua level!');
+                document.getElementById('inputJawaban').style.display = 'none';
+                document.getElementById('soal').innerHTML = '';
+                return;
+            }
+            let soal = levels[jenisSoal][currentLevel][currentSoal];
+            jawabanBenar = soal.jawaban;
+            document.getElementById('soal').innerHTML = soal.soal;
+            document.getElementById('jawaban').value = '';
+        }
+
         function cekJawaban() {
             let jawaban = document.getElementById('jawaban').value.toLowerCase();
-            if (jawaban === jawabanBenar) alert('Benar! Hebat!');
-            else alert('Coba lagi ya!');
+            let notifikasi = document.getElementById('notifikasi');
+            if (jawaban === jawabanBenar) {
+                notifikasi.innerHTML = 'Benar!';
+                notifikasi.className = 'benar';
+            } else {
+                notifikasi.innerHTML = 'Salah!';
+                notifikasi.className = 'salah';
+            }
+            notifikasi.style.display = 'block';
+            setTimeout(() => {
+                notifikasi.style.display = 'none';
+                currentSoal++;
+                tampilkanSoal();
+            }, 2000); // 2 detik jeda
         }
     </script>
 </body>
