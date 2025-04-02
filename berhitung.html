@@ -1,13 +1,15 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html>
 <head>
     <title>Menu Berhitung</title>
     <style>
         body { background-color: #66ccff; text-align: center; font-family: Comic Sans MS; }
-        .button { padding: 20px; font-size: 24px; margin: 10px; background-color: #66ff66; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        h1 { font-size: 48px; } /* Judul lebih besar */
+        .button { padding: 25px; font-size: 36px; margin: 15px; background-color: #66ff66; color: white; border: none; border-radius: 15px; cursor: pointer; }
         .button:hover { background-color: #33cc33; }
-        #soal { font-size: 30px; margin: 20px; }
-        input { padding: 10px; font-size: 20px; margin: 10px; }
+        #soal { font-size: 40px; margin: 25px; }
+        input { padding: 15px; font-size: 36px; margin: 15px; }
+        .home-btn { background-color: #ffcc00; padding: 15px; font-size: 30px; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -15,8 +17,12 @@
     <button class="button" onclick="tampilkanSoal('penjumlahan')">Penjumlahan</button>
     <button class="button" onclick="tampilkanSoal('pengurangan')">Pengurangan</button>
     <div id="soal"></div>
-    <input type="number" id="jawaban" placeholder="Masukkan jawaban">
-    <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
+    <div id="inputJawaban" style="display: none;">
+        <input type="number" id="jawaban" placeholder="Masukkan jawaban">
+        <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
+    </div>
+    <br>
+    <button class="home-btn" onclick="location.href='index.html'">🏠 Home</button>
     <script>
         let jawabanBenar;
         function tampilkanSoal(jenis) {
@@ -30,6 +36,7 @@
                 jawabanBenar = a - b;
                 document.getElementById('soal').innerHTML = `${a} - ${b} = ?`;
             }
+            document.getElementById('inputJawaban').style.display = 'block'; /* Munculkan kolom jawaban */
         }
         function cekJawaban() {
             let jawaban = document.getElementById('jawaban').value;
