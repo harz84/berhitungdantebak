@@ -1,47 +1,89 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Menu Berhitung</title>
     <style>
         body { background-color: #66ccff; text-align: center; font-family: Comic Sans MS; }
-        h1 { font-size: 48px; } /* Judul lebih besar */
+        h1 { font-size: 48px; }
         .button { padding: 25px; font-size: 36px; margin: 15px; background-color: #66ff66; color: white; border: none; border-radius: 15px; cursor: pointer; }
         .button:hover { background-color: #33cc33; }
         #soal { font-size: 40px; margin: 25px; }
         input { padding: 15px; font-size: 36px; margin: 15px; }
         .home-btn { background-color: #ffcc00; padding: 15px; font-size: 30px; border-radius: 10px; cursor: pointer; }
+        #notifikasi { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; padding: 20px; border-radius: 10px; display: none; }
+        .benar { background-color: #66ff66; color: white; animation: fadeInOut 2s; }
+        .salah { background-color: #ff6666; color: white; animation: fadeInOut 2s; }
+        @keyframes fadeInOut { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
     </style>
 </head>
 <body>
     <h1>Pilih Berhitung</h1>
-    <button class="button" onclick="tampilkanSoal('penjumlahan')">Penjumlahan</button>
-    <button class="button" onclick="tampilkanSoal('pengurangan')">Pengurangan</button>
+    <button class="button" onclick="mulaiLevel('penjumlahan')">Penjumlahan</button>
+    <button class="button" onclick="mulaiLevel('pengurangan')">Pengurangan</button>
     <div id="soal"></div>
     <div id="inputJawaban" style="display: none;">
         <input type="number" id="jawaban" placeholder="Masukkan jawaban">
         <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
     </div>
+    <div id="notifikasi"></div>
     <br>
     <button class="home-btn" onclick="location.href='index.html'">🏠 Home</button>
     <script>
-        let jawabanBenar;
-        function tampilkanSoal(jenis) {
-            let a = Math.floor(Math.random() * 10) + 1;
-            let b = Math.floor(Math.random() * 10) + 1;
-            if (jenis === 'penjumlahan') {
-                jawabanBenar = a + b;
-                document.getElementById('soal').innerHTML = `${a} + ${b} = ?`;
-            } else {
-                if (a < b) [a, b] = [b, a];
-                jawabanBenar = a - b;
-                document.getElementById('soal').innerHTML = `${a} - ${b} = ?`;
-            }
-            document.getElementById('inputJawaban').style.display = 'block'; /* Munculkan kolom jawaban */
+        let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
+        const levels = {
+            penjumlahan: [
+                Array(10).fill().map(() => ({ a: Math.floor(Math.random() * 5) + 1, b: Math.floor(Math.random() * 5) + 1 })), // Level 1: 1-5
+                Array(10).fill().map(() => ({ a: Math.floor(Math.random() * 10) + 1, b: Math.floor(Math.random() * 10) + 1 })), // Level 2: 1-10
+                Array(10).fill().map(() => ({ a: Math.floor(Math.random() * 20) + 1, b: Math.floor(Math.random() * 20) + 1 })) // Level 3: 1-20
+            ],
+            pengurangan: [
+                Array(10).fill().map(() => { let a = Math.floor(Math.random() * 5) + 1, b = Math.floor(Math.random() * a) + 1; return { a, b }; }), // Level 1
+                Array(10).fill().map(() => { let a = Math.floor(Math.random() * 10) + 1, b = Math.floor(Math.random() * a) + 1; return { a, b }; }), // Level 2
+                Array(10).fill().map(() => { let a = Math.floor(Math.random() * 20) + 1, b = Math.floor(Math.random() * a) + 1; return { a, b }; }) // Level 3
+            ]
+        };
+
+        function mulaiLevel(jenis) {
+            jenisSoal = jenis;
+            currentLevel = 0;
+            currentSoal = 0;
+            tampilkanSoal();
+            document.getElementById('inputJawaban').style.display = 'block';
         }
+
+        function tampilkanSoal() {
+            if (currentSoal >= 10) {
+                currentLevel++;
+                currentSoal = 0;
+            }
+            if (currentLevel >= 3) {
+                alert('Selamat! Kamu telah menyelesaikan semua level!');
+                document.getElementById('inputJawaban').style.display = 'none';
+                document.getElementById('soal').innerHTML = '';
+                return;
+            }
+            let soal = levels[jenisSoal][currentLevel][currentSoal];
+            jawabanBenar = jenisSoal === 'penjumlahan' ? soal.a + soal.b : soal.a - soal.b;
+            document.getElementById('soal').innerHTML = `${soal.a} ${jenisSoal === 'penjumlahan' ? '+' : '-'} ${soal.b} = ?`;
+            document.getElementById('jawaban').value = '';
+        }
+
         function cekJawaban() {
             let jawaban = document.getElementById('jawaban').value;
-            if (jawaban == jawabanBenar) alert('Benar! Selamat!');
-            else alert('Coba lagi ya!');
+            let notifikasi = document.getElementById('notifikasi');
+            if (jawaban == jawabanBenar) {
+                notifikasi.innerHTML = 'Benar!';
+                notifikasi.className = 'benar';
+            } else {
+                notifikasi.innerHTML = 'Salah!';
+                notifikasi.className = 'salah';
+            }
+            notifikasi.style.display = 'block';
+            setTimeout(() => {
+                notifikasi.style.display = 'none';
+                currentSoal++;
+                tampilkanSoal();
+            }, 2000); // 2 detik jeda
         }
     </script>
 </body>
