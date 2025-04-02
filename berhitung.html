@@ -233,7 +233,7 @@
         <div id="level-info"></div>
         <div id="soal"></div>
         <div id="inputJawaban">
-             {/* Tambahkan pattern="[0-9]*" dan inputmode="numeric" untuk keyboard mobile */}
+             
             <input type="number" id="jawaban" placeholder="?" inputmode="numeric" pattern="[0-9]*">
             <button class="button-cek" onclick="cekJawaban()"><i class="fas fa-check"></i> Cek</button>
         </div>
@@ -246,7 +246,7 @@
         </div>
     </div>
 
-    <button class="home-btn" onclick="kembaliKeMenu()"><i class="fas fa-home"></i> Home</button>
+    <button class="home-btn" onclick="location.href='index.html'"><i class="fas fa-home"></i> Home</button>
 
     <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
