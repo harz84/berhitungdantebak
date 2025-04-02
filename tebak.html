@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu Tebak-Tebakan</title>
+    <style>
+        body { background-color: #ff99cc; text-align: center; font-family: Comic Sans MS; }
+        .button { padding: 20px; font-size: 24px; margin: 10px; background-color: #ffcc00; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .button:hover { background-color: #ff9900; }
+        #soal { font-size: 30px; margin: 20px; }
+        input { padding: 10px; font-size: 20px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Pilih Tebak-Tebakan</h1>
+    <button class="button" onclick="tampilkanTebakan('hewan')">Tebak Hewan</button>
+    <button class="button" onclick="tampilkanTebakan('buah')">Tebak Buah</button>
+    <div id="soal"></div>
+    <input type="text" id="jawaban" placeholder="Masukkan jawaban">
+    <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
+    <script>
+        const tebakanHewan = [
+            { soal: "Hewan apa yang bisa terbang tapi bukan burung?", jawaban: "kelelawar" },
+            { soal: "Hewan apa yang punya lelet jalannya?", jawaban: "kura-kura" }
+        ];
+        const tebakanBuah = [
+            { soal: "Buah apa yang berwarna merah dan ada bijinya di luar?", jawaban: "stroberi" },
+            { soal: "Buah apa yang kuning dan panjang?", jawaban: "pisang" }
+        ];
+        let jawabanBenar;
+        function tampilkanTebakan(jenis) {
+            let tebakan = jenis === 'hewan' ? tebakanHewan : tebakanBuah;
+            let acak = tebakan[Math.floor(Math.random() * tebakan.length)];
+            jawabanBenar = acak.jawaban;
+            document.getElementById('soal').innerHTML = acak.soal;
+        }
+        function cekJawaban() {
+            let jawaban = document.getElementById('jawaban').value.toLowerCase();
+            if (jawaban === jawabanBenar) alert('Benar! Hebat!');
+            else alert('Coba lagi ya!');
+        }
+    </script>
+</body>
+</html>
