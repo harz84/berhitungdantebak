@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu Berhitung</title>
+    <style>
+        body { background-color: #66ccff; text-align: center; font-family: Comic Sans MS; }
+        .button { padding: 20px; font-size: 24px; margin: 10px; background-color: #66ff66; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .button:hover { background-color: #33cc33; }
+        #soal { font-size: 30px; margin: 20px; }
+        input { padding: 10px; font-size: 20px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Pilih Berhitung</h1>
+    <button class="button" onclick="tampilkanSoal('penjumlahan')">Penjumlahan</button>
+    <button class="button" onclick="tampilkanSoal('pengurangan')">Pengurangan</button>
+    <div id="soal"></div>
+    <input type="number" id="jawaban" placeholder="Masukkan jawaban">
+    <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
+    <script>
+        let jawabanBenar;
+        function tampilkanSoal(jenis) {
+            let a = Math.floor(Math.random() * 10) + 1;
+            let b = Math.floor(Math.random() * 10) + 1;
+            if (jenis === 'penjumlahan') {
+                jawabanBenar = a + b;
+                document.getElementById('soal').innerHTML = `${a} + ${b} = ?`;
+            } else {
+                if (a < b) [a, b] = [b, a];
+                jawabanBenar = a - b;
+                document.getElementById('soal').innerHTML = `${a} - ${b} = ?`;
+            }
+        }
+        function cekJawaban() {
+            let jawaban = document.getElementById('jawaban').value;
+            if (jawaban == jawabanBenar) alert('Benar! Selamat!');
+            else alert('Coba lagi ya!');
+        }
+    </script>
+</body>
+</html>
