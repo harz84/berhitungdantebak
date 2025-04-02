@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: #F4E4BC; text-align: center; font-family: 'Poppins', sans-serif; }
-        h1 { font-size: 96px; }
+        h1 { font-size: 96px; margin: 30px 0; }
         .button { padding: 50px; font-size: 72px; margin: 30px; background-color: #A3D9A5; color: white; border: none; border-radius: 30px; cursor: pointer; }
         .button:hover { background-color: #8CCB8F; }
         #soal { font-size: 80px; margin: 50px; }
@@ -15,18 +15,23 @@
         .benar { background-color: #A3D9A5; color: white; animation: fadeInOut 2s; }
         .salah { background-color: #F28C82; color: white; animation: fadeInOut 2s; }
         @keyframes fadeInOut { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+        #level-info { position: absolute; top: 20px; right: 20px; font-size: 48px; color: #333; }
+        #menu-pilihan { margin-top: 50px; }
     </style>
 </head>
 <body>
     <h1>Pilih Berhitung</h1>
-    <button class="button" onclick="mulaiLevel('penjumlahan')">Penjumlahan</button>
-    <button class="button" onclick="mulaiLevel('pengurangan')">Pengurangan</button>
+    <div id="menu-pilihan">
+        <button class="button" onclick="mulaiLevel('penjumlahan')">Penjumlahan</button>
+        <button class="button" onclick="mulaiLevel('pengurangan')">Pengurangan</button>
+    </div>
     <div id="soal"></div>
     <div id="inputJawaban" style="display: none;">
         <input type="number" id="jawaban" placeholder="Masukkan jawaban">
         <button class="button" onclick="cekJawaban()">Cek Jawaban</button>
     </div>
     <div id="notifikasi"></div>
+    <div id="level-info"></div>
     <br>
     <button class="home-btn" onclick="location.href='index.html'">🏠 Home</button>
     <script>
@@ -48,6 +53,7 @@
             jenisSoal = jenis;
             currentLevel = 0;
             currentSoal = 0;
+            document.getElementById('menu-pilihan').style.display = 'none'; // Hilangkan tombol
             tampilkanSoal();
             document.getElementById('inputJawaban').style.display = 'block';
         }
@@ -61,12 +67,15 @@
                 alert('Selamat! Kamu telah menyelesaikan semua level!');
                 document.getElementById('inputJawaban').style.display = 'none';
                 document.getElementById('soal').innerHTML = '';
+                document.getElementById('level-info').innerHTML = '';
+                document.getElementById('menu-pilihan').style.display = 'block'; // Kembalikan tombol
                 return;
             }
             let soal = levels[jenisSoal][currentLevel][currentSoal];
             jawabanBenar = jenisSoal === 'penjumlahan' ? soal.a + soal.b : soal.a - soal.b;
             document.getElementById('soal').innerHTML = `${soal.a} ${jenisSoal === 'penjumlahan' ? '+' : '-'} ${soal.b} = ?`;
             document.getElementById('jawaban').value = '';
+            document.getElementById('level-info').innerHTML = `Level ${currentLevel + 1} - Soal ${currentSoal + 1}/10`;
         }
 
         function cekJawaban() {
