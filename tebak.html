@@ -25,12 +25,13 @@
         body {
             background-color: var(--bg-color); font-family: 'Poppins', sans-serif;
             color: var(--text-color); margin: 0;
-            padding: 70px 20px 20px 20px; min-height: 100vh;
-            display: flex; flex-direction: column; align-items: center;
-            position: relative;
+            padding: 70px 20px 20px 20px; /* Padding Atas untuk Home */
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; position: relative;
         }
 
-        .home-btn { /* Posisi sudah di kiri atas */
+        /* --- PERBAIKAN 2 & 3: Posisi Tombol Home (Sama seperti berhitung.html) --- */
+         .home-btn {
             position: absolute; top: 15px; left: 15px;
             background-color: var(--home-btn-bg); color: var(--text-color);
             padding: 10px 15px; font-size: clamp(0.9rem, 3vw, 1.2rem);
@@ -40,63 +41,89 @@
         }
         .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.05); }
         .home-btn:active { transform: scale(0.98); }
+        /* --- AKHIR PERBAIKAN 2 & 3 --- */
 
         h1 {
             font-size: clamp(2rem, 8vw, 3.5rem); color: var(--primary-color);
-            margin-bottom: 1em; text-align: center; margin-top: 0;
+            margin-bottom: 1em; text-align: center;
         }
 
-        #pilihan-kategori { /* ... style ... */ }
-        .button-kategori { /* ... style ... */ }
+        #pilihan-kategori {
+             display: flex; flex-direction: column; gap: 20px;
+             width: 90%; max-width: 500px; margin-bottom: 30px;
+        }
+
+        .button-kategori {
+            padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem);
+            background-color: var(--primary-color); color: var(--white-color);
+            border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            width: 100%; display: flex; align-items: center;
+            justify-content: center; gap: 10px;
+        }
+        .button-kategori:hover { background-color: var(--primary-hover); transform: scale(1.03); }
+         .button-kategori:active { transform: scale(0.98); }
 
         #kuis-container {
             display: none; width: 100%; max-width: 600px;
-            text-align: center; padding-bottom: 50px; /* Padding bawah default */
+            text-align: center; padding-bottom: 50px;
         }
-
-        /* Level Info masih di dalam kuis container */
-        #level-info {
-             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px;
-             margin-bottom: 20px; /* Jarak default */
-             color: var(--text-color);
-         }
-        /* Layout belum dinaikkan */
-        #progress-container {
-            width: 80%; max-width: 400px; height: 20px;
-            background-color: #e0e0e0; border-radius: 10px;
-            margin: 0 auto 25px auto; /* Margin bawah default */
-            overflow: hidden;
-        }
-        #progress-bar { /* ... style ... */ }
 
         #soal {
-            font-size: clamp(1.5rem, 6vw, 2.2rem);
-            margin-bottom: 30px; /* Margin bawah default */
+            font-size: clamp(1.5rem, 6vw, 2.2rem); margin-bottom: 30px;
             min-height: 3em; line-height: 1.4;
         }
+
         #opsiJawaban {
-            display: flex; flex-direction: column; gap: 15px; /* Jarak default */
-            margin-bottom: 30px; /* Margin bawah default */
+            display: flex; flex-direction: column; gap: 15px;
+            margin-bottom: 30px;
         }
-        .opsi { /* ... style ... */ }
-        .opsi:hover:not(:disabled) { /* ... style ... */ }
-        .opsi:active:not(:disabled) { /* ... style ... */ }
-        .opsi:disabled { /* ... style ... */ }
 
-        /* Tombol Kembali Kategori */
-         .button-kembali-kategori { /* ... style ... */ }
+        .opsi {
+            padding: 15px 20px; font-size: clamp(1.2rem, 4.5vw, 2rem);
+            background-color: var(--secondary-color); color: var(--white-color);
+            border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .opsi:hover { background-color: var(--secondary-hover); transform: scale(1.03); }
+        .opsi:active { transform: scale(0.98); }
 
-        #notifikasi-overlay { /* ... style ... */ }
-        #notifikasi { /* ... style (tanpa text-align center) ... */ }
-         .benar { /* ... style ... */ }
-         .salah { /* ... style ... */ }
-        #notifikasi-overlay.show #notifikasi { /* ... style ... */ }
+        #notifikasi-overlay { /* Sama seperti berhitung.html */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); display: none;
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        #notifikasi { /* Sama seperti berhitung.html */
+            font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px;
+            border-radius: var(--border-radius); color: var(--white-color);
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            transform: scale(0.5); opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+         #notifikasi i { font-size: 1.2em; }
+        .benar { background-color: var(--correct-color); }
+        .salah { background-color: var(--wrong-color); }
+        #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
+
+        #progress-container { /* Sama seperti berhitung.html */
+            width: 80%; max-width: 400px; height: 20px;
+            background-color: #e0e0e0; border-radius: 10px;
+            margin: 20px auto; overflow: hidden;
+        }
+        #progress-bar { /* Sama seperti berhitung.html */
+            width: 0%; height: 100%; background-color: var(--primary-color);
+            border-radius: 10px; transition: width 0.5s ease;
+        }
+         #level-info { /* Sama seperti berhitung.html */
+             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px;
+             margin-bottom: 20px; color: var(--text-color);
+         }
 
     </style>
 </head>
 <body>
+    <!-- PERBAIKAN 2: Tombol Home dipindah & link diperbaiki -->
     <button class="home-btn" onclick="location.href='index.html'"> <i class="fas fa-home"></i> Home</button>
-    <!-- Level Info tidak di sini -->
 
     <h1>Pilih Tebak-Tebakan</h1>
 
@@ -106,56 +133,197 @@
     </div>
 
     <div id="kuis-container">
-        <!-- Level Info kembali ke sini -->
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
          <div id="level-info"></div>
-         <div id="progress-container"> <div id="progress-bar"></div> </div>
         <div id="soal"></div>
         <div id="opsiJawaban"></div>
-        <button class="button-kembali-kategori" onclick="kembaliKeMenuKategori()">
+        <!-- Tombol kembali ke menu KATEGORI tebak, BUKAN index.html -->
+        <button class="button-kategori" style="margin-top: 20px; background-color: var(--home-btn-bg); color: var(--text-color);" onclick="kembaliKeMenuKategori()">
             <i class="fas fa-arrow-left"></i> Pilih Kategori Lain
         </button>
     </div>
 
-    <div id="notifikasi-overlay"> <div id="notifikasi"> <i class=""></i> <span id="notifikasi-teks"></span> </div> </div>
+    <div id="notifikasi-overlay">
+        <div id="notifikasi">
+            <i class=""></i>
+            <span id="notifikasi-teks"></span>
+        </div>
+    </div>
+
+    <!-- Tombol Home sudah di atas -->
 
     <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
+        // Ubah jumlah soal per level jika diinginkan (misal 5)
         const soalPerLevel = 5;
+        // --- PERUBAHAN 3: Total Level jadi 5 ---
         const totalLevel = 5;
 
-        // Data Soal 5 Level (Pastikan lengkap)
-        const levels = { /* ... data 5 level ... */ };
+        // --- PERUBAHAN 3: Tambah Data Level 4 & 5 ---
+        const levels = {
+            hewan: [
+                // Level 1 (Sama seperti sebelumnya)
+                [
+                    { soal: "Aku besar, punya belalai panjang, dan telingaku lebar. Siapakah aku?", jawaban: "gajah", opsi: ["gajah", "badak", "kuda nil"] },
+                    { soal: "Aku suka makan wortel dan melompat dengan telinga panjangku. Siapakah aku?", jawaban: "kelinci", opsi: ["kelinci", "kanguru", "kucing"] },
+                    { soal: "Aku bisa terbang dan suaraku merdu di pagi hari. Siapakah aku?", jawaban: "burung", opsi: ["burung", "ayam", "lebah"] },
+                    { soal: "Aku punya tempurung keras dan jalanku lambat. Siapakah aku?", jawaban: "kura-kura", opsi: ["kura-kura", "kepiting", "semut"] },
+                    { soal: "Aku mengeong dan suka dielus. Siapakah aku?", jawaban: "kucing", opsi: ["kucing", "anjing", "tikus"] }
+                ],
+                // Level 2 (Sama seperti sebelumnya)
+                [
+                    { soal: "Aku raja hutan dengan surai di leherku. Siapakah aku?", jawaban: "singa", opsi: ["singa", "harimau", "beruang"] },
+                    { soal: "Aku berenang di air, punya sirip dan ekor. Siapakah aku?", jawaban: "ikan", opsi: ["ikan", "udang", "katak"] },
+                    { soal: "Aku punya leher sangat panjang untuk makan daun di pohon tinggi. Siapakah aku?", jawaban: "jerapah", opsi: ["jerapah", "unta", "zebra"] },
+                    { soal: "Aku hitam putih dan suka makan bambu. Siapakah aku?", jawaban: "panda", opsi: ["panda", "beruang kutub", "koala"] },
+                    { soal: "Aku menggonggong dan menjaga rumah. Siapakah aku?", jawaban: "anjing", opsi: ["anjing", "serigala", "rubah"] }
+                ],
+                // Level 3 (Sama seperti sebelumnya)
+                [
+                     { soal: "Aku bisa berubah warna kulit sesuai tempatku. Siapakah aku?", jawaban: "bunglon", opsi: ["bunglon", "cicak", "ular"] },
+                     { soal: "Aku punya kantong di perut untuk membawa anakku. Siapakah aku?", jawaban: "kanguru", opsi: ["kanguru", "koala", "kelinci"] },
+                     { soal: "Aku hidup di kutub, berbulu putih tebal, dan suka ikan. Siapakah aku?", jawaban: "beruang kutub", opsi: ["beruang kutub", "penguin", "anjing laut"] },
+                     { soal: "Aku punya banyak lengan dan hidup di laut dalam. Siapakah aku?", jawaban: "gurita", opsi: ["gurita", "cumi-cumi", "ubur-ubur"] },
+                     { soal: "Aku lari sangat cepat dan punya bintik hitam di tubuhku. Siapakah aku?", jawaban: "cheetah", opsi: ["cheetah", "macan tutul", "jaguar"] }
+                ],
+                 // Level 4 (Hewan sedikit kurang umum / ciri lebih spesifik)
+                [
+                    { soal: "Aku membangun sarang dari lumpur dan bisa menyengat. Siapakah aku?", jawaban: "lebah", opsi: ["lebah", "semut", "lalat"] },
+                    { soal: "Aku tidak bisa terbang, hidup di tempat dingin, dan berjalan lucu. Siapakah aku?", jawaban: "penguin", opsi: ["penguin", "bebek", "angsa"] },
+                    { soal: "Aku punya punuk di punggung untuk menyimpan lemak. Siapakah aku?", jawaban: "unta", opsi: ["unta", "kuda", "sapi"] },
+                    { soal: "Aku punya cangkang keras berpola dan bisa masuk ke dalamnya. Siapakah aku?", jawaban: "siput", opsi: ["siput", "bekicot", "kura-kura"] }, // Bedakan dgn kura2
+                    { soal: "Aku bergaris hitam putih dan mirip kuda. Siapakah aku?", jawaban: "zebra", opsi: ["zebra", "jerapah", "kuda belang"] } // Hati2 pengecoh
+                ],
+                // Level 5 (Hewan lebih unik / deskripsi lebih menantang)
+                [
+                     { soal: "Aku punya delapan kaki dan membuat jaring untuk menangkap mangsa. Siapakah aku?", jawaban: "laba-laba", opsi: ["laba-laba", "semut", "kalajengking"] },
+                     { soal: "Aku tidur terbalik dan aktif di malam hari mencari buah atau serangga. Siapakah aku?", jawaban: "kelelawar", opsi: ["kelelawar", "burung hantu", "tikus terbang"] },
+                     { soal: "Aku melata, tidak punya kaki, dan kadang berbisa. Siapakah aku?", jawaban: "ular", opsi: ["ular", "cacing", "kadal"] },
+                     { soal: "Aku hewan laut besar yang menyemburkan air dari atas kepalaku. Siapakah aku?", jawaban: "paus", opsi: ["paus", "hiu", "lumba-lumba"] },
+                     { soal: "Aku memanjat pohon dengan lambat dan punya cakar panjang. Siapakah aku?", jawaban: "kukang", opsi: ["kukang", "monyet", "koala"] } // Atau 'sloth' jika target audiens tahu
+                ]
+            ],
+            buah: [
+                 // Level 1 (Sama seperti sebelumnya)
+                [
+                    { soal: "Aku berwarna kuning, panjang, dan disukai monyet. Buah apakah aku?", jawaban: "pisang", opsi: ["pisang", "jagung", "mentimun"] },
+                    { soal: "Aku merah atau hijau, renyah saat digigit. Buah apakah aku?", jawaban: "apel", opsi: ["apel", "semangka", "ceri"] },
+                    { soal: "Aku kecil-kecil bergerombol, bisa ungu atau hijau. Buah apakah aku?", jawaban: "anggur", opsi: ["anggur", "stroberi", "blueberry"] },
+                    { soal: "Aku bulat, berwarna oranye, dan punya banyak air. Buah apakah aku?", jawaban: "jeruk", opsi: ["jeruk", "labu", "melon"] },
+                    { soal: "Aku besar, hijau di luar, merah di dalam, banyak airnya. Buah apakah aku?", jawaban: "semangka", opsi: ["semangka", "melon", "kelapa"] }
+                 ],
+                 // Level 2 (Sama seperti sebelumnya)
+                [
+                    { soal: "Aku kecil, merah, manis, dan sering ada di atas kue. Buah apakah aku?", jawaban: "ceri", opsi: ["ceri", "stroberi", "tomat"] },
+                    { soal: "Kulitku berduri tajam, tapi dagingku kuning dan harum. Buah apakah aku?", jawaban: "durian", opsi: ["durian", "nangka", "salak"] },
+                    { soal: "Aku kuning, kulitku kasar punya 'mata', dan manis asam. Buah apakah aku?", jawaban: "nanas", opsi: ["nanas", "mangga", "pepaya"] },
+                    { soal: "Aku hijau atau kuning, dagingku lembut dan punya biji besar di tengah. Buah apakah aku?", jawaban: "mangga", opsi: ["mangga", "alpukat", "jambu biji"] },
+                    { soal: "Kulitku coklat berbulu, dagingku hijau dan ada biji hitam kecil. Buah apakah aku?", jawaban: "kiwi", opsi: ["kiwi", "sawo", "markisa"] }
+                ],
+                 // Level 3 (Sama seperti sebelumnya)
+                [
+                    { soal: "Aku merah, punya banyak biji kecil di luar kulitku. Buah apakah aku?", jawaban: "stroberi", opsi: ["stroberi", "frambos", "delima"] },
+                    { soal: "Bentukku seperti bintang jika dipotong. Buah apakah aku?", jawaban: "belimbing", opsi: ["belimbing", "nanas", "pisang"] },
+                    { soal: "Aku ungu di luar, putih di dalam, rasanya manis asam segar. Buah apakah aku?", jawaban: "manggis", opsi: ["manggis", "anggur", "terong ungu"] },
+                    { soal: "Aku besar, kulitku keras, airku bisa diminum, dagingku putih. Buah apakah aku?", jawaban: "kelapa", opsi: ["kelapa", "semangka", "melon"] },
+                    { soal: "Aku merah, bijiku banyak dan seperti permata. Buah apakah aku?", jawaban: "delima", opsi: ["delima", "jambu biji", "stroberi"] }
+                ],
+                 // Level 4 (Buah sedikit kurang umum / ciri khas)
+                [
+                    { soal: "Dagingku hijau lembut, bijiku besar, sering dibuat jus kental. Buah apakah aku?", jawaban: "alpukat", opsi: ["alpukat", "melon", "pir"] },
+                    { soal: "Kulitku bersisik seperti ular, dagingku putih renyah. Buah apakah aku?", jawaban: "salak", opsi: ["salak", "lengkeng", "leci"] },
+                    { soal: "Aku kecil, bulat, coklat di luar, putih bening di dalam, bijiku hitam. Buah apakah aku?", jawaban: "lengkeng", opsi: ["lengkeng", "leci", "anggur"] },
+                    { soal: "Aku kuning atau hijau, bentukku lonjong, bijiku banyak & hitam di tengah. Buah apakah aku?", jawaban: "pepaya", opsi: ["pepaya", "mangga", "melon"] },
+                    { soal: "Aku merah atau kuning, dagingku banyak airnya dan bijinya kecil-kecil. Buah apakah aku?", jawaban: "jambu air", opsi: ["jambu air", "jambu biji", "apel"] }
+                ],
+                 // Level 5 (Buah lebih eksotis / deskripsi spesifik)
+                [
+                    { soal: "Aku punya 'rambut' di kulitku, dagingku putih bening manis. Buah apakah aku?", jawaban: "rambutan", opsi: ["rambutan", "leci", "durian"] },
+                    { soal: "Aku kuning kehijauan, kulitku tipis, rasanya asam segar untuk minuman. Buah apakah aku?", jawaban: "lemon", opsi: ["lemon", "jeruk nipis", "jeruk"] }, // Bisa juga Jeruk Nipis
+                    { soal: "Aku ungu atau hijau, lonjong, sering dimasak jadi sayur tapi aku buah. Buah apakah aku?", jawaban: "terong", opsi: ["terong", "timun", "labu siam"] }, // Kembali ke botani
+                    { soal: "Aku oranye, bentukku mirip bintang, rasanya manis asam. Buah apakah aku?", jawaban: "kesemek", opsi: ["kesemek", "belimbing", "markisa"] },
+                    { soal: "Kulitku ungu gelap, isinya banyak biji kecil berair. Buah apakah aku?", jawaban: "markisa", opsi: ["markisa", "anggur", "delima"] }
+                ]
+            ]
+        };
 
-        // Referensi Elemen DOM
-        const pilihanKategoriElem = document.getElementById('pilihan-kategori');
-        const kuisContainerElem = document.getElementById('kuis-container');
-        const judulElem = document.querySelector('h1');
-        const soalElem = document.getElementById('soal');
-        const opsiJawabanContainer = document.getElementById('opsiJawaban');
-        const levelInfoElem = document.getElementById('level-info');
-
-        // Fungsi shuffleArray (Sama)
-        function shuffleArray(array) { /* ... kode ... */ }
-
-        // Fungsi mulaiLevel (Sama)
-        function mulaiLevel(jenis) { /* ... kode ... */ }
-
-        // Fungsi tampilkanSoal (Sama)
-        function tampilkanSoal() { /* ... kode ... */ }
-
-         // Fungsi disableOptions (Sama)
-         function disableOptions(disabled) { /* ... kode ... */ }
-
-        // Fungsi Cek Jawaban (Logika BT.3: Langsung lanjut jika salah)
-        function cekJawaban(jawaban) {
-            disableOptions(true);
-            if (jawaban === jawabanBenar) {
-                tampilkanNotifikasi('Benar!', 'benar');
-            } else {
-                // Tampilkan jawaban benar jika salah
-                tampilkanNotifikasi(`Salah! Jawaban: ${jawabanBenar}`, 'salah');
+        // Fungsi shuffleArray (Sama seperti berhitung.html)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
-            // Selalu lanjut ke soal berikutnya setelah notifikasi
+        }
+
+        // Fungsi mulaiLevel (Tidak berubah)
+        function mulaiLevel(jenis) {
+            jenisSoal = jenis;
+            currentLevel = 0;
+            currentSoal = 0;
+            document.getElementById('pilihan-kategori').style.display = 'none';
+            document.getElementById('kuis-container').style.display = 'block';
+            document.querySelector('h1').textContent = `Tebak ${jenis.charAt(0).toUpperCase() + jenis.slice(1)}`; // Update judul
+            tampilkanSoal();
+        }
+
+        // Fungsi tampilkanSoal (Tidak berubah signifikan)
+        function tampilkanSoal() {
+            if (currentSoal >= soalPerLevel) {
+                currentLevel++;
+                currentSoal = 0;
+                 if(currentLevel < totalLevel) {
+                    tampilkanNotifikasi(`Level ${currentLevel + 1} Mulai!`, 'lanjut', true);
+                    setTimeout(() => {
+                         sembunyikanNotifikasi();
+                         tampilkanSoal(); // Tampilkan soal level baru
+                    }, 1500);
+                    return;
+                 }
+            }
+
+            if (currentLevel >= totalLevel) {
+                tampilkanNotifikasi('Selamat! Semua level selesai!', 'selesai', false);
+                // Opsi: otomatis kembali ke menu kategori setelah beberapa detik?
+                // setTimeout(kembaliKeMenuKategori, 3000);
+                return; // Biarkan user klik tombol kembali manual
+            }
+
+            let soal = levels[jenisSoal][currentLevel][currentSoal];
+            jawabanBenar = soal.jawaban;
+            document.getElementById('soal').innerHTML = soal.soal;
+
+            let opsiAcak = [...soal.opsi];
+            shuffleArray(opsiAcak);
+
+            let opsiHtml = '';
+            opsiAcak.forEach(opsi => {
+                opsiHtml += `<button class="opsi" onclick="cekJawaban('${opsi}')">${opsi}</button>`;
+            });
+            document.getElementById('opsiJawaban').innerHTML = opsiHtml;
+            updateProgressBar();
+            disableOptions(false); // Pastikan opsi aktif
+        }
+
+         // Fungsi disableOptions (Sama seperti berhitung.html)
+         function disableOptions(disabled) {
+             const buttons = document.querySelectorAll('#opsiJawaban .opsi');
+             buttons.forEach(button => {
+                 button.disabled = disabled;
+             });
+         }
+
+        // Fungsi cekJawaban (Tidak berubah)
+        function cekJawaban(jawaban) {
+             disableOptions(true);
+
+            if (jawaban === jawabanBenar) {
+                tampilkanNotifikasi('Benar!', 'benar', true);
+            } else {
+                tampilkanNotifikasi(`Salah! Jawaban: ${jawabanBenar}`, 'salah', true);
+            }
+
             setTimeout(() => {
                 sembunyikanNotifikasi();
                 currentSoal++;
@@ -163,17 +331,52 @@
             }, 1500);
         }
 
-        // Fungsi tampilkanNotifikasi (Sama)
-        function tampilkanNotifikasi(pesan, tipe) { /* ... kode ... */ }
+        // Fungsi tampilkanNotifikasi (Sama seperti berhitung.html)
+        function tampilkanNotifikasi(pesan, tipe, autoHide) {
+            const overlay = document.getElementById('notifikasi-overlay');
+            const notifikasi = document.getElementById('notifikasi');
+            const notifikasiTeks = document.getElementById('notifikasi-teks');
+            const ikon = notifikasi.querySelector('i');
 
-        // Fungsi sembunyikanNotifikasi (Sama)
-        function sembunyikanNotifikasi() { /* ... kode ... */ }
+            notifikasiTeks.textContent = pesan;
+            notifikasi.className = ''; ikon.className = '';
 
-        // Fungsi updateProgressBarAndLevel (Sama, pastikan update levelInfoElem)
-        function updateProgressBarAndLevel() { /* ... kode (sama seperti berhitung.html) ... */ }
+            if (tipe === 'benar') { notifikasi.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); }
+            else if (tipe === 'salah') { notifikasi.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); }
+            else if (tipe === 'selesai') { notifikasi.classList.add('benar'); ikon.classList.add('fas', 'fa-trophy'); }
+            else if (tipe === 'lanjut') { notifikasi.classList.add('benar'); ikon.classList.add('fas', 'fa-arrow-circle-right'); }
 
-         // Fungsi kembaliKeMenuKategori (Sama)
-         function kembaliKeMenuKategori() { /* ... kode ... */ }
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.classList.add('show'); }, 10);
+        }
+
+        // Fungsi sembunyikanNotifikasi (Sama seperti berhitung.html)
+        function sembunyikanNotifikasi() {
+            const overlay = document.getElementById('notifikasi-overlay');
+             overlay.classList.remove('show');
+             setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        // Fungsi updateProgressBar (Sama seperti berhitung.html)
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progress-bar');
+            const levelInfo = document.getElementById('level-info');
+            const totalSoalInLevel = soalPerLevel;
+            const soalTampil = currentSoal >= totalSoalInLevel ? totalSoalInLevel : currentSoal;
+            const progress = (soalTampil / totalSoalInLevel) * 100;
+            progressBar.style.width = `${progress}%`;
+             const nomorSoalTampil = currentSoal >= totalSoalInLevel ? totalSoalInLevel : currentSoal + 1;
+             levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`;
+        }
+
+         // --- PERBAIKAN 2: Fungsi untuk kembali ke MENU KATEGORI ---
+         function kembaliKeMenuKategori() {
+             document.getElementById('kuis-container').style.display = 'none';
+             sembunyikanNotifikasi(); // Pastikan notif hilang
+             document.getElementById('pilihan-kategori').style.display = 'flex';
+             document.querySelector('h1').textContent = 'Pilih Tebak-Tebakan'; // Kembalikan judul
+         }
+         // Tombol Home utama sudah dihandle dengan `location.href` di HTML
 
     </script>
 </body>
