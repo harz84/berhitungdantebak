@@ -16,12 +16,15 @@
             --text-color: #333;
             --white-color: #fff;
             --border-radius: 15px;
+            --copyright-color: rgba(51, 51, 51, 0.7); /* Warna copyright */
         }
         body {
             background-color: var(--bg-color); text-align: center;
             font-family: 'Poppins', sans-serif; color: var(--text-color);
             margin: 0; padding: 20px; min-height: 100vh; display: flex;
             flex-direction: column; justify-content: center; align-items: center;
+            position: relative; /* Diperlukan untuk copyright */
+            padding-bottom: 40px; /* Beri ruang untuk copyright */
         }
         h1 {
             font-size: clamp(2.5rem, 10vw, 4rem); color: var(--primary-color);
@@ -47,17 +50,53 @@
         .button-tebak:hover { background-color: var(--secondary-hover); }
 
         .button i { font-size: 0.9em; }
+
+        /* --- BARU: Copyright Style --- */
+        .copyright {
+            position: absolute; /* Menggunakan absolute relatif thd body */
+            bottom: 10px;
+            right: 10px;
+            font-size: clamp(0.7rem, 2vw, 0.8rem); /* Ukuran font responsif */
+            color: var(--copyright-color);
+            z-index: 5; /* Pastikan di atas background tapi di bawah elemen interaktif jika ada overlay */
+        }
     </style>
 </head>
 <body>
     <h1>Yuk, Mulai Belajar!</h1>
     <div class="menu-container">
-        <button class="button button-hitung" onclick="location.href='berhitung.html'">
+        <!-- BARU: Tambahkan onclick untuk suara -->
+        <button class="button button-hitung" onclick="playSound('click-sound'); location.href='berhitung.html'">
             <i class="fas fa-calculator"></i> Berhitung
         </button>
-        <button class="button button-tebak" onclick="location.href='tebak.html'">
+        <!-- BARU: Tambahkan onclick untuk suara -->
+        <button class="button button-tebak" onclick="playSound('click-sound'); location.href='tebak.html'">
              <i class="fas fa-question-circle"></i> Tebak-Tebakan
         </button>
     </div>
+
+    <!-- --- BARU: Copyright Element --- -->
+    <div class="copyright">Copyright Mas Har - B.3.9</div>
+
+    <!-- --- BARU: Audio Element --- -->
+    <audio id="click-sound" src="ping.wav" preload="auto"></audio>
+    <!-- (Tidak perlu suara salah di halaman ini) -->
+
+    <script>
+        // --- BARU: Fungsi Play Sound ---
+        function playSound(soundId) {
+            try {
+                const sound = document.getElementById(soundId);
+                if (sound) {
+                    sound.currentTime = 0; // Putar dari awal jika diklik cepat
+                    sound.play();
+                } else {
+                    console.warn("Audio element not found:", soundId);
+                }
+            } catch (error) {
+                console.error("Error playing sound:", error);
+            }
+        }
+    </script>
 </body>
 </html>
