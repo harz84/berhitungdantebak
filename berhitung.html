@@ -6,6 +6,7 @@
     <title>Menu Berhitung</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Version B.3.9 -->
     <style>
          :root {
             --bg-color: #fdf0d5;
@@ -20,8 +21,7 @@
             --border-radius: 15px;
             --home-btn-bg: #ffcc80;
             --home-btn-hover: #ffb74d;
-            --copyright-color: rgba(51, 51, 51, 0.7);
-            --score-color: #555; /* Warna Teks Skor */
+            --copyright-color: #555;
         }
 
         body {
@@ -29,33 +29,47 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             margin: 0;
-            padding: 70px 20px 40px 20px; /* Padding atas untuk Home, bawah untuk copyright */
+            padding: 70px 20px 20px 20px; /* Padding atas untuk Home & Copyright */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Untuk copyright & home */
+            position: relative; /* Needed for absolute positioning */
         }
 
-        /* --- PERUBAHAN: Home Button diperbesar ~30% --- */
+        /* 1. Copyright Style */
+        .copyright {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
+            color: var(--copyright-color);
+            z-index: 10;
+        }
+
+        /* 2. Perbesar Tombol Home (+30%) */
         .home-btn {
             position: absolute; top: 15px; left: 15px;
             background-color: var(--home-btn-bg); color: var(--text-color);
-             /* Naikkan padding & font-size */
-            padding: 13px 20px; /* Dari 10px 15px */
-            font-size: clamp(1.1rem, 4vw, 1.5rem); /* Dari 0.9rem, 3vw, 1.2rem */
+            /* Ukuran diperbesar ~30% */
+            padding: 13px 20px; /* dari 10px 15px */
+            font-size: clamp(1.1rem, 3.9vw, 1.5rem); /* dari clamp(0.9rem, 3vw, 1.2rem) */
+            gap: 10px; /* dari 8px */
             border: none; border-radius: var(--border-radius); cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease;
-            display: inline-flex; align-items: center; gap: 10px; /* Perbesar gap sedikit */
-            z-index: 10;
+            display: inline-flex; align-items: center; z-index: 10;
+             user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
-        .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.05); }
-        .home-btn:active { transform: scale(0.98); }
-        .home-btn i { font-size: 1.1em; } /* Perbesar ikon sedikit */
+        .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.08); } /* Scale hover sedikit lebih besar */
+        .home-btn:active { transform: scale(1); } /* Active scale kembali normal */
 
         h1 {
             font-size: clamp(2rem, 8vw, 3.5rem); color: var(--primary-color);
             margin-bottom: 1em; text-align: center;
+            margin-top: 10px; /* Adjust if needed based on copyright/home button */
         }
 
         #menu-pilihan {
@@ -69,36 +83,18 @@
             transition: background-color 0.3s ease, transform 0.1s ease;
             width: 100%; display: flex; align-items: center;
             justify-content: center; gap: 10px;
+             user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .button-pilihan:hover { background-color: var(--primary-hover); transform: scale(1.03); }
         .button-pilihan:active { transform: scale(0.98); }
 
-         #kuis-container {
+        #kuis-container {
             display: none; width: 100%; max-width: 600px;
             text-align: center; padding-bottom: 50px;
         }
-
-         #progress-container {
-            width: 80%; max-width: 400px; height: 20px;
-            background-color: #e0e0e0; border-radius: 10px;
-            margin: 0 auto 5px auto; /* Kurangi margin bawah sedikit */
-            overflow: hidden;
-        }
-        #progress-bar {
-            width: 0%; height: 100%; background-color: var(--primary-color);
-            border-radius: 10px; transition: width 0.5s ease;
-        }
-         #level-info {
-             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px;
-             margin-bottom: 10px; /* Kurangi margin bawah */
-             color: var(--text-color);
-         }
-
-         /* --- BARU: Score Info Style --- */
-         #score-info {
-             font-size: clamp(1.1rem, 4vw, 1.4rem); margin-bottom: 20px;
-             color: var(--score-color); font-weight: bold;
-         }
 
         #soal {
             font-size: clamp(2.5rem, 10vw, 4rem); margin-bottom: 30px;
@@ -125,6 +121,10 @@
             border-radius: var(--border-radius);
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease;
+             user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .opsi:hover {
             background-color: var(--secondary-hover);
@@ -133,11 +133,11 @@
         .opsi:active {
             transform: scale(0.98);
         }
-        .opsi:disabled { /* Style saat opsi dinonaktifkan */
-             opacity: 0.6;
+        .opsi:disabled { /* Style saat opsi nonaktif */
+             background-color: #cccccc;
              cursor: not-allowed;
-        }
-
+             opacity: 0.7;
+         }
 
         #notifikasi-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -150,80 +150,103 @@
             display: flex; flex-direction: column; align-items: center; gap: 15px;
             transform: scale(0.5); opacity: 0;
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            text-align: center; /* Pastikan teks notif center */
         }
          #notifikasi i { font-size: 1.2em; }
-         /* --- PERUBAHAN: Tambah class 'coba-lagi' --- */
         .benar { background-color: var(--correct-color); }
         .salah { background-color: var(--wrong-color); }
-        .coba-lagi { background-color: var(--wrong-color); } /* Sama dg salah, tp icon beda */
         #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
 
-        /* --- BARU: Final Score Overlay Style --- */
-        #final-score-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Sedikit lebih gelap */
-            display: none; /* Awalnya hidden */
-            flex-direction: column; /* Konten tumpuk vertikal */
-            justify-content: center; align-items: center; z-index: 1001; /* Di atas notif biasa */
-            color: var(--white-color); text-align: center; padding: 20px;
+         #progress-container {
+            width: 80%; max-width: 400px; height: 20px;
+            background-color: #e0e0e0; border-radius: 10px;
+            margin: 20px auto; overflow: hidden;
         }
-        #final-score-content {
-             background-color: var(--correct-color); /* Latar hijau cerah */
-             padding: clamp(30px, 8vw, 60px);
-             border-radius: var(--border-radius);
-             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        #progress-bar {
+            width: 0%; height: 100%; background-color: var(--primary-color);
+            border-radius: 10px; transition: width 0.5s ease;
         }
-         #final-score-content h2 {
-            font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 15px;
-            color: var(--white-color);
-        }
-        #final-score-content p {
-            font-size: clamp(1.2rem, 5vw, 1.8rem); margin-bottom: 30px;
-            color: var(--white-color);
-        }
-        #final-score-content .home-btn-final { /* Style tombol home di final score */
+         #level-info {
+             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px;
+             margin-bottom: 20px; color: var(--text-color);
+         }
+
+         /* 5. Style untuk Halaman Hasil Akhir */
+         #hasil-akhir-container {
+            display: none; /* Sembunyikan secara default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            margin-top: 20px;
+            background-color: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+         }
+         #hasil-akhir-container h2 {
+            color: var(--primary-color);
+            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            margin-bottom: 15px;
+         }
+         #hasil-akhir-container p {
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            margin-bottom: 25px;
+            line-height: 1.6;
+         }
+         .button-hasil-akhir { /* Tombol home di halaman hasil */
             padding: 15px 25px;
-            font-size: clamp(1.2rem, 4.5vw, 1.8rem);
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
             background-color: var(--home-btn-bg);
             color: var(--text-color);
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
+            border: none; border-radius: var(--border-radius); cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease;
             display: inline-flex; align-items: center; gap: 10px;
-        }
-        #final-score-content .home-btn-final:hover {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+         }
+         .button-hasil-akhir:hover {
             background-color: var(--home-btn-hover);
             transform: scale(1.05);
-        }
-         #final-score-content .home-btn-final:active {
-             transform: scale(0.98);
          }
-         #final-score-content .home-btn-final i {
-             font-size: 1.1em;
+         .button-hasil-akhir:active {
+            transform: scale(0.98);
          }
 
-
-        /* --- BARU: Copyright Style --- */
-        .copyright {
-            position: absolute; bottom: 10px; right: 10px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem);
-            color: var(--copyright-color); z-index: 5;
+        /* Style untuk HP layar kecil */
+        @media (max-width: 400px) {
+            .copyright {
+                right: 10px;
+            }
+             .home-btn {
+                 left: 10px;
+                 padding: 10px 15px; /* Kembalikan sedikit jika terlalu besar */
+                 font-size: clamp(1rem, 3.5vw, 1.3rem);
+             }
+             body {
+                 padding-top: 80px; /* Beri ruang lebih di atas */
+             }
+             h1 {
+                 margin-top: 0;
+             }
         }
     </style>
 </head>
 <body>
-    <!-- BARU: Tambahkan onclick untuk suara -->
-    <button class="home-btn" onclick="playSound('click-sound'); location.href='index.html'"><i class="fas fa-home"></i> Home</button>
+    <!-- 1. Copyright Element -->
+    <div class="copyright">copyright Mas Har</div>
+
+    <!-- 2. Tombol Home (sudah di-style di CSS) -->
+    <button class="home-btn" onclick="location.href='index.html'"><i class="fas fa-home"></i> Home</button>
 
     <h1>Pilih Berhitung</h1>
 
     <div id="menu-pilihan">
-         <!-- BARU: Tambahkan onclick untuk suara -->
-        <button class="button-pilihan" onclick="playSound('click-sound'); mulaiLevel('penjumlahan')"><i class="fas fa-plus"></i> Penjumlahan</button>
-         <!-- BARU: Tambahkan onclick untuk suara -->
-        <button class="button-pilihan" onclick="playSound('click-sound'); mulaiLevel('pengurangan')"><i class="fas fa-minus"></i> Pengurangan</button>
+        <button class="button-pilihan" onclick="mulaiLevel('penjumlahan')"><i class="fas fa-plus"></i> Penjumlahan</button>
+        <button class="button-pilihan" onclick="mulaiLevel('pengurangan')"><i class="fas fa-minus"></i> Pengurangan</button>
     </div>
 
     <div id="kuis-container">
@@ -231,12 +254,17 @@
             <div id="progress-bar"></div>
         </div>
         <div id="level-info"></div>
-        <!-- --- BARU: Score Info Element --- -->
-        <div id="score-info">Benar: 0 | Salah: 0</div>
         <div id="soal"></div>
-        <div id="opsiJawaban">
-            <!-- Tombol opsi akan dibuat oleh JavaScript -->
-        </div>
+        <div id="opsiJawaban"></div>
+     </div>
+
+     <!-- 5. Kontainer Hasil Akhir -->
+     <div id="hasil-akhir-container">
+        <h2>Selamat! Kamu Hebat! <i class="fas fa-trophy" style="color: #ffd700;"></i></h2>
+        <p id="pesan-hasil-akhir"></p>
+        <button class="button-hasil-akhir" onclick="location.href='index.html'">
+            <i class="fas fa-home"></i> Kembali ke Menu Utama
+        </button>
      </div>
 
     <div id="notifikasi-overlay">
@@ -246,37 +274,17 @@
         </div>
     </div>
 
-    <!-- --- BARU: Final Score Overlay Element --- -->
-    <div id="final-score-overlay">
-        <div id="final-score-content">
-            <h2>Selamat! 🎉</h2>
-            <p id="final-score-text">Kamu menyelesaikan semua level!</p>
-            <p id="final-score-detail">Skor Akhir: Benar: 0 | Salah: 0</p>
-            <!-- BARU: Tombol Home di Final Score -->
-            <button class="home-btn-final" onclick="playSound('click-sound'); location.href='index.html'">
-                <i class="fas fa-home"></i> Kembali ke Home
-            </button>
-        </div>
-    </div>
-
-    <!-- --- BARU: Copyright Element --- -->
-    <div class="copyright">Copyright Mas Har - B.3.9</div>
-
-    <!-- --- BARU: Audio Elements --- -->
-    <audio id="click-sound" src="ping.wav" preload="auto"></audio>
-    <audio id="wrong-sound" src="gameovertwew.wav" preload="auto"></audio>
+    <!-- 3 & 6. Audio Elements -->
+    <audio id="pingSound" src="ping.wav" preload="auto"></audio>
+    <audio id="wrongSound" src="gameovertwew.wav" preload="auto"></audio>
 
     <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
         const soalPerLevel = 10;
         const totalLevel = 5;
 
-        // --- BARU: Score Variables ---
-        let scoreBenar = 0;
-        let scoreSalah = 0;
-
-        const levels = { // (Data levels tidak berubah, tetap sama)
-            penjumlahan: [
+        const levels = { /* ... (data level sama seperti sebelumnya) ... */
+             penjumlahan: [
                 Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 5) + 1, b: Math.floor(Math.random() * 5) + 1 })),
                 Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 10) + 1, b: Math.floor(Math.random() * 10) + 1 })),
                 Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 11) + 5, b: Math.floor(Math.random() * 11) + 5 })),
@@ -292,22 +300,53 @@
             ]
         };
 
+        // Ambil Referensi Elemen DOM
         const menuPilihanElem = document.getElementById('menu-pilihan');
         const kuisContainerElem = document.getElementById('kuis-container');
+        const hasilAkhirContainerElem = document.getElementById('hasil-akhir-container'); // 5. Ref Hasil
+        const pesanHasilElem = document.getElementById('pesan-hasil-akhir'); // 5. Ref Pesan Hasil
         const judulElem = document.querySelector('h1');
         const soalElem = document.getElementById('soal');
         const opsiJawabanContainer = document.getElementById('opsiJawaban');
-        const scoreInfoElem = document.getElementById('score-info'); // BARU: Referensi skor
-        const finalScoreOverlay = document.getElementById('final-score-overlay'); // BARU: Referensi Final Score
+        const notifikasiOverlay = document.getElementById('notifikasi-overlay');
+        const notifikasiElem = document.getElementById('notifikasi');
+        const notifikasiTeks = document.getElementById('notifikasi-teks');
+        const progressBar = document.getElementById('progress-bar');
+        const levelInfo = document.getElementById('level-info');
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+        // 3 & 6. Audio Element References
+        const pingSound = document.getElementById('pingSound');
+        const wrongSound = document.getElementById('wrongSound');
+
+        // 3. Fungsi Play Sound
+        function playSound(soundElement) {
+            if (soundElement) {
+                soundElement.currentTime = 0;
+                soundElement.play().catch(error => console.log("Playback failed:", error));
+            }
+        }
+
+        // 3. Event listener untuk semua tombol (termasuk home, opsi, dll)
+        document.addEventListener('click', function(event) {
+            const button = event.target.closest('button');
+            // Hanya mainkan ping jika bukan tombol opsi jawaban (karena opsi punya feedback sendiri)
+            // Atau jika notifikasi sedang tidak tampil (agar tidak double sound saat klik di notif)
+            if (button && !button.classList.contains('opsi') && notifikasiOverlay.style.display === 'none') {
+                 // Kecualikan juga tombol di hasil akhir jika ingin suara berbeda/tanpa suara
+                 if (!hasilAkhirContainerElem.contains(button)) {
+                     playSound(pingSound);
+                 }
+            }
+        });
+
+        function shuffleArray(array) { /* ... (sama) ... */
+             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
-        function generateOptions(correctAnswer) {
+        function generateOptions(correctAnswer) { /* ... (sama) ... */
              let options = [correctAnswer];
             const maxAttempts = 10;
             let attempts = 0;
@@ -318,9 +357,8 @@
                     wrongOption = correctAnswer + variation;
                 } else {
                     wrongOption = correctAnswer - variation;
-                    if (wrongOption < 0) wrongOption = correctAnswer + variation + 1; // Hindari negatif jika bisa
                 }
-                 if (wrongOption >= 0 && !options.includes(wrongOption)) {
+                if (wrongOption >= 0 && !options.includes(wrongOption)) {
                     options.push(wrongOption);
                 }
                 attempts++;
@@ -330,45 +368,42 @@
                  if(!options.includes(randomNum)){
                      options.push(randomNum)
                  } else {
-                      options.push(Math.max(0, Math.floor(Math.random()*50)+correctAnswer-25)) // Fallback lebih terarah
+                      options.push(Math.max(0, Math.floor(Math.random()*50)))
                  }
              }
             shuffleArray(options);
             return options;
         }
 
-        // --- PERUBAHAN: Reset Skor saat mulai ---
         function mulaiLevel(jenis) {
             jenisSoal = jenis;
             currentLevel = 0;
             currentSoal = 0;
-            scoreBenar = 0; // Reset skor
-            scoreSalah = 0; // Reset skor
-            updateScoreDisplay(); // Tampilkan skor awal (0)
-            finalScoreOverlay.style.display = 'none'; // Sembunyikan final score jika kembali
             menuPilihanElem.style.display = 'none';
-            kuisContainerElem.style.display = 'block';
+            kuisContainerElem.style.display = 'block'; // Tampilkan kuis
+            hasilAkhirContainerElem.style.display = 'none'; // Sembunyikan hasil akhir
             judulElem.textContent = jenis === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan';
             tampilkanSoal();
         }
 
         function tampilkanSoal() {
-            // Cek jika level SELESAI sebelum menampilkan soal berikutnya
-            if (currentSoal >= soalPerLevel) {
+             // Cek apakah level SEBELUMNYA sudah selesai
+             if (currentSoal >= soalPerLevel) {
                 currentLevel++;
                 currentSoal = 0;
-                // Cek apakah SEMUA level sudah selesai
-                if (currentLevel >= totalLevel) {
-                    tampilkanFinalScore(); // Tampilkan layar skor akhir
+                 // Cek apakah semua level sudah selesai
+                 if (currentLevel >= totalLevel) {
+                    tampilkanHasilAkhir(); // 5. Panggil fungsi hasil akhir
                     return; // Stop proses tampilkan soal
-                } else {
+                 } else {
                     // Lanjut ke level berikutnya
-                    tampilkanNotifikasi(`Level ${currentLevel + 1} Mulai!`, 'lanjut', true); // Notif pindah level
-                    // Tidak perlu timeout di sini, notifikasi akan hilang saat soal baru tampil atau dihandle oleh setTimeout di cekJawaban
-                }
+                    tampilkanNotifikasi(`Level ${currentLevel + 1} Dimulai!`, 'lanjut', 1500); // Auto hide
+                    // Tidak perlu timeout di sini, notifikasi akan hilang sendiri
+                    // Lanjut tampilkan soal level baru setelah notifikasi
+                 }
             }
 
-             // Jika belum selesai semua level, tampilkan soal
+            // Jika belum selesai semua level, tampilkan soal
             let soal = levels[jenisSoal][currentLevel][currentSoal];
             jawabanBenar = jenisSoal === 'penjumlahan' ? soal.a + soal.b : soal.a - soal.b;
             soalElem.innerHTML = `${soal.a} ${jenisSoal === 'penjumlahan' ? '+' : '−'} ${soal.b} = ?`;
@@ -379,13 +414,13 @@
                 const button = document.createElement('button');
                 button.classList.add('opsi');
                 button.textContent = opsi;
-                 // BARU: Tambahkan playSound('click-sound') saat tombol opsi diklik, SEBELUM cekJawaban
-                button.onclick = () => { playSound('click-sound'); cekJawaban(opsi); };
+                // PENTING: Kirim nilai opsi saat diklik
+                button.onclick = () => cekJawaban(opsi);
                 opsiJawabanContainer.appendChild(button);
             });
 
             updateProgressBar();
-            disableOptions(false); // Aktifkan opsi untuk soal baru
+            disableOptions(false); // Pastikan opsi aktif
         }
 
         function disableOptions(disabled) {
@@ -395,120 +430,87 @@
              });
          }
 
-        // --- PERUBAHAN BESAR: Logic Cek Jawaban (Retry on Wrong) ---
+        // 4 & 6. Modifikasi Cek Jawaban
         function cekJawaban(pilihan) {
-            disableOptions(true); // Nonaktifkan opsi sementara
+            disableOptions(true); // Nonaktifkan opsi segera
 
             if (parseInt(pilihan) === jawabanBenar) {
                 // Jawaban Benar
-                scoreBenar++;
-                updateScoreDisplay();
-                // Suara benar (pakai click sound saja sesuai request awal)
-                // playSound('click-sound'); // Sudah di onclick tombol
-                tampilkanNotifikasi('Benar!', 'benar', true); // Tampilkan notif benar
-
-                // Tunggu sebentar, lalu lanjut soal berikutnya
+                playSound(pingSound); // Mainkan suara benar (pakai ping atau suara lain jika ada)
+                tampilkanNotifikasi('Benar!', 'benar', 1200); // Durasi lebih pendek
+                // Langsung lanjut ke soal berikutnya setelah notifikasi hilang
                 setTimeout(() => {
-                    sembunyikanNotifikasi();
-                    currentSoal++; // Maju ke soal berikutnya
-                    tampilkanSoal(); // Tampilkan soal baru (atau cek level selesai)
-                }, 1200); // Durasi notifikasi benar sedikit lebih cepat
+                    currentSoal++;
+                    tampilkanSoal(); // Lanjut ke soal/level berikutnya
+                }, 1300); // Sedikit lebih lama dari durasi notifikasi
 
             } else {
                 // Jawaban Salah
-                scoreSalah++;
-                updateScoreDisplay();
-                playSound('wrong-sound'); // Mainkan suara salah
-                tampilkanNotifikasi('Salah! Coba lagi ya!', 'coba-lagi', false); // Notif coba lagi (jangan auto hide)
-
-                // Tunggu sebentar, lalu sembunyikan notif dan aktifkan lagi opsi
+                playSound(wrongSound); // 6. Mainkan suara salah
+                // 4. Minta coba lagi, jangan beri tahu jawaban
+                tampilkanNotifikasi('Salah, coba lagi ya!', 'salah', 1500);
+                 // Setelah notifikasi hilang, aktifkan kembali opsi
                 setTimeout(() => {
-                    sembunyikanNotifikasi();
-                    disableOptions(false); // Aktifkan kembali opsi untuk mencoba lagi
-                }, 1500); // Durasi notifikasi salah
-                // JANGAN MAJUKAN currentSoal agar soal yang sama ditampilkan lagi
+                   disableOptions(false); // Aktifkan kembali opsi untuk mencoba lagi
+                }, 1600); // Sedikit lebih lama dari durasi notifikasi
+                // Jangan increment currentSoal atau panggil tampilkanSoal()
             }
         }
 
-        // --- BARU: Update Score Display ---
-        function updateScoreDisplay() {
-            scoreInfoElem.textContent = `Benar: ${scoreBenar} | Salah: ${scoreSalah}`;
-        }
-
-        // --- PERUBAHAN: Modifikasi Tampilkan Notifikasi untuk Coba Lagi ---
-        function tampilkanNotifikasi(pesan, tipe, autoHide) { // autoHide tidak dipakai di logic baru
-            const overlay = document.getElementById('notifikasi-overlay');
-            const notifikasi = document.getElementById('notifikasi');
-            const notifikasiTeks = document.getElementById('notifikasi-teks');
-            const ikon = notifikasi.querySelector('i');
+        // Tampilkan Notifikasi (dengan autoHide)
+        function tampilkanNotifikasi(pesan, tipe, duration = null) { // duration dalam ms
+            const ikon = notifikasiElem.querySelector('i');
 
             notifikasiTeks.textContent = pesan;
-            notifikasi.className = ''; ikon.className = ''; // Reset class
+            notifikasiElem.className = ''; ikon.className = '';
 
-            if (tipe === 'benar') {
-                 notifikasi.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle');
-            } else if (tipe === 'salah') { // Tipe 'salah' tidak dipakai lagi untuk jawaban, diganti 'coba-lagi'
-                 notifikasi.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle');
-            } else if (tipe === 'coba-lagi') { // BARU
-                 notifikasi.classList.add('coba-lagi'); ikon.classList.add('fas', 'fa-redo'); // Icon refresh/coba lagi
-            } else if (tipe === 'lanjut') {
-                 notifikasi.classList.add('benar'); ikon.classList.add('fas', 'fa-arrow-circle-right');
+            if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); }
+            else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); }
+            else if (tipe === 'selesai') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-trophy'); } // Untuk hasil akhir nanti
+            else if (tipe === 'lanjut') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-arrow-circle-right'); }
+
+            notifikasiOverlay.style.display = 'flex';
+            setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10);
+
+            // Sembunyikan otomatis jika durasi diberikan
+            if (duration) {
+                setTimeout(sembunyikanNotifikasi, duration);
             }
-             // Hapus logika 'selesai' dari sini, ditangani final score
-
-            overlay.style.display = 'flex';
-            setTimeout(() => { overlay.classList.add('show'); }, 10);
-
-            // Hapus auto hide, akan di-handle manual oleh setTimeout di cekJawaban
         }
 
         function sembunyikanNotifikasi() {
-            const overlay = document.getElementById('notifikasi-overlay');
-            overlay.classList.remove('show');
-             setTimeout(() => { overlay.style.display = 'none'; }, 300); // Delay agar transisi selesai
+            notifikasiOverlay.classList.remove('show');
+             setTimeout(() => {
+                 notifikasiOverlay.style.display = 'none';
+                 // PENTING: Jika notifikasi adalah 'lanjut level', panggil tampilkanSoal() SETELAH notifikasi hilang
+                 if (notifikasiElem.classList.contains('benar') && notifikasiElem.querySelector('i').classList.contains('fa-arrow-circle-right')) {
+                     tampilkanSoal(); // Tampilkan soal level baru sekarang
+                 }
+             }, 300); // Waktu untuk animasi fade out
         }
 
         function updateProgressBar() {
-             const progressBar = document.getElementById('progress-bar');
-            const levelInfo = document.getElementById('level-info');
-            const totalSoalInLevel = soalPerLevel;
-            // Penyesuaian agar progress bar tidak aneh saat soal terakhir level
-            const soalEfektif = currentSoal >= totalSoalInLevel ? totalSoalInLevel : currentSoal;
-            const progress = (soalEfektif / totalSoalInLevel) * 100;
-            progressBar.style.width = `${progress}%`;
-            // Penyesuaian nomor soal tampil
-             const nomorSoalTampil = currentSoal >= totalSoalInLevel ? totalSoalInLevel : currentSoal + 1;
+             const totalSoalInLevel = soalPerLevel;
+             // Pastikan currentSoal tidak melebihi soalPerLevel untuk tampilan progress
+             const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel);
+             const progress = (soalTampilProgress / totalSoalInLevel) * 100;
+             progressBar.style.width = `${progress}%`;
+             // Tampilkan nomor soal yang benar (1 sampai soalPerLevel)
+             const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel);
              levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`;
         }
 
-        // --- BARU: Fungsi Play Sound (Sama seperti index.html) ---
-        function playSound(soundId) {
-            try {
-                const sound = document.getElementById(soundId);
-                if (sound) {
-                    sound.currentTime = 0;
-                    sound.play();
-                } else {
-                    console.warn("Audio element not found:", soundId);
-                }
-            } catch (error) {
-                console.error("Error playing sound:", error);
-            }
-        }
-
-        // --- BARU: Fungsi Tampilkan Final Score ---
-        function tampilkanFinalScore() {
+        // 5. Fungsi untuk menampilkan Hasil Akhir
+        function tampilkanHasilAkhir() {
             kuisContainerElem.style.display = 'none'; // Sembunyikan kuis
-            sembunyikanNotifikasi(); // Pastikan notif biasa hilang
-
-            // Update teks di overlay final score
-            document.getElementById('final-score-text').textContent = `Kamu menyelesaikan semua ${totalLevel} level ${jenisSoal}!`;
-            document.getElementById('final-score-detail').textContent = `Skor Akhir: Benar: ${scoreBenar} | Salah: ${scoreSalah}`;
-
-            // Tampilkan overlay final score
-            finalScoreOverlay.style.display = 'flex';
-            // Optional: Mainkan suara kemenangan?
-            // playSound('victory-sound'); // Jika ada file suara kemenangan
+            menuPilihanElem.style.display = 'none'; // Pastikan menu pilihan juga tersembunyi
+            judulElem.textContent = "Permainan Selesai!"; // Ganti judul utama
+            pesanHasilElem.textContent = `Kamu telah menyelesaikan semua ${totalLevel} level ${jenisSoal}! Pertahankan prestasimu!`;
+            hasilAkhirContainerElem.style.display = 'flex'; // Tampilkan kontainer hasil
+            playSound(pingSound); // Atau suara kemenangan lain jika ada
+             // Optional: Tampilkan notifikasi "Selesai" sebentar sebelum hasil akhir muncul
+             // tampilkanNotifikasi('Hebat! Semua level selesai!', 'selesai', 2000);
+             // setTimeout(() => { /* Tampilkan hasil akhir di sini */ }, 500); // Delay sedikit
         }
 
     </script>
