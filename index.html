@@ -6,6 +6,7 @@
     <title>Aplikasi Belajar Anak</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Version B.3.9 -->
     <style>
         :root {
             --bg-color: #fdf0d5;
@@ -16,19 +17,28 @@
             --text-color: #333;
             --white-color: #fff;
             --border-radius: 15px;
-            --copyright-color: rgba(51, 51, 51, 0.7); /* Warna copyright */
+            --copyright-color: #555; /* Warna copyright */
         }
         body {
             background-color: var(--bg-color); text-align: center;
             font-family: 'Poppins', sans-serif; color: var(--text-color);
             margin: 0; padding: 20px; min-height: 100vh; display: flex;
             flex-direction: column; justify-content: center; align-items: center;
-            position: relative; /* Diperlukan untuk copyright */
-            padding-bottom: 40px; /* Beri ruang untuk copyright */
+            position: relative; /* Needed for absolute positioning of copyright */
+        }
+        /* 1. Copyright Style */
+        .copyright {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: clamp(0.7rem, 2vw, 0.8rem); /* Ukuran font responsif */
+            color: var(--copyright-color);
+            z-index: 10;
         }
         h1 {
             font-size: clamp(2.5rem, 10vw, 4rem); color: var(--primary-color);
             margin-bottom: 1.5em;
+            margin-top: 30px; /* Add some margin top to avoid overlap with copyright */
         }
         .menu-container {
             display: flex; flex-direction: column; gap: 20px;
@@ -39,6 +49,11 @@
             color: var(--white-color); border: none; border-radius: var(--border-radius);
             cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease;
             display: flex; align-items: center; justify-content: center; gap: 10px;
+            /* Tambahkan user-select none agar tidak mudah terseleksi saat tap cepat */
+            user-select: none;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
         }
         .button:hover { transform: scale(1.03); }
         .button:active { transform: scale(0.98); }
@@ -51,52 +66,63 @@
 
         .button i { font-size: 0.9em; }
 
-        /* --- BARU: Copyright Style --- */
-        .copyright {
-            position: absolute; /* Menggunakan absolute relatif thd body */
-            bottom: 10px;
-            right: 10px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem); /* Ukuran font responsif */
-            color: var(--copyright-color);
-            z-index: 5; /* Pastikan di atas background tapi di bawah elemen interaktif jika ada overlay */
+        /* Style untuk HP layar kecil agar copyright tidak terlalu mepet */
+        @media (max-width: 400px) {
+            .copyright {
+                right: 10px;
+            }
+            h1 {
+                margin-top: 35px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 1. Copyright Element -->
+    <div class="copyright">copyright Mas Har</div>
+
     <h1>Yuk, Mulai Belajar!</h1>
     <div class="menu-container">
-        <!-- BARU: Tambahkan onclick untuk suara -->
-        <button class="button button-hitung" onclick="playSound('click-sound'); location.href='berhitung.html'">
+        <button class="button button-hitung" onclick="location.href='berhitung.html'">
             <i class="fas fa-calculator"></i> Berhitung
         </button>
-        <!-- BARU: Tambahkan onclick untuk suara -->
-        <button class="button button-tebak" onclick="playSound('click-sound'); location.href='tebak.html'">
+        <button class="button button-tebak" onclick="location.href='tebak.html'">
              <i class="fas fa-question-circle"></i> Tebak-Tebakan
         </button>
     </div>
 
-    <!-- --- BARU: Copyright Element --- -->
-    <div class="copyright">Copyright Mas Har - B.3.9</div>
-
-    <!-- --- BARU: Audio Element --- -->
-    <audio id="click-sound" src="ping.wav" preload="auto"></audio>
-    <!-- (Tidak perlu suara salah di halaman ini) -->
+    <!-- 3. Audio Element (ping) -->
+    <audio id="pingSound" src="ping.wav" preload="auto"></audio>
+    <!-- Audio untuk jawaban salah tidak diperlukan di index.html -->
 
     <script>
-        // --- BARU: Fungsi Play Sound ---
-        function playSound(soundId) {
-            try {
-                const sound = document.getElementById(soundId);
-                if (sound) {
-                    sound.currentTime = 0; // Putar dari awal jika diklik cepat
-                    sound.play();
-                } else {
-                    console.warn("Audio element not found:", soundId);
-                }
-            } catch (error) {
-                console.error("Error playing sound:", error);
+        // 3. Fungsi Play Sound
+        const pingSound = document.getElementById('pingSound');
+
+        function playSound(soundElement) {
+            if (soundElement) {
+                // Reset playback position and play
+                soundElement.currentTime = 0;
+                soundElement.play().catch(error => {
+                    // Handle error (e.g., user hasn't interacted yet)
+                    console.log("Playback failed:", error);
+                });
             }
         }
+
+        // 3. Event listener untuk semua tombol
+        document.addEventListener('click', function(event) {
+            // Check if the clicked element is a button or inside a button
+            const button = event.target.closest('button');
+            if (button) {
+                // Cek apakah ini tombol di dalam notifikasi atau hasil akhir (jika ada nanti)
+                // Untuk index.html, semua button utama bisa diberi suara
+                playSound(pingSound);
+
+                // Jika tombol punya onclick untuk navigasi, biarkan default action
+                // Jika ada logic lain, bisa ditambahkan di sini
+            }
+        });
     </script>
 </body>
 </html>
