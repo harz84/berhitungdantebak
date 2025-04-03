@@ -16,32 +16,52 @@
             --text-color: #333;
             --white-color: #fff;
             --border-radius: 15px;
-            --copyright-color: rgba(51, 51, 51, 0.7); /* Warna copyright */
+            --copyright-color: rgba(51, 51, 51, 0.7);
+            --transition-speed: 0.3s; /* BARU: Kecepatan transisi */
         }
         body {
             background-color: var(--bg-color); text-align: center;
             font-family: 'Poppins', sans-serif; color: var(--text-color);
             margin: 0; padding: 20px; min-height: 100vh; display: flex;
             flex-direction: column; justify-content: center; align-items: center;
-            position: relative; /* Diperlukan untuk copyright */
-            padding-bottom: 40px; /* Beri ruang untuk copyright */
+            position: relative;
+            padding-bottom: 40px;
+            overflow-x: hidden; /* Mencegah scroll horizontal saat animasi */
         }
         h1 {
             font-size: clamp(2.5rem, 10vw, 4rem); color: var(--primary-color);
             margin-bottom: 1.5em;
+             /* BARU: Animasi fade-in untuk judul */
+             opacity: 0;
+             animation: fadeIn 1s ease-out forwards;
+             animation-delay: 0.2s; /* Muncul setelah sedikit delay */
         }
         .menu-container {
             display: flex; flex-direction: column; gap: 20px;
             width: 90%; max-width: 500px;
+             /* BARU: Animasi slide-in untuk menu */
+             opacity: 0;
+             transform: translateY(20px);
+             animation: slideFadeIn 0.8s ease-out forwards;
+             animation-delay: 0.5s; /* Muncul setelah judul */
         }
         .button {
             padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem);
             color: var(--white-color); border: none; border-radius: var(--border-radius);
-            cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease;
+            cursor: pointer;
+             /* BARU: Transisi untuk hover dan active */
+             transition: background-color var(--transition-speed) ease,
+                         transform var(--transition-speed) ease;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .button:hover { transform: scale(1.03); }
-        .button:active { transform: scale(0.98); }
+        .button:hover {
+             transform: scale(1.03); /* Tetap ada efek hover */
+        }
+        /* --- PERUBAHAN: Animasi Tombol Tekan --- */
+        .button:active {
+             transform: scale(0.98); /* Sedikit mengecil cepat saat ditekan */
+             transition-duration: 0.05s; /* Transisi lebih cepat saat active */
+         }
 
         .button-hitung { background-color: var(--primary-color); }
         .button-hitung:hover { background-color: var(--primary-hover); }
@@ -51,44 +71,56 @@
 
         .button i { font-size: 0.9em; }
 
-        /* --- BARU: Copyright Style --- */
         .copyright {
-            position: absolute; /* Menggunakan absolute relatif thd body */
+            position: absolute;
             bottom: 10px;
             right: 10px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem); /* Ukuran font responsif */
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             color: var(--copyright-color);
-            z-index: 5; /* Pastikan di atas background tapi di bawah elemen interaktif jika ada overlay */
+            z-index: 5;
         }
+
+        /* --- BARU: Keyframes untuk Animasi Masuk --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
     </style>
 </head>
 <body>
     <h1>Yuk, Mulai Belajar!</h1>
     <div class="menu-container">
-        <!-- BARU: Tambahkan onclick untuk suara -->
-        <button class="button button-hitung" onclick="playSound('click-sound'); location.href='berhitung.html'">
+        <button class="button button-hitung" onclick="handleNavigation('berhitung.html')">
             <i class="fas fa-calculator"></i> Berhitung
         </button>
-        <!-- BARU: Tambahkan onclick untuk suara -->
-        <button class="button button-tebak" onclick="playSound('click-sound'); location.href='tebak.html'">
+        <button class="button button-tebak" onclick="handleNavigation('tebak.html')">
              <i class="fas fa-question-circle"></i> Tebak-Tebakan
         </button>
     </div>
 
-    <!-- --- BARU: Copyright Element --- -->
     <div class="copyright">Copyright Mas Har - B.3.9</div>
 
-    <!-- --- BARU: Audio Element --- -->
     <audio id="click-sound" src="ping.wav" preload="auto"></audio>
-    <!-- (Tidak perlu suara salah di halaman ini) -->
 
     <script>
-        // --- BARU: Fungsi Play Sound ---
         function playSound(soundId) {
-            try {
+            // ... (fungsi playSound tetap sama)
+             try {
                 const sound = document.getElementById(soundId);
                 if (sound) {
-                    sound.currentTime = 0; // Putar dari awal jika diklik cepat
+                    sound.currentTime = 0;
                     sound.play();
                 } else {
                     console.warn("Audio element not found:", soundId);
@@ -96,6 +128,15 @@
             } catch (error) {
                 console.error("Error playing sound:", error);
             }
+        }
+
+        // --- BARU: Handle Navigasi dengan Delay untuk Suara ---
+        function handleNavigation(url) {
+            playSound('click-sound');
+            // Beri sedikit waktu agar suara terdengar sebelum pindah halaman
+            setTimeout(() => {
+                window.location.href = url;
+            }, 150); // Delay 150ms (sesuaikan jika perlu)
         }
     </script>
 </body>
