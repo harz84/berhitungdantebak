@@ -3,57 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Belajar Anak</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Kuis Anak Muslim</title> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Version B.3.9 -->
     <style>
         :root {
             --bg-color: #fdf0d5;
-            --primary-color: #f08080; /* Warna Tombol 1 */
+            --primary-color: #f08080; /* Warna Tombol 1 & Judul Utama */
             --primary-hover: #e57373;
             --secondary-color: #66d9ef; /* Warna Tombol 2 */
             --secondary-hover: #4fc3f7;
             --text-color: #333;
             --white-color: #fff;
             --border-radius: 15px;
-            --copyright-color: #555; /* Warna copyright */
+            --copyright-color: #555;
         }
         body {
-            background-color: var(--bg-color); text-align: center;
-            font-family: 'Poppins', sans-serif; color: var(--text-color);
-            margin: 0; padding: 20px; min-height: 100vh; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
-            position: relative; /* Needed for absolute positioning of copyright */
+            background-color: var(--bg-color);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px 20px 20px; /* Padding atas sedikit disesuaikan */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Konten ditumpuk vertikal */
+            justify-content: center; /* Pusatkan vertikal */
+            align-items: center; /* Pusatkan horizontal */
+            position: relative;
         }
-        /* 1. Copyright Style */
         .copyright {
             position: absolute;
             top: 10px;
             right: 15px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem); /* Ukuran font responsif */
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
             color: var(--copyright-color);
             z-index: 10;
         }
-        h1 {
-            font-size: clamp(2.5rem, 10vw, 4rem); color: var(--primary-color);
-            margin-bottom: 1.5em;
-            margin-top: 30px; /* Add some margin top to avoid overlap with copyright */
+
+        /* Judul Utama Baru */
+        .main-title {
+            font-size: clamp(2.8rem, 10vw, 4.5rem); /* Ukuran paling besar */
+            color: var(--primary-color); /* Samakan dengan tombol Berhitung */
+            margin-bottom: 0.4em; /* Jarak ke gambar */
+            margin-top: 20px; /* Jarak dari atas/copyright */
+            font-weight: 700; /* Bold */
+            line-height: 1.2; /* Jarak antar baris jika judul wrap */
         }
+
+        /* Gambar Siluet */
+        .hero-image {
+            display: block; /* Agar margin auto efektif */
+            max-width: 180px; /* Atur lebar maksimum gambar */
+            height: auto; /* Pertahankan rasio aspek */
+            margin: 0 auto 0.8em auto; /* Jarak atas 0, L/R auto, bawah 0.8em ke sub-judul */
+        }
+
+        /* Sub Judul (dulunya h1) */
+        .sub-title {
+             font-size: clamp(1.5rem, 5vw, 2.2rem); /* Ukuran lebih kecil */
+             color: var(--text-color); /* Warna teks standar */
+             margin-top: 0; /* Hapus margin atas */
+             margin-bottom: 1.5em; /* Jarak ke tombol */
+             font-weight: 400; /* Bobot font normal */
+        }
+
         .menu-container {
-            display: flex; flex-direction: column; gap: 20px;
-            width: 90%; max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 90%;
+            max-width: 500px;
         }
         .button {
-            padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem);
-            color: var(--white-color); border: none; border-radius: var(--border-radius);
-            cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            /* Tambahkan user-select none agar tidak mudah terseleksi saat tap cepat */
+            padding: 20px 30px;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--white-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             user-select: none;
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+ */
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
         .button:hover { transform: scale(1.03); }
         .button:active { transform: scale(0.98); }
@@ -66,22 +100,48 @@
 
         .button i { font-size: 0.9em; }
 
-        /* Style untuk HP layar kecil agar copyright tidak terlalu mepet */
+        /* Penyesuaian untuk layar kecil */
+        @media (max-width: 600px) {
+             .main-title {
+                 font-size: clamp(2.5rem, 9vw, 4rem);
+             }
+             .hero-image {
+                 max-width: 150px; /* Sedikit lebih kecil di layar sedang */
+             }
+             .sub-title {
+                 font-size: clamp(1.3rem, 4.5vw, 2rem);
+             }
+        }
+
         @media (max-width: 400px) {
+            body {
+                 padding-top: 50px; /* Beri ruang lebih untuk copyright */
+             }
+             .main-title {
+                 font-size: clamp(2.2rem, 8vw, 3.5rem);
+                 margin-top: 25px; /* Pastikan tidak overlap copyright */
+             }
+             .hero-image {
+                 max-width: 120px; /* Lebih kecil lagi di layar sempit */
+             }
+              .sub-title {
+                 font-size: clamp(1.2rem, 4vw, 1.8rem);
+             }
             .copyright {
-                right: 10px;
-            }
-            h1 {
-                margin-top: 35px;
+                right: 10px; /* Tetap */
             }
         }
     </style>
 </head>
 <body>
-    <!-- 1. Copyright Element -->
     <div class="copyright">© Mas Har</div>
 
-    <h1>Yuk, Mulai Belajar!</h1>
+    <h1 class="main-title">Kuis Anak Muslim</h1>
+
+    <img src="siluet-anak.png" alt="Siluet anak Muslim laki-laki dan perempuan" class="hero-image">
+
+    <h2 class="sub-title">Yuk, Mulai Belajar!</h2>
+
     <div class="menu-container">
         <button class="button button-hitung" onclick="location.href='berhitung.html'">
             <i class="fas fa-calculator"></i> Berhitung
@@ -91,36 +151,24 @@
         </button>
     </div>
 
-    <!-- 3. Audio Element (ping) -->
     <audio id="pingSound" src="ping.wav" preload="auto"></audio>
-    <!-- Audio untuk jawaban salah tidak diperlukan di index.html -->
 
     <script>
-        // 3. Fungsi Play Sound
         const pingSound = document.getElementById('pingSound');
 
         function playSound(soundElement) {
             if (soundElement) {
-                // Reset playback position and play
                 soundElement.currentTime = 0;
                 soundElement.play().catch(error => {
-                    // Handle error (e.g., user hasn't interacted yet)
                     console.log("Playback failed:", error);
                 });
             }
         }
 
-        // 3. Event listener untuk semua tombol
         document.addEventListener('click', function(event) {
-            // Check if the clicked element is a button or inside a button
             const button = event.target.closest('button');
             if (button) {
-                // Cek apakah ini tombol di dalam notifikasi atau hasil akhir (jika ada nanti)
-                // Untuk index.html, semua button utama bisa diberi suara
                 playSound(pingSound);
-
-                // Jika tombol punya onclick untuk navigasi, biarkan default action
-                // Jika ada logic lain, bisa ditambahkan di sini
             }
         });
     </script>
