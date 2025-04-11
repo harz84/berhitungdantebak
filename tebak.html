@@ -20,8 +20,10 @@
             --ayat-hover: #66bb6a;
             --text-color: #333;
             --white-color: #fff;
-            --correct-color: #81c784;
-            --wrong-color: #e57373;
+            --correct-color: #81c784; /* Benar & Tombol Lanjut */
+            --correct-hover: #66bb6a;
+            --wrong-color: #e57373;   /* Salah & Tombol Berhenti */
+            --wrong-hover: #d32f2f;
             --border-radius: 15px;
             --home-btn-bg: #ffcc80;
             --home-btn-hover: #ffb74d;
@@ -32,18 +34,16 @@
         body {
             background-color: var(--bg-color); font-family: 'Poppins', sans-serif;
             color: var(--text-color); margin: 0;
-            padding: 70px 20px 20px 20px; /* Padding Atas untuk Home & Copyright */
+            padding: 70px 20px 20px 20px;
             min-height: 100vh; display: flex; flex-direction: column;
             align-items: center; position: relative;
         }
 
-        /* 1. Copyright Style */
+        /* Copyright & Home Button (Tetap Sama) */
         .copyright {
             position: absolute; top: 10px; right: 15px;
             font-size: clamp(0.7rem, 2vw, 0.8rem); color: var(--copyright-color); z-index: 10;
         }
-
-        /* 2. Tombol Home */
          .home-btn {
             position: absolute; top: 15px; left: 15px; background-color: var(--home-btn-bg);
             color: var(--text-color); padding: 13px 20px; font-size: clamp(1.1rem, 3.9vw, 1.5rem);
@@ -55,19 +55,17 @@
         .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.08); }
         .home-btn:active { transform: scale(1); }
 
-        h1 {
+        h1 { /* Judul Halaman */
             font-size: clamp(2rem, 8vw, 3.5rem); color: var(--primary-color);
             margin-bottom: 1em; text-align: center; margin-top: 10px;
         }
-        /* Ganti warna judul saat mode Ayat */
-        body.ayat-mode h1 { color: var(--ayat-color); }
+        body.ayat-mode h1 { color: var(--ayat-color); } /* Warna Judul Mode Ayat */
 
-        #pilihan-kategori {
+        #pilihan-kategori { /* Menu Awal */
              display: flex; flex-direction: column; gap: 20px; width: 90%;
              max-width: 500px; margin-bottom: 30px;
         }
-
-        .button-kategori {
+        .button-kategori { /* Tombol Menu Awal */
             padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem);
             color: var(--white-color); border: none; border-radius: var(--border-radius);
             cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease;
@@ -76,122 +74,93 @@
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
         .button-kategori:hover { transform: scale(1.03); }
-         .button-kategori:active { transform: scale(0.98); }
+        .button-kategori:active { transform: scale(0.98); }
+        .button-hewan { background-color: var(--primary-color); }
+        .button-hewan:hover { background-color: var(--primary-hover); }
+        .button-buah { background-color: var(--secondary-color); }
+        .button-buah:hover { background-color: var(--secondary-hover); }
+        .button-ayat { background-color: var(--ayat-color); }
+        .button-ayat:hover { background-color: var(--ayat-hover); }
 
-         /* Warna spesifik untuk tombol kategori */
-         .button-hewan { background-color: var(--primary-color); }
-         .button-hewan:hover { background-color: var(--primary-hover); }
-         .button-buah { background-color: var(--secondary-color); } /* Misal pakai warna opsi */
-         .button-buah:hover { background-color: var(--secondary-hover); }
-         .button-ayat { background-color: var(--ayat-color); }
-         .button-ayat:hover { background-color: var(--ayat-hover); }
-
-        #kuis-container {
+        #kuis-container { /* Kontainer Utama Kuis */
             display: none; width: 100%; max-width: 600px;
-            text-align: center; padding-bottom: 50px;
+            text-align: center; padding-bottom: 30px; /* Kurangi padding bawah */
         }
 
-        /* Kontainer untuk Soal dan Tombol Baca */
+        /* Info Level - Disesuaikan */
+        #level-info {
+             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px;
+             margin-bottom: 15px; /* Kurangi jarak ke progress bar */
+             color: var(--text-color);
+         }
+
+         /* Progress Bar - Disesuaikan */
+        #progress-container {
+             width: 80%; max-width: 400px; height: 20px; background-color: #e0e0e0;
+             border-radius: 10px; margin: 0 auto 15px auto; /* Kurangi margin bawah */
+             overflow: hidden;
+        }
+        #progress-bar {
+            width: 0%; height: 100%; background-color: var(--primary-color);
+            border-radius: 10px; transition: width 0.5s ease;
+        }
+        #kuis-container.ayat-mode #progress-bar { background-color: var(--ayat-color); } /* Warna Mode Ayat */
+
+
+        /* Kontainer Soal & Tombol Baca - Disesuaikan */
         #soal-container {
-            position: relative; margin-bottom: 25px; display: flex; align-items: center;
-            justify-content: center; gap: 15px; flex-wrap: wrap;
+            position: relative;
+            margin-bottom: 20px; /* Kurangi jarak ke opsi */
+            display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;
         }
-
-        #soal {
-            font-size: clamp(1.5rem, 6vw, 2.2rem); min-height: 3em; line-height: 1.4;
-            margin-bottom: 0; max-width: calc(100% - 70px); text-align: center;
+        #soal { /* Teks Soal */
+            font-size: clamp(1.5rem, 6vw, 2.2rem); min-height: 2.5em; /* Kurangi min-height */
+            line-height: 1.4; margin-bottom: 0; max-width: calc(100% - 70px); text-align: center;
         }
-
-        /* Tombol Baca Soal (default disembunyikan) */
-        .button-baca-soal {
+        .button-baca-soal { /* Tombol Speaker */
             background-color: var(--secondary-color); color: var(--white-color); border: none;
             border-radius: 50%; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease; display: none; /* Default hidden */
+            transition: background-color 0.3s ease, transform 0.1s ease; display: none;
             align-items: center; justify-content: center; flex-shrink: 0; user-select: none;
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
-         body.speech-synthesis-supported .button-baca-soal {
-             display: inline-flex; /* Tampilkan jika API didukung (akan di-override di mode ayat) */
-         }
+        body.speech-synthesis-supported .button-baca-soal { display: inline-flex; }
         .button-baca-soal:hover { background-color: var(--secondary-hover); transform: scale(1.1); }
         .button-baca-soal:active { transform: scale(0.95); }
 
+        /* Kontainer Opsi Jawaban - Disesuaikan */
         #opsiJawaban {
-            display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;
+            display: flex; flex-direction: column; gap: 12px; /* Kurangi jarak antar opsi */
+            margin-bottom: 20px; /* Kurangi jarak ke tombol kembali */
             width: 90%; max-width: 450px; margin-left: auto; margin-right: auto;
         }
-
-        .opsi {
+        .opsi { /* Tombol Opsi Jawaban */
             padding: 15px 20px; font-size: clamp(1.2rem, 4.5vw, 2rem);
             background-color: var(--secondary-color); color: var(--white-color); border: none;
             border-radius: var(--border-radius); cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease; user-select: none;
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
-         /* Ganti warna opsi di mode Ayat */
-         #kuis-container.ayat-mode .opsi { background-color: var(--ayat-color); }
-         #kuis-container.ayat-mode .opsi:hover { background-color: var(--ayat-hover); }
-
-        .opsi:hover { transform: scale(1.03); } /* Hover umum */
+        #kuis-container.ayat-mode .opsi { background-color: var(--ayat-color); } /* Warna Mode Ayat */
+        #kuis-container.ayat-mode .opsi:hover { background-color: var(--ayat-hover); }
+        .opsi:hover { transform: scale(1.03); }
         .opsi:active { transform: scale(0.98); }
-         .opsi:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
+        .opsi:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
 
-        /* == Style Khusus Mode Tebak Ayat == */
+        /* Style Khusus Mode Ayat (Tetap Sama) */
         #kuis-container.ayat-mode #soal,
         #kuis-container.ayat-mode .opsi {
-            direction: rtl; /* Arah Teks: Kanan ke Kiri */
-            text-align: right; /* Perataan Teks: Kanan */
-            font-family: var(--arabic-font); /* Gunakan font Arab */
-            font-size: clamp(1.8rem, 7vw, 2.8rem); /* Sesuaikan ukuran font Arab */
-            line-height: 1.8; /* Sesuaikan jarak antar baris */
+            direction: rtl; text-align: right; font-family: var(--arabic-font);
+            font-size: clamp(1.8rem, 7vw, 2.8rem); line-height: 1.8;
         }
-        #kuis-container.ayat-mode #soal {
-             max-width: 100%; /* Soal bisa full width karena tidak ada tombol baca */
-        }
-        /* Pastikan tombol baca benar-benar hilang di mode ayat */
-        #kuis-container.ayat-mode .button-baca-soal {
-            display: none !important;
-        }
-        /* Penyesuaian padding opsi jika perlu untuk font Arab */
-        #kuis-container.ayat-mode .opsi {
-             padding: 12px 20px; /* Sedikit adjust padding vertikal */
-        }
-        /* == Akhir Style Khusus Mode Tebak Ayat == */
+        #kuis-container.ayat-mode #soal { max-width: 100%; }
+        #kuis-container.ayat-mode .button-baca-soal { display: none !important; }
+        #kuis-container.ayat-mode .opsi { padding: 12px 20px; }
 
-
-        #notifikasi-overlay {
-             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center;
-            align-items: center; z-index: 1000;
-        }
-        #notifikasi {
-            font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px;
-            border-radius: var(--border-radius); color: var(--white-color); display: flex;
-            flex-direction: column; align-items: center; gap: 15px; transform: scale(0.5);
-            opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
-         #notifikasi i { font-size: 1.2em; }
-        .benar { background-color: var(--correct-color); }
-        .salah { background-color: var(--wrong-color); }
-        #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
-
-        #progress-container {
-             width: 80%; max-width: 400px; height: 20px; background-color: #e0e0e0;
-             border-radius: 10px; margin: 20px auto; overflow: hidden;
-        }
-        #progress-bar {
-            width: 0%; height: 100%; background-color: var(--primary-color);
-            border-radius: 10px; transition: width 0.5s ease;
-        }
-         /* Ganti warna progress bar di mode Ayat */
-         #kuis-container.ayat-mode #progress-bar { background-color: var(--ayat-color); }
-
-         #level-info {
-             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px; margin-bottom: 20px;
-             color: var(--text-color);
-         }
+        /* Tombol Kembali ke Kategori - Disesuaikan */
          .button-kembali-kategori {
-             margin-top: 20px; background-color: var(--home-btn-bg); color: var(--text-color);
+             margin-top: 15px; /* Kurangi jarak dari opsi */
+             background-color: var(--home-btn-bg); color: var(--text-color);
              padding: 15px 25px; font-size: clamp(1.2rem, 4vw, 1.8rem); user-select: none;
             -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
             border: none; border-radius: var(--border-radius); cursor: pointer;
@@ -200,6 +169,22 @@
          }
           .button-kembali-kategori:hover { background-color: var(--home-btn-hover); transform: scale(1.05); }
 
+        /* Notifikasi Benar/Salah (Auto-hide) */
+        #notifikasi-overlay {
+             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);
+             display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        #notifikasi {
+            font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px; border-radius: var(--border-radius);
+            color: var(--white-color); display: flex; flex-direction: column; align-items: center; gap: 15px;
+            transform: scale(0.5); opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+         #notifikasi i { font-size: 1.2em; }
+        .benar { background-color: var(--correct-color); }
+        .salah { background-color: var(--wrong-color); }
+        #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
+
+        /* Hasil Akhir (Semua Level Selesai) */
          #hasil-akhir-container {
             display: none; flex-direction: column; align-items: center; justify-content: center;
             padding: 30px; margin-top: 20px; background-color: var(--white-color);
@@ -207,12 +192,9 @@
             width: 90%; max-width: 500px; text-align: center;
          }
          #hasil-akhir-container h2 {
-            color: var(--primary-color); /* Default color */
-            font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px;
+            color: var(--primary-color); font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px;
          }
-         /* Ganti warna judul hasil di mode Ayat */
          body.ayat-mode #hasil-akhir-container h2 { color: var(--ayat-color); }
-
          #hasil-akhir-container p {
             font-size: clamp(1rem, 4vw, 1.4rem); margin-bottom: 25px; line-height: 1.6;
          }
@@ -226,6 +208,45 @@
          .button-hasil-akhir:hover { background-color: var(--home-btn-hover); transform: scale(1.05); }
          .button-hasil-akhir:active { transform: scale(0.98); }
 
+        /** BARU: Style untuk Notifikasi Pilihan Akhir Level (Mirip berhitung.html) **/
+        #level-selesai-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); display: none;
+            justify-content: center; align-items: center; z-index: 1100;
+        }
+        #level-selesai-box {
+            background-color: var(--bg-color); padding: 25px 30px; border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2); text-align: center; width: 90%;
+            max-width: 450px; transform: scale(0.8); opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        #level-selesai-overlay.show #level-selesai-box { transform: scale(1); opacity: 1; }
+        #level-selesai-box h3 {
+            font-size: clamp(1.5rem, 5vw, 2.2rem); color: var(--correct-color);
+            margin-top: 0; margin-bottom: 15px;
+        }
+        #level-selesai-box p {
+            font-size: clamp(1rem, 3.5vw, 1.4rem); color: var(--text-color);
+            margin-bottom: 25px; line-height: 1.5;
+        }
+        .level-selesai-buttons {
+            display: flex; justify-content: space-around; gap: 15px; flex-wrap: wrap;
+        }
+        .button-level-selesai {
+            padding: 12px 20px; font-size: clamp(1rem, 3.5vw, 1.3rem); color: var(--white-color);
+            border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex;
+            align-items: center; justify-content: center; gap: 8px; flex-grow: 1;
+            min-width: 120px; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+        }
+        .button-level-selesai:hover { transform: scale(1.05); }
+        .button-level-selesai:active { transform: scale(0.98); }
+        #button-lanjut { background-color: var(--correct-color); }
+        #button-lanjut:hover { background-color: var(--correct-hover); }
+        #button-berhenti { background-color: var(--wrong-color); }
+        #button-berhenti:hover { background-color: var(--wrong-hover); }
+        /** Akhir Style Notifikasi Akhir Level **/
 
         /* Responsive */
         @media (max-width: 480px) {
@@ -233,21 +254,22 @@
              .home-btn { left: 10px; padding: 10px 15px; font-size: clamp(1rem, 3.5vw, 1.3rem); }
              body { padding-top: 80px; }
              h1 { margin-top: 0; }
-             #soal-container { flex-direction: column; gap: 10px; }
-             #soal { max-width: 100%; }
-             /* Sesuaikan ukuran font Arab di layar kecil jika perlu */
+             #soal-container { flex-direction: column; gap: 10px; margin-bottom: 15px;} /* Kurangi margin bawah */
+             #soal { max-width: 100%; min-height: 2em;} /* Kurangi min-height */
              #kuis-container.ayat-mode #soal,
              #kuis-container.ayat-mode .opsi {
-                 font-size: clamp(1.6rem, 6vw, 2.5rem); /* Sedikit lebih kecil */
-                 line-height: 1.7;
+                 font-size: clamp(1.6rem, 6vw, 2.5rem); line-height: 1.7;
              }
+             #opsiJawaban { margin-bottom: 15px; } /* Kurangi margin bawah */
+             .button-kembali-kategori { margin-top: 15px;} /* Kurangi margin atas */
+             #level-selesai-box { padding: 20px; }
+             .level-selesai-buttons { justify-content: center; }
         }
 
     </style>
 </head>
 <body>
     <div class="copyright">© Mas Har</div>
-
     <button class="home-btn" onclick="location.href='index.html'"> <i class="fas fa-home"></i> Home</button>
 
     <h1>Pilih Tebak-Tebakan</h1>
@@ -259,18 +281,15 @@
     </div>
 
     <div id="kuis-container">
-        <div id="progress-container">
+        <div id="level-info"></div> <div id="progress-container">
             <div id="progress-bar"></div>
         </div>
-         <div id="level-info"></div>
-
          <div id="soal-container">
              <div id="soal"></div>
              <button id="tombol-baca-soal" class="button-baca-soal" title="Bacakan Pertanyaan">
                  <i class="fas fa-volume-up"></i>
              </button>
          </div>
-
         <div id="opsiJawaban"></div>
         <button class="button-kembali-kategori" onclick="kembaliKeMenuKategori()">
             <i class="fas fa-arrow-left"></i> Pilih Kategori Lain
@@ -292,92 +311,38 @@
         </div>
     </div>
 
+    <div id="level-selesai-overlay">
+        <div id="level-selesai-box">
+            <h3><i class="fas fa-star" style="color: #ffc107;"></i> Selamat!</h3>
+            <p id="level-selesai-pesan"></p>
+            <div class="level-selesai-buttons">
+                <button id="button-lanjut" class="button-level-selesai">
+                    <i class="fas fa-arrow-right"></i> Lanjut Level Berikutnya
+                </button>
+                <button id="button-berhenti" class="button-level-selesai">
+                    <i class="fas fa-stop-circle"></i> Berhenti Bermain
+                </button>
+            </div>
+        </div>
+    </div>
+
     <audio id="pingSound" src="ping.wav" preload="auto"></audio>
     <audio id="wrongSound" src="gameovertwew.wav" preload="auto"></audio>
 
     <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
-        const soalPerLevel = 5; // Tetap 5 soal per level untuk konsistensi
+        const soalPerLevel = 5;
         const totalLevel = 5;
 
-        // === DATA SOAL ===
+        // Data Soal (Sama)
         const levels = {
-             hewan: [ // Data Hewan (Tetap Sama)
-                [
-                    { soal: "Aku besar, punya belalai panjang, dan telingaku lebar. Siapakah aku?", jawaban: "gajah", opsi: ["gajah", "badak", "kuda nil"] },
-                    { soal: "Aku suka makan wortel dan melompat dengan telinga panjangku. Siapakah aku?", jawaban: "kelinci", opsi: ["kelinci", "kanguru", "kucing"] },
-                    { soal: "Aku bisa terbang dan suaraku merdu di pagi hari. Siapakah aku?", jawaban: "burung", opsi: ["burung", "ayam", "lebah"] },
-                    { soal: "Aku punya tempurung keras dan jalanku lambat. Siapakah aku?", jawaban: "kura-kura", opsi: ["kura-kura", "kepiting", "semut"] },
-                    { soal: "Aku mengeong dan suka dielus. Siapakah aku?", jawaban: "kucing", opsi: ["kucing", "anjing", "tikus"] }
-                ],
-                // ... (Level hewan 2 s/d 5 tetap sama) ...
-                [ { soal: "Aku raja hutan dengan surai di leherku. Siapakah aku?", jawaban: "singa", opsi: ["singa", "harimau", "beruang"] }, { soal: "Aku berenang di air, punya sirip dan ekor. Siapakah aku?", jawaban: "ikan", opsi: ["ikan", "udang", "katak"] }, { soal: "Aku punya leher sangat panjang untuk makan daun di pohon tinggi. Siapakah aku?", jawaban: "jerapah", opsi: ["jerapah", "unta", "zebra"] }, { soal: "Aku hitam putih dan suka makan bambu. Siapakah aku?", jawaban: "panda", opsi: ["panda", "beruang kutub", "koala"] }, { soal: "Aku menggonggong dan menjaga rumah. Siapakah aku?", jawaban: "anjing", opsi: ["anjing", "serigala", "rubah"] } ],
-                [ { soal: "Aku bisa berubah warna kulit sesuai tempatku. Siapakah aku?", jawaban: "bunglon", opsi: ["bunglon", "cicak", "ular"] }, { soal: "Aku punya kantong di perut untuk membawa anakku. Siapakah aku?", jawaban: "kanguru", opsi: ["kanguru", "koala", "kelinci"] }, { soal: "Aku hidup di kutub, berbulu putih tebal, dan suka ikan. Siapakah aku?", jawaban: "beruang kutub", opsi: ["beruang kutub", "penguin", "anjing laut"] }, { soal: "Aku punya banyak lengan dan hidup di laut dalam. Siapakah aku?", jawaban: "gurita", opsi: ["gurita", "cumi-cumi", "ubur-ubur"] }, { soal: "Aku lari sangat cepat dan punya bintik hitam di tubuhku. Siapakah aku?", jawaban: "cheetah", opsi: ["cheetah", "macan tutul", "jaguar"] } ],
-                [ { soal: "Aku membangun sarang dari lumpur dan bisa menyengat. Siapakah aku?", jawaban: "lebah", opsi: ["lebah", "semut", "lalat"] }, { soal: "Aku tidak bisa terbang, hidup di tempat dingin, dan berjalan lucu. Siapakah aku?", jawaban: "penguin", opsi: ["penguin", "bebek", "angsa"] }, { soal: "Aku punya punuk di punggung untuk menyimpan lemak. Siapakah aku?", jawaban: "unta", opsi: ["unta", "kuda", "sapi"] }, { soal: "Aku punya cangkang keras berpola dan bisa masuk ke dalamnya. Siapakah aku?", jawaban: "siput", opsi: ["siput", "bekicot", "kura-kura"] }, { soal: "Aku bergaris hitam putih dan mirip kuda. Siapakah aku?", jawaban: "zebra", opsi: ["zebra", "jerapah", "kuda belang"] } ],
-                [ { soal: "Aku punya delapan kaki dan membuat jaring untuk menangkap mangsa. Siapakah aku?", jawaban: "laba-laba", opsi: ["laba-laba", "semut", "kalajengking"] }, { soal: "Aku tidur terbalik dan aktif di malam hari mencari buah atau serangga. Siapakah aku?", jawaban: "kelelawar", opsi: ["kelelawar", "burung hantu", "tikus terbang"] }, { soal: "Aku melata, tidak punya kaki, dan kadang berbisa. Siapakah aku?", jawaban: "ular", opsi: ["ular", "cacing", "kadal"] }, { soal: "Aku hewan laut besar yang menyemburkan air dari atas kepalaku. Siapakah aku?", jawaban: "paus", opsi: ["paus", "hiu", "lumba-lumba"] }, { soal: "Aku memanjat pohon dengan lambat dan punya cakar panjang. Siapakah aku?", jawaban: "kukang", opsi: ["kukang", "monyet", "koala"] } ]
-
-             ],
-             buah: [ // Data Buah (Tetap Sama)
-                [
-                    { soal: "Aku berwarna kuning, panjang, dan disukai monyet. Buah apakah aku?", jawaban: "pisang", opsi: ["pisang", "jagung", "mentimun"] },
-                    { soal: "Aku merah atau hijau, renyah saat digigit. Buah apakah aku?", jawaban: "apel", opsi: ["apel", "semangka", "ceri"] },
-                    { soal: "Aku kecil-kecil bergerombol, bisa ungu atau hijau. Buah apakah aku?", jawaban: "anggur", opsi: ["anggur", "stroberi", "blueberry"] },
-                    { soal: "Aku bulat, berwarna oranye, dan punya banyak air. Buah apakah aku?", jawaban: "jeruk", opsi: ["jeruk", "labu", "melon"] },
-                    { soal: "Aku besar, hijau di luar, merah di dalam, banyak airnya. Buah apakah aku?", jawaban: "semangka", opsi: ["semangka", "melon", "kelapa"] }
-                 ],
-                 // ... (Level buah 2 s/d 5 tetap sama) ...
-                 [ { soal: "Aku kecil, merah, manis, dan sering ada di atas kue. Buah apakah aku?", jawaban: "ceri", opsi: ["ceri", "stroberi", "tomat"] }, { soal: "Kulitku berduri tajam, tapi dagingku kuning dan harum. Buah apakah aku?", jawaban: "durian", opsi: ["durian", "nangka", "salak"] }, { soal: "Aku kuning, kulitku kasar punya 'mata', dan manis asam. Buah apakah aku?", jawaban: "nanas", opsi: ["nanas", "mangga", "pepaya"] }, { soal: "Aku hijau atau kuning, dagingku lembut dan punya biji besar di tengah. Buah apakah aku?", jawaban: "mangga", opsi: ["mangga", "alpukat", "jambu biji"] }, { soal: "Kulitku coklat berbulu, dagingku hijau dan ada biji hitam kecil. Buah apakah aku?", jawaban: "kiwi", opsi: ["kiwi", "sawo", "markisa"] } ],
-                 [ { soal: "Aku merah, punya banyak biji kecil di luar kulitku. Buah apakah aku?", jawaban: "stroberi", opsi: ["stroberi", "frambos", "delima"] }, { soal: "Bentukku seperti bintang jika dipotong. Buah apakah aku?", jawaban: "belimbing", opsi: ["belimbing", "nanas", "pisang"] }, { soal: "Aku ungu di luar, putih di dalam, rasanya manis asam segar. Buah apakah aku?", jawaban: "manggis", opsi: ["manggis", "anggur", "terong ungu"] }, { soal: "Aku besar, kulitku keras, airku bisa diminum, dagingku putih. Buah apakah aku?", jawaban: "kelapa", opsi: ["kelapa", "semangka", "melon"] }, { soal: "Aku merah, bijiku banyak dan seperti permata. Buah apakah aku?", jawaban: "delima", opsi: ["delima", "jambu biji", "stroberi"] } ],
-                 [ { soal: "Dagingku hijau lembut, bijiku besar, sering dibuat jus kental. Buah apakah aku?", jawaban: "alpukat", opsi: ["alpukat", "melon", "pir"] }, { soal: "Kulitku bersisik seperti ular, dagingku putih renyah. Buah apakah aku?", jawaban: "salak", opsi: ["salak", "lengkeng", "leci"] }, { soal: "Aku kecil, bulat, coklat di luar, putih bening di dalam, bijiku hitam. Buah apakah aku?", jawaban: "lengkeng", opsi: ["lengkeng", "leci", "anggur"] }, { soal: "Aku kuning atau hijau, bentukku lonjong, bijiku banyak & hitam di tengah. Buah apakah aku?", jawaban: "pepaya", opsi: ["pepaya", "mangga", "melon"] }, { soal: "Aku merah atau kuning, dagingku banyak airnya dan bijinya kecil-kecil. Buah apakah aku?", jawaban: "jambu air", opsi: ["jambu air", "jambu biji", "apel"] } ],
-                 [ { soal: "Aku punya 'rambut' di kulitku, dagingku putih bening manis. Buah apakah aku?", jawaban: "rambutan", opsi: ["rambutan", "leci", "durian"] }, { soal: "Aku kuning kehijauan, kulitku tipis, rasanya asam segar untuk minuman. Buah apakah aku?", jawaban: "lemon", opsi: ["lemon", "jeruk nipis", "jeruk"] }, { soal: "Aku ungu atau hijau, lonjong, sering dimasak jadi sayur tapi aku buah. Buah apakah aku?", jawaban: "terong", opsi: ["terong", "timun", "labu siam"] }, { soal: "Aku oranye, bentukku mirip bintang, rasanya manis asam. Buah apakah aku?", jawaban: "kesemek", opsi: ["kesemek", "belimbing", "markisa"] }, { soal: "Kulitku ungu gelap, isinya banyak biji kecil berair. Buah apakah aku?", jawaban: "markisa", opsi: ["markisa", "anggur", "delima"] } ]
-             ],
-             // **BARU**: Data Tebak Ayat (Contoh dari Juz 30 - PERLU VERIFIKASI & DITAMBAH)
-             ayat: [
-                 // Level 1: Surat Pendek Umum
-                 [
-                    { soal: "قُلْ هُوَ اللَّهُ", jawaban: "أَحَدٌ", opsi: ["أَحَدٌ", "الصَّمَدُ", "الْوَاحِدُ"] },
-                    { soal: "اللَّهُ", jawaban: "الصَّمَدُ", opsi: ["الصَّمَدُ", "الْأَحَدُ", "الْغَفُورُ"] },
-                    { soal: "لَمْ يَلِدْ وَلَمْ", jawaban: "يُولَدْ", opsi: ["يُولَدْ", "يُظْلَمْ", "يُشْرِكْ"] },
-                    { soal: "وَلَمْ يَكُنْ لَهُ كُفُوًا", jawaban: "أَحَدٌ", opsi: ["أَحَدٌ", "شَيْءٌ", "مِثْلٌ"] },
-                    { soal: "قُلْ أَعُوذُ بِرَبِّ", jawaban: "الْفَلَقِ", opsi: ["الْفَلَقِ", "النَّاسِ", "السَّمَاءِ"] }
-                 ],
-                 // Level 2: Surat Pendek Lain
-                 [
-                    { soal: "مِنْ شَرِّ مَا", jawaban: "خَلَقَ", opsi: ["خَلَقَ", "غَسَقٍ", "حَسَدَ"] },
-                    { soal: "وَمِنْ شَرِّ غَاسِقٍ إِذَا", jawaban: "وَقَبَ", opsi: ["وَقَبَ", "حَسَدَ", "نَفَثَ"] },
-                    { soal: "وَمِنْ شَرِّ النَّفَّاثَاتِ فِي", jawaban: "الْعُقَدِ", opsi: ["الْعُقَدِ", "الْقُلُوبِ", "الْأَسْحَارِ"] },
-                    { soal: "وَمِنْ شَرِّ حَاسِدٍ إِذَا", jawaban: "حَسَدَ", opsi: ["حَسَدَ", "وَقَبَ", "خَلَقَ"] },
-                    { soal: "قُلْ أَعُوذُ بِرَبِّ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْفَلَقِ", "الْعَرْشِ"] }
-                 ],
-                 // Level 3: An-Nas & Al-Asr
-                 [
-                    { soal: "مَلِكِ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْجِنَّةِ", "السَّمَاءِ"] },
-                    { soal: "إِلَٰهِ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْقُلُوبِ", "الْحَقِّ"] },
-                    { soal: "مِنْ شَرِّ الْوَسْوَاسِ", jawaban: "الْخَنَّاسِ", opsi: ["الْخَنَّاسِ", "الْمُبِينِ", "الْعَظِيمِ"] },
-                    { soal: "الَّذِي يُوَسْوِسُ فِي صُدُورِ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْجِنَّةِ", "الْمُؤْمِنِينَ"] },
-                    { soal: "وَالْعَصْرِ", jawaban: "إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ", opsi: ["إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ", "إِلَّا الَّذِينَ آمَنُوا", "وَتَوَاصَوْا بِالْحَقِّ"] }
-                 ],
-                 // Level 4: Al-Asr & Al-Humazah
-                 [
-                    { soal: "إِنَّ الْإِنْسَانَ لَفِي", jawaban: "خُسْرٍ", opsi: ["خُسْرٍ", "نُكْرٍ", "ضَلَالٍ"] },
-                    { soal: "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا", jawaban: "الصَّالِحَاتِ", opsi: ["الصَّالِحَاتِ", "الْخَيْرَاتِ", "الْحَسَنَاتِ"] },
-                    { soal: "وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا", jawaban: "بِالصَّبْرِ", opsi: ["بِالصَّبْرِ", "بِالْمَرْحَمَةِ", "بِالتَّقْوَى"] },
-                    { soal: "وَيْلٌ لِكُلِّ هُمَزَةٍ", jawaban: "لُمَزَةٍ", opsi: ["لُمَزَةٍ", "أَفَّاكٍ", "أَثِيمٍ"] },
-                    { soal: "الَّذِي جَمَعَ مَالًا", jawaban: "وَعَدَّدَهُ", opsi: ["وَعَدَّدَهُ", "وَكَنَزَهُ", "وَأَبْقَاهُ"] }
-                 ],
-                  // Level 5: Al-Humazah & Al-Fil
-                 [
-                    { soal: "يَحْسَبُ أَنَّ مَالَهُ", jawaban: "أَخْلَدَهُ", opsi: ["أَخْلَدَهُ", "يَنْفَعُهُ", "يُغْنِيهِ"] },
-                    { soal: "كَلَّا ۖ لَيُنْبَذَنَّ فِي", jawaban: "الْحُطَمَةِ", opsi: ["الْحُطَمَةِ", "النَّارِ", "جَهَنَّمَ"] },
-                    { soal: "وَمَا أَدْرَاكَ مَا", jawaban: "الْحُطَمَةُ", opsi: ["الْحُطَمَةُ", "الْقَارِعَةُ", "السَّاعَةُ"] },
-                    { soal: "نَارُ اللَّهِ", jawaban: "الْمُوقَدَةُ", opsi: ["الْمُوقَدَةُ", "الْكُبْرَىٰ", "الْحَامِيَةُ"] },
-                    { soal: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ", jawaban: "الْفِيلِ", opsi: ["الْفِيلِ", "الْأُخْدُودِ", "الْقَرْيَةِ"] }
-                 ]
-            ]
+             hewan: [ [ { soal: "Aku besar, punya belalai panjang, dan telingaku lebar. Siapakah aku?", jawaban: "gajah", opsi: ["gajah", "badak", "kuda nil"] }, { soal: "Aku suka makan wortel dan melompat dengan telinga panjangku. Siapakah aku?", jawaban: "kelinci", opsi: ["kelinci", "kanguru", "kucing"] }, { soal: "Aku bisa terbang dan suaraku merdu di pagi hari. Siapakah aku?", jawaban: "burung", opsi: ["burung", "ayam", "lebah"] }, { soal: "Aku punya tempurung keras dan jalanku lambat. Siapakah aku?", jawaban: "kura-kura", opsi: ["kura-kura", "kepiting", "semut"] }, { soal: "Aku mengeong dan suka dielus. Siapakah aku?", jawaban: "kucing", opsi: ["kucing", "anjing", "tikus"] } ], [ { soal: "Aku raja hutan dengan surai di leherku. Siapakah aku?", jawaban: "singa", opsi: ["singa", "harimau", "beruang"] }, { soal: "Aku berenang di air, punya sirip dan ekor. Siapakah aku?", jawaban: "ikan", opsi: ["ikan", "udang", "katak"] }, { soal: "Aku punya leher sangat panjang untuk makan daun di pohon tinggi. Siapakah aku?", jawaban: "jerapah", opsi: ["jerapah", "unta", "zebra"] }, { soal: "Aku hitam putih dan suka makan bambu. Siapakah aku?", jawaban: "panda", opsi: ["panda", "beruang kutub", "koala"] }, { soal: "Aku menggonggong dan menjaga rumah. Siapakah aku?", jawaban: "anjing", opsi: ["anjing", "serigala", "rubah"] } ], [ { soal: "Aku bisa berubah warna kulit sesuai tempatku. Siapakah aku?", jawaban: "bunglon", opsi: ["bunglon", "cicak", "ular"] }, { soal: "Aku punya kantong di perut untuk membawa anakku. Siapakah aku?", jawaban: "kanguru", opsi: ["kanguru", "koala", "kelinci"] }, { soal: "Aku hidup di kutub, berbulu putih tebal, dan suka ikan. Siapakah aku?", jawaban: "beruang kutub", opsi: ["beruang kutub", "penguin", "anjing laut"] }, { soal: "Aku punya banyak lengan dan hidup di laut dalam. Siapakah aku?", jawaban: "gurita", opsi: ["gurita", "cumi-cumi", "ubur-ubur"] }, { soal: "Aku lari sangat cepat dan punya bintik hitam di tubuhku. Siapakah aku?", jawaban: "cheetah", opsi: ["cheetah", "macan tutul", "jaguar"] } ], [ { soal: "Aku membangun sarang dari lumpur dan bisa menyengat. Siapakah aku?", jawaban: "lebah", opsi: ["lebah", "semut", "lalat"] }, { soal: "Aku tidak bisa terbang, hidup di tempat dingin, dan berjalan lucu. Siapakah aku?", jawaban: "penguin", opsi: ["penguin", "bebek", "angsa"] }, { soal: "Aku punya punuk di punggung untuk menyimpan lemak. Siapakah aku?", jawaban: "unta", opsi: ["unta", "kuda", "sapi"] }, { soal: "Aku punya cangkang keras berpola dan bisa masuk ke dalamnya. Siapakah aku?", jawaban: "siput", opsi: ["siput", "bekicot", "kura-kura"] }, { soal: "Aku bergaris hitam putih dan mirip kuda. Siapakah aku?", jawaban: "zebra", opsi: ["zebra", "jerapah", "kuda belang"] } ], [ { soal: "Aku punya delapan kaki dan membuat jaring untuk menangkap mangsa. Siapakah aku?", jawaban: "laba-laba", opsi: ["laba-laba", "semut", "kalajengking"] }, { soal: "Aku tidur terbalik dan aktif di malam hari mencari buah atau serangga. Siapakah aku?", jawaban: "kelelawar", opsi: ["kelelawar", "burung hantu", "tikus terbang"] }, { soal: "Aku melata, tidak punya kaki, dan kadang berbisa. Siapakah aku?", jawaban: "ular", opsi: ["ular", "cacing", "kadal"] }, { soal: "Aku hewan laut besar yang menyemburkan air dari atas kepalaku. Siapakah aku?", jawaban: "paus", opsi: ["paus", "hiu", "lumba-lumba"] }, { soal: "Aku memanjat pohon dengan lambat dan punya cakar panjang. Siapakah aku?", jawaban: "kukang", opsi: ["kukang", "monyet", "koala"] } ] ],
+             buah: [ [ { soal: "Aku berwarna kuning, panjang, dan disukai monyet. Buah apakah aku?", jawaban: "pisang", opsi: ["pisang", "jagung", "mentimun"] }, { soal: "Aku merah atau hijau, renyah saat digigit. Buah apakah aku?", jawaban: "apel", opsi: ["apel", "semangka", "ceri"] }, { soal: "Aku kecil-kecil bergerombol, bisa ungu atau hijau. Buah apakah aku?", jawaban: "anggur", opsi: ["anggur", "stroberi", "blueberry"] }, { soal: "Aku bulat, berwarna oranye, dan punya banyak air. Buah apakah aku?", jawaban: "jeruk", opsi: ["jeruk", "labu", "melon"] }, { soal: "Aku besar, hijau di luar, merah di dalam, banyak airnya. Buah apakah aku?", jawaban: "semangka", opsi: ["semangka", "melon", "kelapa"] } ], [ { soal: "Aku kecil, merah, manis, dan sering ada di atas kue. Buah apakah aku?", jawaban: "ceri", opsi: ["ceri", "stroberi", "tomat"] }, { soal: "Kulitku berduri tajam, tapi dagingku kuning dan harum. Buah apakah aku?", jawaban: "durian", opsi: ["durian", "nangka", "salak"] }, { soal: "Aku kuning, kulitku kasar punya 'mata', dan manis asam. Buah apakah aku?", jawaban: "nanas", opsi: ["nanas", "mangga", "pepaya"] }, { soal: "Aku hijau atau kuning, dagingku lembut dan punya biji besar di tengah. Buah apakah aku?", jawaban: "mangga", opsi: ["mangga", "alpukat", "jambu biji"] }, { soal: "Kulitku coklat berbulu, dagingku hijau dan ada biji hitam kecil. Buah apakah aku?", jawaban: "kiwi", opsi: ["kiwi", "sawo", "markisa"] } ], [ { soal: "Aku merah, punya banyak biji kecil di luar kulitku. Buah apakah aku?", jawaban: "stroberi", opsi: ["stroberi", "frambos", "delima"] }, { soal: "Bentukku seperti bintang jika dipotong. Buah apakah aku?", jawaban: "belimbing", opsi: ["belimbing", "nanas", "pisang"] }, { soal: "Aku ungu di luar, putih di dalam, rasanya manis asam segar. Buah apakah aku?", jawaban: "manggis", opsi: ["manggis", "anggur", "terong ungu"] }, { soal: "Aku besar, kulitku keras, airku bisa diminum, dagingku putih. Buah apakah aku?", jawaban: "kelapa", opsi: ["kelapa", "semangka", "melon"] }, { soal: "Aku merah, bijiku banyak dan seperti permata. Buah apakah aku?", jawaban: "delima", opsi: ["delima", "jambu biji", "stroberi"] } ], [ { soal: "Dagingku hijau lembut, bijiku besar, sering dibuat jus kental. Buah apakah aku?", jawaban: "alpukat", opsi: ["alpukat", "melon", "pir"] }, { soal: "Kulitku bersisik seperti ular, dagingku putih renyah. Buah apakah aku?", jawaban: "salak", opsi: ["salak", "lengkeng", "leci"] }, { soal: "Aku kecil, bulat, coklat di luar, putih bening di dalam, bijiku hitam. Buah apakah aku?", jawaban: "lengkeng", opsi: ["lengkeng", "leci", "anggur"] }, { soal: "Aku kuning atau hijau, bentukku lonjong, bijiku banyak & hitam di tengah. Buah apakah aku?", jawaban: "pepaya", opsi: ["pepaya", "mangga", "melon"] }, { soal: "Aku merah atau kuning, dagingku banyak airnya dan bijinya kecil-kecil. Buah apakah aku?", jawaban: "jambu air", opsi: ["jambu air", "jambu biji", "apel"] } ], [ { soal: "Aku punya 'rambut' di kulitku, dagingku putih bening manis. Buah apakah aku?", jawaban: "rambutan", opsi: ["rambutan", "leci", "durian"] }, { soal: "Aku kuning kehijauan, kulitku tipis, rasanya asam segar untuk minuman. Buah apakah aku?", jawaban: "lemon", opsi: ["lemon", "jeruk nipis", "jeruk"] }, { soal: "Aku ungu atau hijau, lonjong, sering dimasak jadi sayur tapi aku buah. Buah apakah aku?", jawaban: "terong", opsi: ["terong", "timun", "labu siam"] }, { soal: "Aku oranye, bentukku mirip bintang, rasanya manis asam. Buah apakah aku?", jawaban: "kesemek", opsi: ["kesemek", "belimbing", "markisa"] }, { soal: "Kulitku ungu gelap, isinya banyak biji kecil berair. Buah apakah aku?", jawaban: "markisa", opsi: ["markisa", "anggur", "delima"] } ] ],
+             ayat: [ [ { soal: "قُلْ هُوَ اللَّهُ", jawaban: "أَحَدٌ", opsi: ["أَحَدٌ", "الصَّمَدُ", "الْوَاحِدُ"] }, { soal: "اللَّهُ", jawaban: "الصَّمَدُ", opsi: ["الصَّمَدُ", "الْأَحَدُ", "الْغَفُورُ"] }, { soal: "لَمْ يَلِدْ وَلَمْ", jawaban: "يُولَدْ", opsi: ["يُولَدْ", "يُظْلَمْ", "يُشْرِكْ"] }, { soal: "وَلَمْ يَكُنْ لَهُ كُفُوًا", jawaban: "أَحَدٌ", opsi: ["أَحَدٌ", "شَيْءٌ", "مِثْلٌ"] }, { soal: "قُلْ أَعُوذُ بِرَبِّ", jawaban: "الْفَلَقِ", opsi: ["الْفَلَقِ", "الخَنَّاسٍ", "السَّمَاءِ"] } ], [ { soal: "مِنْ شَرِّ مَا", jawaban: "خَلَقَ", opsi: ["خَلَقَ", "غَسَقٍ", "حَسَدَ"] }, { soal: "وَمِنْ شَرِّ غَاسِقٍ إِذَا", jawaban: "وَقَبَ", opsi: ["وَقَبَ", "حَسَدَ", "نَفَثَ"] }, { soal: "وَمِنْ شَرِّ النَّفَّاثَاتِ فِي", jawaban: "الْعُقَدِ", opsi: ["الْعُقَدِ", "الْقُلُوبِ", "الْأَسْحَارِ"] }, { soal: "وَمِنْ شَرِّ حَاسِدٍ إِذَا", jawaban: "حَسَدَ", opsi: ["حَسَدَ", "وَقَبَ", "خَلَقَ"] }, { soal: "قُلْ أَعُوذُ بِرَبِّ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "اللَّهِ", "الْعَرْشِ"] } ], [ { soal: "مَلِكِ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْجِنَّةِ", "السَّمَاءِ"] }, { soal: "إِلَٰهِ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْقُلُوبِ", "الْحَقِّ"] }, { soal: "مِنْ شَرِّ الْوَسْوَاسِ", jawaban: "الْخَنَّاسِ", opsi: ["الْخَنَّاسِ", "الْمُبِينِ", "الْعَظِيمِ"] }, { soal: "الَّذِي يُوَسْوِسُ فِي صُدُورِ", jawaban: "النَّاسِ", opsi: ["النَّاسِ", "الْجِنَّةِ", "الْمُؤْمِنِينَ"] }, { soal: "وَالْعَصْرِ", jawaban: "إِنَّ الْإِنْسَانَ لَفِي خُsرٍ", opsi: ["إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ", "إِلَّا الَّذِينَ آمَنُوا", "وَتَوَاصَوْا بِالْحَقِّ"] } ], [ { soal: "إِنَّ الْإِنْسَانَ لَفِي", jawaban: "خُسْرٍ", opsi: ["خُسْرٍ", "نُكْرٍ", "ضَلَالٍ"] }, { soal: "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا", jawaban: "الصَّالِحَاتِ", opsi: ["الصَّالِحَاتِ", "الْخَيْرَاتِ", "الْحَسَنَاتِ"] }, { soal: "وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا", jawaban: "بِالصَّبْرِ", opsi: ["بِالصَّبْرِ", "بِالْمَرْحَمَةِ", "بِالتَّقْوَى"] }, { soal: "وَيْلٌ لِكُلِّ هُمَزَةٍ", jawaban: "لُمَzَةٍ", opsi: ["لُمَزَةٍ", "أَفَّاكٍ", "أَثِيمٍ"] }, { soal: "الَّذِي جَمَعَ مَالًا", jawaban: "وَعَدَّدَهُ", opsi: ["وَعَدَّدَهُ", "وَكَنَزَهُ", "وَأَبْقَاهُ"] } ], [ { soal: "يَحْسَبُ أَنَّ مَالَهُ", jawaban: "أَخْلَدَهُ", opsi: ["أَخْلَدَهُ", "يَنْفَعُهُ", "يُغْنِيهِ"] }, { soal: "كَلَّا ۖ لَيُنْبَذَنَّ فِي", jawaban: "الْحُطَمَةِ", opsi: ["الْحُطَمَةِ", "النَّارِ", "جَهَنَّمَ"] }, { soal: "وَمَا أَدْرَاكَ مَا", jawaban: "الْحُطَمَةُ", opsi: ["الْحُطَمَةُ", "الْقَارِعَةُ", "السَّاعَةُ"] }, { soal: "نَارُ اللَّهِ", jawaban: "الْمُوقَدَةُ", opsi: ["الْمُوقَدَةُ", "الْكُبْرَىٰ", "الْحَامِيَةُ"] }, { soal: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ", jawaban: "الْفِيلِ", opsi: ["الْفِيلِ", "الْأُخْدُودِ", "الْقَرْيَةِ"] } ] ]
         };
 
         // === Referensi Elemen DOM ===
-        const bodyElem = document.body; // Ref Body untuk toggle class
+        const bodyElem = document.body;
         const pilihanKategoriElem = document.getElementById('pilihan-kategori');
         const kuisContainerElem = document.getElementById('kuis-container');
         const hasilAkhirContainerElem = document.getElementById('hasil-akhir-container');
@@ -394,231 +359,132 @@
         const pingSound = document.getElementById('pingSound');
         const wrongSound = document.getElementById('wrongSound');
 
+        // /** BARU **/ Referensi Elemen Modal Akhir Level
+        const levelSelesaiOverlay = document.getElementById('level-selesai-overlay');
+        const levelSelesaiPesan = document.getElementById('level-selesai-pesan');
+        const buttonLanjut = document.getElementById('button-lanjut');
+        const buttonBerhenti = document.getElementById('button-berhenti');
+
         // === Logika Utama ===
 
-        // Cek Dukungan Speech Synthesis
+        // Cek Dukungan Speech Synthesis (Sama)
         const supportSpeech = 'speechSynthesis' in window;
-        if (supportSpeech) {
-            bodyElem.classList.add('speech-synthesis-supported');
-            console.log("Speech Synthesis didukung.");
-        } else {
-            console.warn("Browser tidak mendukung Speech Synthesis.");
-        }
+        if (supportSpeech) { bodyElem.classList.add('speech-synthesis-supported'); console.log("Speech Synthesis didukung."); }
+        else { console.warn("Browser tidak mendukung Speech Synthesis."); }
 
-        // Fungsi Play Sound
-        function playSound(soundElement) {
-            if (soundElement) {
-                soundElement.currentTime = 0;
-                soundElement.play().catch(error => console.log("Playback error:", error));
-            }
-        }
+        // Fungsi Play Sound (Sama)
+        function playSound(soundElement) { /* ... sama ... */ if (soundElement) { soundElement.currentTime = 0; soundElement.play().catch(error => console.log("Playback error:", error)); } }
 
-        // Event listener klik umum (untuk sound)
-        document.addEventListener('click', function(event) {
-            const button = event.target.closest('button');
-            if (button && !button.classList.contains('opsi') && !button.classList.contains('button-baca-soal') && notifikasiOverlay.style.display === 'none' && !hasilAkhirContainerElem.contains(button)) {
-                 playSound(pingSound);
-            }
-        });
+        // Event listener klik umum (Sama)
+        document.addEventListener('click', function(event) { /* ... sama ... */ const button = event.target.closest('button'); if (button && !button.classList.contains('opsi') && !button.classList.contains('button-baca-soal') && !button.closest('#notifikasi-overlay') && !button.closest('#level-selesai-overlay') && !button.closest('#hasil-akhir-container')) { playSound(pingSound); } });
 
-        // Fungsi Baca Soal (Hanya untuk kategori non-ayat)
-        function bacaSoal() {
-            if (!supportSpeech || jenisSoal === 'ayat') { // Jangan baca jika mode ayat
-                return;
-            }
-            const teksSoal = soalElem.textContent || soalElem.innerText;
-            if (teksSoal && teksSoal.trim() !== '') {
-                window.speechSynthesis.cancel(); // Hentikan yg lama
-                const utterance = new SpeechSynthesisUtterance(teksSoal);
-                utterance.lang = 'id-ID';
-                utterance.rate = 0.9;
-                utterance.pitch = 1.1;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-        if (tombolBacaSoal) { // Tambahkan listener jika tombol ada
-            tombolBacaSoal.addEventListener('click', bacaSoal);
-        }
+        // Fungsi Baca Soal (Sama)
+        function bacaSoal() { /* ... sama ... */ if (!supportSpeech || jenisSoal === 'ayat') return; const teksSoal = soalElem.textContent || soalElem.innerText; if (teksSoal && teksSoal.trim() !== '') { window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(teksSoal); utterance.lang = 'id-ID'; utterance.rate = 0.9; utterance.pitch = 1.1; window.speechSynthesis.speak(utterance); } }
+        if (tombolBacaSoal) tombolBacaSoal.addEventListener('click', bacaSoal);
 
-        // Fungsi Acak Array
-        function shuffleArray(array) {
-             for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+        // Fungsi Acak Array (Sama)
+        function shuffleArray(array) { /* ... sama ... */ for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
-        // Fungsi Memulai Level/Kategori
-        function mulaiLevel(jenis) {
-            jenisSoal = jenis;
-            currentLevel = 0;
-            currentSoal = 0;
-            pilihanKategoriElem.style.display = 'none';
-            kuisContainerElem.style.display = 'block';
-            hasilAkhirContainerElem.style.display = 'none';
+        // Fungsi Memulai Level/Kategori (Sama)
+        function mulaiLevel(jenis) { /* ... sama ... */ jenisSoal = jenis; currentLevel = 0; currentSoal = 0; pilihanKategoriElem.style.display = 'none'; kuisContainerElem.style.display = 'block'; hasilAkhirContainerElem.style.display = 'none'; levelSelesaiOverlay.style.display = 'none'; /* Sembunyikan modal */ bodyElem.classList.remove('ayat-mode'); kuisContainerElem.classList.remove('ayat-mode'); if (tombolBacaSoal) tombolBacaSoal.style.display = 'none'; if (jenis === 'hewan') { judulElem.textContent = 'Tebak Hewan'; if (supportSpeech && tombolBacaSoal) tombolBacaSoal.style.display = 'inline-flex'; } else if (jenis === 'buah') { judulElem.textContent = 'Tebak Buah'; if (supportSpeech && tombolBacaSoal) tombolBacaSoal.style.display = 'inline-flex'; } else if (jenis === 'ayat') { judulElem.textContent = 'Tebak Ayat'; kuisContainerElem.classList.add('ayat-mode'); bodyElem.classList.add('ayat-mode'); } tampilkanSoal(); }
 
-            // Reset class & tombol baca
-            bodyElem.classList.remove('ayat-mode'); // Hapus class ayat dari body (jika ada)
-            kuisContainerElem.classList.remove('ayat-mode'); // Hapus class ayat dari kuis container
-            if (tombolBacaSoal) tombolBacaSoal.style.display = 'none'; // Sembunyikan tombol baca default
-
-            // Penyesuaian berdasarkan jenis soal
-            if (jenis === 'hewan') {
-                judulElem.textContent = 'Tebak Hewan';
-                if (supportSpeech && tombolBacaSoal) tombolBacaSoal.style.display = 'inline-flex'; // Tampilkan tombol baca
-            } else if (jenis === 'buah') {
-                judulElem.textContent = 'Tebak Buah';
-                if (supportSpeech && tombolBacaSoal) tombolBacaSoal.style.display = 'inline-flex'; // Tampilkan tombol baca
-            } else if (jenis === 'ayat') {
-                judulElem.textContent = 'Tebak Ayat';
-                kuisContainerElem.classList.add('ayat-mode'); // Tambahkan class untuk styling RTL
-                bodyElem.classList.add('ayat-mode'); // Tambahkan ke body juga untuk style H1/hasil
-                // Tombol baca tetap disembunyikan (sudah di-default di atas)
-            }
-
-            tampilkanSoal();
-        }
-
-        // Fungsi Menampilkan Soal
+        // Fungsi Menampilkan Soal /** MODIFIKASI di bagian akhir level **/
         function tampilkanSoal() {
-             if (supportSpeech) window.speechSynthesis.cancel(); // Hentikan suara
+             if (supportSpeech) window.speechSynthesis.cancel();
 
-             if (currentSoal >= soalPerLevel) { // Cek jika level selesai
-                currentLevel++;
-                currentSoal = 0;
-                 if (currentLevel >= totalLevel) { // Cek jika semua level selesai
+             // Cek jika level SEBELUMNYA sudah selesai
+             if (currentSoal >= soalPerLevel) {
+                const levelYangSelesai = currentLevel; // Simpan level yg baru selesai
+                currentLevel++; // Naikkan level
+                currentSoal = 0; // Reset soal
+
+                 // Cek apakah SEMUA level sudah selesai
+                 if (currentLevel >= totalLevel) {
                      tampilkanHasilAkhir();
                      return;
                  } else {
-                     tampilkanNotifikasi(`Level ${currentLevel + 1} Dimulai!`, 'lanjut', 1500);
-                     return; // Soal baru akan tampil setelah notifikasi
+                     // Tampilkan notifikasi PILIHAN jika masih ada level berikutnya
+                     tampilkanPilihanLevelSelesai(levelYangSelesai);
+                     return; // Tunggu pilihan user
                  }
             }
 
-            // Ambil data soal & tampilkan
+            // --- Lanjut tampilkan soal ---
             let soalData = levels[jenisSoal][currentLevel][currentSoal];
             jawabanBenar = soalData.jawaban;
-            soalElem.textContent = soalData.soal; // Tampilkan soal (teks biasa atau Arab)
+            soalElem.textContent = soalData.soal;
 
-            // Acak dan tampilkan opsi
             let opsiAcak = [...soalData.opsi];
             shuffleArray(opsiAcak);
             opsiJawabanContainer.innerHTML = '';
             opsiAcak.forEach(opsi => {
                  const button = document.createElement('button');
-                 button.classList.add('opsi');
-                 button.textContent = opsi; // Tampilkan opsi (teks biasa atau Arab)
+                 button.classList.add('opsi'); button.textContent = opsi;
                  button.onclick = () => cekJawaban(opsi);
                  opsiJawabanContainer.appendChild(button);
             });
 
             updateProgressBar();
-            disableOptions(false); // Aktifkan opsi
+            disableOptions(false);
         }
 
-        // Fungsi Nonaktifkan/Aktifkan Tombol Opsi
-         function disableOptions(disabled) {
-             const buttons = opsiJawabanContainer.querySelectorAll('.opsi');
-             buttons.forEach(button => { button.disabled = disabled; });
-         }
+        // Fungsi Nonaktifkan/Aktifkan Opsi (Sama)
+        function disableOptions(disabled) { /* ... sama ... */ const buttons = opsiJawabanContainer.querySelectorAll('.opsi'); buttons.forEach(button => { button.disabled = disabled; }); }
 
-        // Fungsi Cek Jawaban
-        function cekJawaban(jawaban) {
-             disableOptions(true);
-             if (supportSpeech) window.speechSynthesis.cancel(); // Hentikan suara
+        // Fungsi Cek Jawaban (Sama)
+        function cekJawaban(jawaban) { /* ... sama ... */ disableOptions(true); if (supportSpeech) window.speechSynthesis.cancel(); let isCorrect; if (jenisSoal === 'ayat') { isCorrect = jawaban === jawabanBenar; } else { isCorrect = jawaban.toLowerCase() === jawabanBenar.toLowerCase(); } if (isCorrect) { playSound(pingSound); tampilkanNotifikasi('Benar!', 'benar', 1200); setTimeout(() => { currentSoal++; tampilkanSoal(); }, 1300); } else { playSound(wrongSound); tampilkanNotifikasi('Salah, coba lagi yuk!', 'salah', 1500); setTimeout(() => { disableOptions(false); }, 1600); } }
 
-             // Bandingkan jawaban (case-insensitive untuk non-Arab, exact untuk Arab)
-             let isCorrect;
-             if (jenisSoal === 'ayat') {
-                 isCorrect = jawaban === jawabanBenar; // Perbandingan string Arab harus exact
-             } else {
-                 isCorrect = jawaban.toLowerCase() === jawabanBenar.toLowerCase();
-             }
+        // Fungsi Tampilkan Notifikasi Benar/Salah (Auto-hide)
+        function tampilkanNotifikasi(pesan, tipe, duration = 1200) { /* ... sama ... */ const ikon = notifikasiElem.querySelector('i'); notifikasiTeks.textContent = pesan; notifikasiElem.className = ''; ikon.className = ''; if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); } else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); } else if (tipe === 'selesai') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-trophy'); } /* Hapus 'lanjut' */ notifikasiOverlay.style.display = 'flex'; setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10); if (duration) { setTimeout(sembunyikanNotifikasi, duration); } }
 
-            if (isCorrect) {
-                playSound(pingSound);
-                tampilkanNotifikasi('Benar!', 'benar', 1200);
-                 setTimeout(() => { currentSoal++; tampilkanSoal(); }, 1300);
-            } else {
-                 playSound(wrongSound);
-                 // Jangan tampilkan jawaban benar untuk ayat, cukup coba lagi
-                 tampilkanNotifikasi('Salah, coba lagi yuk!', 'salah', 1500);
-                 setTimeout(() => { disableOptions(false); }, 1600);
-            }
+        // Fungsi Sembunyikan Notifikasi Benar/Salah
+        function sembunyikanNotifikasi() { /* ... sama ... */ notifikasiOverlay.classList.remove('show'); setTimeout(() => { notifikasiOverlay.style.display = 'none'; }, 300); /* Hapus logic panggil tampilkanSoal */ }
+
+        // /** BARU **/ Fungsi Tampilkan Pilihan Akhir Level
+        function tampilkanPilihanLevelSelesai(levelSelesai) {
+            let namaKategoriTeks = '';
+            if (jenisSoal === 'hewan') namaKategoriTeks = 'Tebak Hewan';
+            else if (jenisSoal === 'buah') namaKategoriTeks = 'Tebak Buah';
+            else if (jenisSoal === 'ayat') namaKategoriTeks = 'Tebak Ayat';
+
+            levelSelesaiPesan.textContent = `Kamu berhasil menyelesaikan Level ${levelSelesai + 1} ${namaKategoriTeks}. Mau lanjut ke Level ${levelSelesai + 2}?`;
+            levelSelesaiOverlay.style.display = 'flex';
+            setTimeout(() => levelSelesaiOverlay.classList.add('show'), 10);
+
+            // Tambahkan event listener sekali pakai
+            buttonLanjut.onclick = handleLanjutLevel;
+            buttonBerhenti.onclick = handleBerhenti;
         }
 
-        // Fungsi Tampilkan Notifikasi
-        function tampilkanNotifikasi(pesan, tipe, duration = null) {
-             const ikon = notifikasiElem.querySelector('i');
-             notifikasiTeks.textContent = pesan;
-             notifikasiElem.className = ''; ikon.className = '';
-             if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); }
-             else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); }
-             else if (tipe === 'selesai') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-trophy'); }
-             else if (tipe === 'lanjut') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-arrow-circle-right'); }
-             notifikasiOverlay.style.display = 'flex';
-             setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10);
-             if (duration) { setTimeout(sembunyikanNotifikasi, duration); }
-         }
+        // /** BARU **/ Handler untuk tombol Lanjut Level
+        function handleLanjutLevel() {
+            levelSelesaiOverlay.classList.remove('show');
+            setTimeout(() => {
+                levelSelesaiOverlay.style.display = 'none';
+                buttonLanjut.onclick = null; buttonBerhenti.onclick = null;
+                // Langsung tampilkan soal level baru (currentLevel sudah naik)
+                tampilkanSoal();
+            }, 300);
+        }
 
-        // Fungsi Sembunyikan Notifikasi
-        function sembunyikanNotifikasi() {
-             notifikasiOverlay.classList.remove('show');
+        // /** BARU **/ Handler untuk tombol Berhenti
+        function handleBerhenti() {
+             levelSelesaiOverlay.classList.remove('show');
              setTimeout(() => {
-                 notifikasiOverlay.style.display = 'none';
-                 // Jika notif 'lanjut', tampilkan soal baru
-                 if (notifikasiElem.classList.contains('benar') && notifikasiElem.querySelector('i').classList.contains('fa-arrow-circle-right')) {
-                     tampilkanSoal();
-                 }
+                levelSelesaiOverlay.style.display = 'none';
+                buttonLanjut.onclick = null; buttonBerhenti.onclick = null;
+                location.href = 'index.html'; // Kembali ke menu utama
              }, 300);
         }
 
-        // Fungsi Update Progress Bar
-        function updateProgressBar() {
-             const totalSoalInLevel = soalPerLevel;
-             const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel);
-             const progress = (soalTampilProgress / totalSoalInLevel) * 100;
-             progressBar.style.width = `${progress}%`;
-             const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel);
-             levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`;
-        }
+        // Fungsi Update Progress Bar (Sama)
+        function updateProgressBar() { /* ... sama ... */ const totalSoalInLevel = soalPerLevel; const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel); const progress = (soalTampilProgress / totalSoalInLevel) * 100; progressBar.style.width = `${progress}%`; const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel); levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`; }
 
-        // Fungsi Kembali ke Menu Kategori
-         function kembaliKeMenuKategori() {
-             kuisContainerElem.style.display = 'none';
-             hasilAkhirContainerElem.style.display = 'none';
-             sembunyikanNotifikasi();
-             pilihanKategoriElem.style.display = 'flex';
-             judulElem.textContent = 'Pilih Tebak-Tebakan';
-             // Reset styles
-             bodyElem.classList.remove('ayat-mode');
-             kuisContainerElem.classList.remove('ayat-mode');
-             if (tombolBacaSoal) tombolBacaSoal.style.display = 'none'; // Sembunyikan tombol baca
-             if (supportSpeech) window.speechSynthesis.cancel(); // Hentikan suara
-         }
+        // Fungsi Kembali ke Menu Kategori (Sama)
+         function kembaliKeMenuKategori() { /* ... sama ... */ kuisContainerElem.style.display = 'none'; hasilAkhirContainerElem.style.display = 'none'; sembunyikanNotifikasi(); levelSelesaiOverlay.style.display = 'none'; /* Pastikan modal hilang */ pilihanKategoriElem.style.display = 'flex'; judulElem.textContent = 'Pilih Tebak-Tebakan'; bodyElem.classList.remove('ayat-mode'); kuisContainerElem.classList.remove('ayat-mode'); if (tombolBacaSoal) tombolBacaSoal.style.display = 'none'; if (supportSpeech) window.speechSynthesis.cancel(); }
 
-        // Fungsi Tampilkan Hasil Akhir
-         function tampilkanHasilAkhir() {
-            kuisContainerElem.style.display = 'none';
-            pilihanKategoriElem.style.display = 'none';
-            judulElem.textContent = "Permainan Selesai!"; // Judul generik
-
-            let namaKategori = '';
-            if (jenisSoal === 'hewan') namaKategori = 'Tebak Hewan';
-            else if (jenisSoal === 'buah') namaKategori = 'Tebak Buah';
-            else if (jenisSoal === 'ayat') {
-                 namaKategori = 'Tebak Ayat';
-                 // Pastikan style ayat aktif di hasil akhir juga
-                 bodyElem.classList.add('ayat-mode');
-            }
-
-            pesanHasilElem.textContent = `Kamu telah menyelesaikan semua ${totalLevel} level ${namaKategori}! Masya Allah, Kamu Pintar!`; // Pesan hasil
-            hasilAkhirContainerElem.style.display = 'flex';
-            playSound(pingSound);
-             // Sembunyikan tombol baca & hentikan suara
-             if (tombolBacaSoal) tombolBacaSoal.style.display = 'none';
-             if (supportSpeech) window.speechSynthesis.cancel();
-        }
+        // Fungsi Tampilkan Hasil Akhir (Sama)
+         function tampilkanHasilAkhir() { /* ... sama ... */ kuisContainerElem.style.display = 'none'; pilihanKategoriElem.style.display = 'none'; levelSelesaiOverlay.style.display = 'none'; /* Pastikan modal hilang */ judulElem.textContent = "Permainan Selesai!"; let namaKategori = ''; if (jenisSoal === 'hewan') namaKategori = 'Tebak Hewan'; else if (jenisSoal === 'buah') namaKategori = 'Tebak Buah'; else if (jenisSoal === 'ayat') { namaKategori = 'Tebak Ayat'; bodyElem.classList.add('ayat-mode'); } pesanHasilElem.textContent = `Kamu telah menyelesaikan semua ${totalLevel} level ${namaKategori}! Masya Allah, Kamu Pintar!`; hasilAkhirContainerElem.style.display = 'flex'; playSound(pingSound); if (tombolBacaSoal) tombolBacaSoal.style.display = 'none'; if (supportSpeech) window.speechSynthesis.cancel(); }
 
     </script>
 </body>
