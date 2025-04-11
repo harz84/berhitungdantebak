@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuis Anak Muslim</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #fdf0d5;
-            --primary-color: #f08080;
+            --primary-color: #f08080; /* Tombol Hitung */
             --primary-hover: #e57373;
-            --secondary-color: #66d9ef;
+            --secondary-color: #66d9ef; /* Tombol Tebak */
             --secondary-hover: #4fc3f7;
+            --title-color: #007777; /* Warna Baru Judul Utama (Teal Tua) */
             --text-color: #333;
             --white-color: #fff;
             --border-radius: 15px;
@@ -21,17 +24,20 @@
         body {
             background-color: var(--bg-color);
             text-align: center;
+            /* Default font Poppins, akan di-override untuk judul */
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             margin: 0;
-            padding: 40px 20px 20px 20px;
+            /* Padding atas dikurangi, bawah ditambah sedikit untuk ruang */
+            padding: 25px 20px 30px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            /* Diubah ke flex-start agar konten mulai dari atas */
+            justify-content: flex-start;
             align-items: center;
             position: relative;
-            overflow-x: hidden; /* Mencegah scroll horizontal jika gambar terlalu lebar */
+            overflow-x: hidden;
         }
         .copyright {
             position: absolute;
@@ -44,45 +50,49 @@
 
         /* Judul Utama Baru - Disesuaikan */
         .main-title {
-            /* Ukuran font diperbesar 50% */
-            font-size: clamp(4.2rem, 15vw, 6.75rem); /* 2.8*1.5=4.2, 10*1.5=15, 4.5*1.5=6.75 */
-            color: var(--primary-color);
-            margin-bottom: 0.5em; /* Jarak ke gambar sedikit ditambah */
-            /* Posisi dinaikkan (kurangi margin atas) */
-            margin-top: 5px; /* Lebih dekat ke atas/copyright */
-            font-weight: 700;
-            line-height: 1.1; /* Kurangi sedikit line-height agar tidak terlalu jauh jika wrap */
+            /* Font diubah ke Lilita One */
+            font-family: 'Lilita One', cursive;
+            font-size: clamp(4.2rem, 15vw, 6.75rem); /* Ukuran tetap besar */
+            /* Warna diubah ke Teal Tua */
+            color: var(--title-color);
+            /* Margin bawah dikurangi lagi */
+            margin-bottom: 0.3em;
+            margin-top: 10px; /* Naikkan lagi (lebih dekat ke copyright) */
+            font-weight: 400; /* Lilita One biasanya tidak perlu bold eksplisit */
+            line-height: 1.1;
         }
 
         /* Gambar Siluet - Disesuaikan */
         .hero-image {
             display: block;
-            /* Ukuran diperbesar 2x */
-            max-width: 360px; /* 180px * 2 = 360px */
+            max-width: 360px; /* Ukuran tetap besar */
             height: auto;
-            margin: 0 auto 1.2em auto; /* Jarak bawah ditambah sedikit */
+            /* Margin bawah dikurangi agar lebih rapat */
+            margin: 0 auto 0.8em auto;
         }
 
-        /* Sub Judul */
+        /* Sub Judul - Disesuaikan */
         .sub-title {
-             font-size: clamp(1.5rem, 5vw, 2.2rem); /* Tetap sama */
+             font-size: clamp(1.5rem, 5vw, 2.2rem);
              color: var(--text-color);
              margin-top: 0;
-             margin-bottom: 1.8em; /* Jarak ke tombol sedikit ditambah */
+             /* Margin bawah dikurangi agar lebih rapat */
+             margin-bottom: 1.2em;
              font-weight: 400;
         }
 
+        /* Kontainer Menu - Tidak perlu banyak perubahan */
         .menu-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px; /* Sedikit kurangi jarak antar tombol */
             width: 90%;
             max-width: 500px;
-            z-index: 5; /* Pastikan tombol di atas elemen lain jika overlap (jarang terjadi) */
+            z-index: 5;
         }
         .button {
-            padding: 20px 30px;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            padding: 18px 25px; /* Sedikit kurangi padding tombol */
+            font-size: clamp(1.4rem, 4.5vw, 2.3rem); /* Sedikit kurangi font tombol */
             color: var(--white-color);
             border: none;
             border-radius: var(--border-radius);
@@ -109,38 +119,55 @@
         /* Penyesuaian untuk layar kecil - Disesuaikan */
         @media (max-width: 600px) {
              .main-title {
-                 /* 2.5*1.5=3.75, 9*1.5=13.5, 4*1.5=6 */
                  font-size: clamp(3.75rem, 13.5vw, 6rem);
-                 margin-bottom: 0.4em;
+                 margin-bottom: 0.25em;
              }
              .hero-image {
-                 max-width: 300px; /* 150px * 2 = 300px */
-                 margin-bottom: 1em;
+                 max-width: 300px;
+                 margin-bottom: 0.7em;
              }
              .sub-title {
-                 font-size: clamp(1.3rem, 4.5vw, 2rem); /* Tetap */
-                 margin-bottom: 1.5em;
+                 font-size: clamp(1.3rem, 4.5vw, 2rem);
+                 margin-bottom: 1em;
+             }
+             .menu-container {
+                 gap: 15px;
+             }
+             .button {
+                 padding: 16px 20px;
+                 font-size: clamp(1.3rem, 4vw, 2.1rem);
              }
         }
 
         @media (max-width: 400px) {
             body {
-                 padding-top: 50px;
+                 padding-top: 40px; /* Kurangi padding atas di layar kecil */
+                 padding-bottom: 20px;
              }
              .main-title {
-                /* 2.2*1.5=3.3, 8*1.5=12, 3.5*1.5=5.25 */
                  font-size: clamp(3.3rem, 12vw, 5.25rem);
-                 margin-top: 15px; /* Sedikit ruang lagi dari copyright */
-                 line-height: 1.1;
+                 margin-top: 10px; /* Lebih dekat ke atas */
+                 line-height: 1; /* Lebih rapat jika wrap */
+                 margin-bottom: 0.2em;
              }
              .hero-image {
-                 max-width: 240px; /* 120px * 2 = 240px */
+                 max-width: 240px;
+                 margin-bottom: 0.6em;
              }
               .sub-title {
-                 font-size: clamp(1.2rem, 4vw, 1.8rem); /* Tetap */
+                 font-size: clamp(1.2rem, 4vw, 1.8rem);
+                 margin-bottom: 0.8em;
+             }
+             .menu-container {
+                 gap: 12px;
+             }
+             .button {
+                 padding: 15px 18px;
+                 font-size: clamp(1.2rem, 3.8vw, 2rem);
              }
             .copyright {
                 right: 10px;
+                top: 8px;
             }
         }
     </style>
