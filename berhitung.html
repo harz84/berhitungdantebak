@@ -6,7 +6,6 @@
     <title>Menu Berhitung</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Version B.3.9 -->
     <style>
          :root {
             --bg-color: #fdf0d5;
@@ -16,8 +15,10 @@
             --secondary-hover: #4fc3f7;
             --text-color: #333;
             --white-color: #fff;
-            --correct-color: #81c784;
-            --wrong-color: #e57373;
+            --correct-color: #81c784; /* Benar & Tombol Lanjut */
+            --correct-hover: #66bb6a;
+            --wrong-color: #e57373;   /* Salah & Tombol Berhenti */
+            --wrong-hover: #d32f2f;
             --border-radius: 15px;
             --home-btn-bg: #ffcc80;
             --home-btn-hover: #ffb74d;
@@ -25,131 +26,80 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            font-family: 'Poppins', sans-serif;
-            color: var(--text-color);
-            margin: 0;
-            padding: 70px 20px 20px 20px; /* Padding atas untuk Home & Copyright */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative; /* Needed for absolute positioning */
+            background-color: var(--bg-color); font-family: 'Poppins', sans-serif;
+            color: var(--text-color); margin: 0; padding: 70px 20px 20px 20px;
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; position: relative;
         }
 
-        /* 1. Copyright Style */
         .copyright {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem);
-            color: var(--copyright-color);
-            z-index: 10;
+            position: absolute; top: 10px; right: 15px;
+            font-size: clamp(0.7rem, 2vw, 0.8rem); color: var(--copyright-color); z-index: 10;
         }
 
-        /* 2. Perbesar Tombol Home (+30%) */
         .home-btn {
-            position: absolute; top: 15px; left: 15px;
-            background-color: var(--home-btn-bg); color: var(--text-color);
-            /* Ukuran diperbesar ~30% */
-            padding: 13px 20px; /* dari 10px 15px */
-            font-size: clamp(1.1rem, 3.9vw, 1.5rem); /* dari clamp(0.9rem, 3vw, 1.2rem) */
-            gap: 10px; /* dari 8px */
-            border: none; border-radius: var(--border-radius); cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            display: inline-flex; align-items: center; z-index: 10;
-             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            position: absolute; top: 15px; left: 15px; background-color: var(--home-btn-bg);
+            color: var(--text-color); padding: 13px 20px; font-size: clamp(1.1rem, 3.9vw, 1.5rem);
+            gap: 10px; border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex;
+            align-items: center; z-index: 10; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
-        .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.08); } /* Scale hover sedikit lebih besar */
-        .home-btn:active { transform: scale(1); } /* Active scale kembali normal */
+        .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.08); }
+        .home-btn:active { transform: scale(1); }
 
         h1 {
             font-size: clamp(2rem, 8vw, 3.5rem); color: var(--primary-color);
-            margin-bottom: 1em; text-align: center;
-            margin-top: 10px; /* Adjust if needed based on copyright/home button */
+            margin-bottom: 1em; text-align: center; margin-top: 10px;
         }
 
         #menu-pilihan {
-             display: flex; flex-direction: column; gap: 20px;
-             width: 90%; max-width: 500px; margin-bottom: 30px;
+             display: flex; flex-direction: column; gap: 20px; width: 90%;
+             max-width: 500px; margin-bottom: 30px;
         }
         .button-pilihan {
-            padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem);
-            background-color: var(--primary-color); color: var(--white-color);
-            border: none; border-radius: var(--border-radius); cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            width: 100%; display: flex; align-items: center;
-            justify-content: center; gap: 10px;
-             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem); background-color: var(--primary-color);
+            color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease; width: 100%; display: flex;
+            align-items: center; justify-content: center; gap: 10px; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
         .button-pilihan:hover { background-color: var(--primary-hover); transform: scale(1.03); }
         .button-pilihan:active { transform: scale(0.98); }
 
         #kuis-container {
-            display: none; width: 100%; max-width: 600px;
-            text-align: center; padding-bottom: 50px;
+            display: none; width: 100%; max-width: 600px; text-align: center; padding-bottom: 50px;
         }
 
         #soal {
-            font-size: clamp(2.5rem, 10vw, 4rem); margin-bottom: 30px;
-            font-weight: bold; color: var(--primary-color); min-height: 1.5em;
+            font-size: clamp(2.5rem, 10vw, 4rem); margin-bottom: 30px; font-weight: bold;
+            color: var(--primary-color); min-height: 1.5em;
         }
 
         #opsiJawaban {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-            width: 90%;
-            max-width: 450px;
-            margin-left: auto;
-            margin-right: auto;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px;
+            width: 90%; max-width: 450px; margin-left: auto; margin-right: auto;
         }
 
         .opsi {
-            padding: 20px 15px;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            background-color: var(--secondary-color);
-            color: var(--white-color);
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            padding: 20px 15px; font-size: clamp(1.5rem, 5vw, 2.5rem); background-color: var(--secondary-color);
+            color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
         }
-        .opsi:hover {
-            background-color: var(--secondary-hover);
-            transform: scale(1.03);
-        }
-        .opsi:active {
-            transform: scale(0.98);
-        }
-        .opsi:disabled { /* Style saat opsi nonaktif */
-             background-color: #cccccc;
-             cursor: not-allowed;
-             opacity: 0.7;
-         }
+        .opsi:hover { background-color: var(--secondary-hover); transform: scale(1.03); }
+        .opsi:active { transform: scale(0.98); }
+        .opsi:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
 
+        /* Notifikasi Benar/Salah (Auto-hide) */
         #notifikasi-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); display: none;
-            justify-content: center; align-items: center; z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
         }
         #notifikasi {
-            font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px;
-            border-radius: var(--border-radius); color: var(--white-color);
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-            transform: scale(0.5); opacity: 0;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px; border-radius: var(--border-radius);
+            color: var(--white-color); display: flex; flex-direction: column; align-items: center; gap: 15px;
+            transform: scale(0.5); opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
          #notifikasi i { font-size: 1.2em; }
         .benar { background-color: var(--correct-color); }
@@ -157,89 +107,122 @@
         #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
 
          #progress-container {
-            width: 80%; max-width: 400px; height: 20px;
-            background-color: #e0e0e0; border-radius: 10px;
-            margin: 20px auto; overflow: hidden;
+            width: 80%; max-width: 400px; height: 20px; background-color: #e0e0e0;
+            border-radius: 10px; margin: 20px auto; overflow: hidden;
         }
         #progress-bar {
-            width: 0%; height: 100%; background-color: var(--primary-color);
-            border-radius: 10px; transition: width 0.5s ease;
+            width: 0%; height: 100%; background-color: var(--primary-color); border-radius: 10px;
+            transition: width 0.5s ease;
         }
          #level-info {
-             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px;
-             margin-bottom: 20px; color: var(--text-color);
+             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px; margin-bottom: 20px;
+             color: var(--text-color);
          }
 
-         /* 5. Style untuk Halaman Hasil Akhir */
          #hasil-akhir-container {
-            display: none; /* Sembunyikan secara default */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            margin-top: 20px;
-            background-color: var(--white-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            padding: 30px; margin-top: 20px; background-color: var(--white-color);
+            border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 90%; max-width: 500px; text-align: center;
          }
          #hasil-akhir-container h2 {
-            color: var(--primary-color);
-            font-size: clamp(1.8rem, 6vw, 2.8rem);
-            margin-bottom: 15px;
+            color: var(--primary-color); font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px;
          }
          #hasil-akhir-container p {
-            font-size: clamp(1rem, 4vw, 1.4rem);
-            margin-bottom: 25px;
-            line-height: 1.6;
+            font-size: clamp(1rem, 4vw, 1.4rem); margin-bottom: 25px; line-height: 1.6;
          }
-         .button-hasil-akhir { /* Tombol home di halaman hasil */
-            padding: 15px 25px;
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-            background-color: var(--home-btn-bg);
+         .button-hasil-akhir {
+            padding: 15px 25px; font-size: clamp(1.2rem, 4vw, 1.8rem); background-color: var(--home-btn-bg);
+            color: var(--text-color); border: none; border-radius: var(--border-radius); cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex;
+            align-items: center; gap: 10px; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+         }
+         .button-hasil-akhir:hover { background-color: var(--home-btn-hover); transform: scale(1.05); }
+         .button-hasil-akhir:active { transform: scale(0.98); }
+
+        /** BARU: Style untuk Notifikasi Pilihan Akhir Level **/
+        #level-selesai-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Sedikit lebih gelap */
+            display: none; /* Sembunyi default */
+            justify-content: center; align-items: center; z-index: 1100; /* Di atas notif biasa */
+        }
+        #level-selesai-box {
+            background-color: var(--bg-color);
+            padding: 25px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            transform: scale(0.8); /* Animasi muncul */
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        #level-selesai-overlay.show #level-selesai-box {
+            transform: scale(1);
+            opacity: 1;
+        }
+        #level-selesai-box h3 {
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            color: var(--correct-color); /* Warna hijau selamat */
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        #level-selesai-box p {
+            font-size: clamp(1rem, 3.5vw, 1.4rem);
             color: var(--text-color);
-            border: none; border-radius: var(--border-radius); cursor: pointer;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .level-selesai-buttons {
+            display: flex;
+            justify-content: space-around; /* Beri jarak antar tombol */
+            gap: 15px; /* Jarak jika wrap */
+            flex-wrap: wrap; /* Izinkan tombol wrap di layar kecil */
+        }
+        .button-level-selesai {
+            padding: 12px 20px;
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            color: var(--white-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease;
-            display: inline-flex; align-items: center; gap: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-grow: 1; /* Tombol coba penuhi ruang */
+            min-width: 120px; /* Lebar minimum tombol */
             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-         }
-         .button-hasil-akhir:hover {
-            background-color: var(--home-btn-hover);
-            transform: scale(1.05);
-         }
-         .button-hasil-akhir:active {
-            transform: scale(0.98);
-         }
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+        }
+        .button-level-selesai:hover { transform: scale(1.05); }
+        .button-level-selesai:active { transform: scale(0.98); }
+        #button-lanjut { background-color: var(--correct-color); }
+        #button-lanjut:hover { background-color: var(--correct-hover); }
+        #button-berhenti { background-color: var(--wrong-color); }
+        #button-berhenti:hover { background-color: var(--wrong-hover); }
+        /** Akhir Style BARU **/
+
 
         /* Style untuk HP layar kecil */
         @media (max-width: 400px) {
-            .copyright {
-                right: 10px;
-            }
-             .home-btn {
-                 left: 10px;
-                 padding: 10px 15px; /* Kembalikan sedikit jika terlalu besar */
-                 font-size: clamp(1rem, 3.5vw, 1.3rem);
-             }
-             body {
-                 padding-top: 80px; /* Beri ruang lebih di atas */
-             }
-             h1 {
-                 margin-top: 0;
-             }
+            .copyright { right: 10px; }
+             .home-btn { left: 10px; padding: 10px 15px; font-size: clamp(1rem, 3.5vw, 1.3rem); }
+             body { padding-top: 80px; }
+             h1 { margin-top: 0; }
+             /* Sesuaikan style modal di layar kecil */
+             #level-selesai-box { padding: 20px; }
+             .level-selesai-buttons { justify-content: center; } /* Pusatkan jika wrap */
         }
     </style>
 </head>
 <body>
-    <!-- 1. Copyright Element -->
     <div class="copyright">© Mas Har</div>
 
-    <!-- 2. Tombol Home (sudah di-style di CSS) -->
     <button class="home-btn" onclick="location.href='index.html'"><i class="fas fa-home"></i> Home</button>
 
     <h1>Pilih Berhitung</h1>
@@ -258,7 +241,6 @@
         <div id="opsiJawaban"></div>
      </div>
 
-     <!-- 5. Kontainer Hasil Akhir -->
      <div id="hasil-akhir-container">
         <h2>Selamat! Kamu Hebat! <i class="fas fa-trophy" style="color: #ffd700;"></i></h2>
         <p id="pesan-hasil-akhir"></p>
@@ -274,7 +256,21 @@
         </div>
     </div>
 
-    <!-- 3 & 6. Audio Elements -->
+    <div id="level-selesai-overlay">
+        <div id="level-selesai-box">
+            <h3><i class="fas fa-star" style="color: #ffc107;"></i> Selamat!</h3>
+            <p id="level-selesai-pesan"></p>
+            <div class="level-selesai-buttons">
+                <button id="button-lanjut" class="button-level-selesai">
+                    <i class="fas fa-arrow-right"></i> Lanjut Level Berikutnya
+                </button>
+                <button id="button-berhenti" class="button-level-selesai">
+                    <i class="fas fa-stop-circle"></i> Berhenti Bermain
+                </button>
+            </div>
+        </div>
+    </div>
+
     <audio id="pingSound" src="ping.wav" preload="auto"></audio>
     <audio id="wrongSound" src="gameovertwew.wav" preload="auto"></audio>
 
@@ -283,7 +279,8 @@
         const soalPerLevel = 10;
         const totalLevel = 5;
 
-        const levels = { /* ... (data level sama seperti sebelumnya) ... */
+        // Data Level (Rentang Angka) - Tetap sama, sudah gradual & random
+        const levels = {
              penjumlahan: [
                 Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 5) + 1, b: Math.floor(Math.random() * 5) + 1 })),
                 Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 10) + 1, b: Math.floor(Math.random() * 10) + 1 })),
@@ -300,11 +297,11 @@
             ]
         };
 
-        // Ambil Referensi Elemen DOM
+        // Referensi Elemen DOM
         const menuPilihanElem = document.getElementById('menu-pilihan');
         const kuisContainerElem = document.getElementById('kuis-container');
-        const hasilAkhirContainerElem = document.getElementById('hasil-akhir-container'); // 5. Ref Hasil
-        const pesanHasilElem = document.getElementById('pesan-hasil-akhir'); // 5. Ref Pesan Hasil
+        const hasilAkhirContainerElem = document.getElementById('hasil-akhir-container');
+        const pesanHasilElem = document.getElementById('pesan-hasil-akhir');
         const judulElem = document.querySelector('h1');
         const soalElem = document.getElementById('soal');
         const opsiJawabanContainer = document.getElementById('opsiJawaban');
@@ -313,12 +310,17 @@
         const notifikasiTeks = document.getElementById('notifikasi-teks');
         const progressBar = document.getElementById('progress-bar');
         const levelInfo = document.getElementById('level-info');
-
-        // 3 & 6. Audio Element References
         const pingSound = document.getElementById('pingSound');
         const wrongSound = document.getElementById('wrongSound');
 
-        // 3. Fungsi Play Sound
+        // /** BARU **/ Referensi Elemen Modal Akhir Level
+        const levelSelesaiOverlay = document.getElementById('level-selesai-overlay');
+        const levelSelesaiPesan = document.getElementById('level-selesai-pesan');
+        const buttonLanjut = document.getElementById('button-lanjut');
+        const buttonBerhenti = document.getElementById('button-berhenti');
+
+
+        // Fungsi Play Sound
         function playSound(soundElement) {
             if (soundElement) {
                 soundElement.currentTime = 0;
@@ -326,84 +328,74 @@
             }
         }
 
-        // 3. Event listener untuk semua tombol (termasuk home, opsi, dll)
+        // Event listener klik umum
         document.addEventListener('click', function(event) {
             const button = event.target.closest('button');
-            // Hanya mainkan ping jika bukan tombol opsi jawaban (karena opsi punya feedback sendiri)
-            // Atau jika notifikasi sedang tidak tampil (agar tidak double sound saat klik di notif)
-            if (button && !button.classList.contains('opsi') && notifikasiOverlay.style.display === 'none') {
-                 // Kecualikan juga tombol di hasil akhir jika ingin suara berbeda/tanpa suara
-                 if (!hasilAkhirContainerElem.contains(button)) {
-                     playSound(pingSound);
-                 }
+            // Kecualikan tombol opsi & tombol di modal/notif dari sound ping generik
+            if (button && !button.classList.contains('opsi') && !button.closest('#notifikasi-overlay') && !button.closest('#level-selesai-overlay') && !button.closest('#hasil-akhir-container')) {
+                 playSound(pingSound);
             }
         });
 
-        function shuffleArray(array) { /* ... (sama) ... */
+        // Fungsi Acak Array (untuk opsi)
+        function shuffleArray(array) {
              for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
-        function generateOptions(correctAnswer) { /* ... (sama) ... */
+        // Fungsi Generate Opsi Jawaban
+        function generateOptions(correctAnswer) {
              let options = [correctAnswer];
-            const maxAttempts = 10;
-            let attempts = 0;
+            const maxAttempts = 10; let attempts = 0;
             while (options.length < 4 && attempts < maxAttempts) {
-                let wrongOption;
-                let variation = Math.floor(Math.random() * 10) + 1;
-                if (Math.random() < 0.5) {
-                    wrongOption = correctAnswer + variation;
-                } else {
-                    wrongOption = correctAnswer - variation;
-                }
-                if (wrongOption >= 0 && !options.includes(wrongOption)) {
-                    options.push(wrongOption);
-                }
+                let wrongOption; let variation = Math.floor(Math.random() * 10) + 1;
+                if (Math.random() < 0.5) { wrongOption = correctAnswer + variation; }
+                else { wrongOption = correctAnswer - variation; }
+                if (wrongOption >= 0 && !options.includes(wrongOption)) { options.push(wrongOption); }
                 attempts++;
             }
              while (options.length < 4) {
                  let randomNum = Math.max(0, correctAnswer + (Math.floor(Math.random()*21)-10));
-                 if(!options.includes(randomNum)){
-                     options.push(randomNum)
-                 } else {
-                      options.push(Math.max(0, Math.floor(Math.random()*50)))
-                 }
+                 if(!options.includes(randomNum)){ options.push(randomNum) }
+                 else { options.push(Math.max(0, Math.floor(Math.random()*50))) }
              }
-            shuffleArray(options);
-            return options;
+            shuffleArray(options); return options;
         }
 
+        // Fungsi Mulai Level
         function mulaiLevel(jenis) {
-            jenisSoal = jenis;
-            currentLevel = 0;
-            currentSoal = 0;
+            jenisSoal = jenis; currentLevel = 0; currentSoal = 0;
             menuPilihanElem.style.display = 'none';
-            kuisContainerElem.style.display = 'block'; // Tampilkan kuis
-            hasilAkhirContainerElem.style.display = 'none'; // Sembunyikan hasil akhir
+            kuisContainerElem.style.display = 'block';
+            hasilAkhirContainerElem.style.display = 'none';
+            levelSelesaiOverlay.style.display = 'none'; // Pastikan modal tersembunyi
             judulElem.textContent = jenis === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan';
             tampilkanSoal();
         }
 
+        // Fungsi Tampilkan Soal /** MODIFIKASI di bagian akhir level **/
         function tampilkanSoal() {
-             // Cek apakah level SEBELUMNYA sudah selesai
+             // Cek jika level SEBELUMNYA sudah selesai
              if (currentSoal >= soalPerLevel) {
-                currentLevel++;
-                currentSoal = 0;
-                 // Cek apakah semua level sudah selesai
+                // Simpan level yang baru saja selesai
+                const levelYangSelesai = currentLevel;
+                currentLevel++; // Naikkan level untuk pengecekan selanjutnya
+                currentSoal = 0; // Reset nomor soal
+
+                 // Cek apakah SEMUA level sudah selesai
                  if (currentLevel >= totalLevel) {
-                    tampilkanHasilAkhir(); // 5. Panggil fungsi hasil akhir
-                    return; // Stop proses tampilkan soal
+                    tampilkanHasilAkhir(); // Tampilkan hasil akhir jika semua level tuntas
+                    return; // Stop proses
                  } else {
-                    // Lanjut ke level berikutnya
-                    tampilkanNotifikasi(`Level ${currentLevel + 1} Dimulai!`, 'lanjut', 1500); // Auto hide
-                    // Tidak perlu timeout di sini, notifikasi akan hilang sendiri
-                    // Lanjut tampilkan soal level baru setelah notifikasi
+                    // Jika masih ada level berikutnya, tampilkan notifikasi PILIHAN
+                    tampilkanPilihanLevelSelesai(levelYangSelesai);
+                    return; // Stop proses tampilkan soal biasa, tunggu pilihan user
                  }
             }
 
-            // Jika belum selesai semua level, tampilkan soal
+            // --- Jika bukan akhir level ATAU lanjut dari level baru ---
             let soal = levels[jenisSoal][currentLevel][currentSoal];
             jawabanBenar = jenisSoal === 'penjumlahan' ? soal.a + soal.b : soal.a - soal.b;
             soalElem.innerHTML = `${soal.a} ${jenisSoal === 'penjumlahan' ? '+' : '−'} ${soal.b} = ?`;
@@ -412,9 +404,7 @@
             opsiJawabanContainer.innerHTML = '';
             opsiAcak.forEach(opsi => {
                 const button = document.createElement('button');
-                button.classList.add('opsi');
-                button.textContent = opsi;
-                // PENTING: Kirim nilai opsi saat diklik
+                button.classList.add('opsi'); button.textContent = opsi;
                 button.onclick = () => cekJawaban(opsi);
                 opsiJawabanContainer.appendChild(button);
             });
@@ -423,94 +413,108 @@
             disableOptions(false); // Pastikan opsi aktif
         }
 
+        // Fungsi Nonaktifkan/Aktifkan Opsi
         function disableOptions(disabled) {
              const buttons = opsiJawabanContainer.querySelectorAll('.opsi');
-             buttons.forEach(button => {
-                 button.disabled = disabled;
-             });
+             buttons.forEach(button => { button.disabled = disabled; });
          }
 
-        // 4 & 6. Modifikasi Cek Jawaban
+        // Fungsi Cek Jawaban
         function cekJawaban(pilihan) {
-            disableOptions(true); // Nonaktifkan opsi segera
+            disableOptions(true); // Nonaktifkan opsi
 
             if (parseInt(pilihan) === jawabanBenar) {
-                // Jawaban Benar
-                playSound(pingSound); // Mainkan suara benar (pakai ping atau suara lain jika ada)
-                tampilkanNotifikasi('Benar!', 'benar', 1200); // Durasi lebih pendek
-                // Langsung lanjut ke soal berikutnya setelah notifikasi hilang
+                playSound(pingSound);
+                tampilkanNotifikasi('Benar!', 'benar', 1200);
                 setTimeout(() => {
                     currentSoal++;
-                    tampilkanSoal(); // Lanjut ke soal/level berikutnya
-                }, 1300); // Sedikit lebih lama dari durasi notifikasi
-
+                    tampilkanSoal(); // Cek lagi apakah level selesai atau lanjut soal berikutnya
+                }, 1300);
             } else {
-                // Jawaban Salah
-                playSound(wrongSound); // 6. Mainkan suara salah
-                // 4. Minta coba lagi, jangan beri tahu jawaban
+                playSound(wrongSound);
                 tampilkanNotifikasi('Salah, coba lagi ya!', 'salah', 1500);
-                 // Setelah notifikasi hilang, aktifkan kembali opsi
-                setTimeout(() => {
-                   disableOptions(false); // Aktifkan kembali opsi untuk mencoba lagi
-                }, 1600); // Sedikit lebih lama dari durasi notifikasi
-                // Jangan increment currentSoal atau panggil tampilkanSoal()
+                 setTimeout(() => { disableOptions(false); }, 1600); // Aktifkan lagi opsi
             }
         }
 
-        // Tampilkan Notifikasi (dengan autoHide)
-        function tampilkanNotifikasi(pesan, tipe, duration = null) { // duration dalam ms
+        // Fungsi Tampilkan Notifikasi Benar/Salah (Auto-hide)
+        function tampilkanNotifikasi(pesan, tipe, duration = 1200) {
             const ikon = notifikasiElem.querySelector('i');
-
             notifikasiTeks.textContent = pesan;
             notifikasiElem.className = ''; ikon.className = '';
-
             if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); }
             else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); }
-            else if (tipe === 'selesai') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-trophy'); } // Untuk hasil akhir nanti
-            else if (tipe === 'lanjut') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-arrow-circle-right'); }
-
+            // Hapus tipe 'lanjut' karena diganti modal pilihan
             notifikasiOverlay.style.display = 'flex';
             setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10);
-
-            // Sembunyikan otomatis jika durasi diberikan
-            if (duration) {
-                setTimeout(sembunyikanNotifikasi, duration);
-            }
+            if (duration) { setTimeout(sembunyikanNotifikasi, duration); }
         }
 
+        // Fungsi Sembunyikan Notifikasi Benar/Salah
         function sembunyikanNotifikasi() {
             notifikasiOverlay.classList.remove('show');
-             setTimeout(() => {
-                 notifikasiOverlay.style.display = 'none';
-                 // PENTING: Jika notifikasi adalah 'lanjut level', panggil tampilkanSoal() SETELAH notifikasi hilang
-                 if (notifikasiElem.classList.contains('benar') && notifikasiElem.querySelector('i').classList.contains('fa-arrow-circle-right')) {
-                     tampilkanSoal(); // Tampilkan soal level baru sekarang
-                 }
-             }, 300); // Waktu untuk animasi fade out
+             setTimeout(() => { notifikasiOverlay.style.display = 'none'; }, 300);
+             // Hapus logic panggil tampilkanSoal() dari sini
         }
 
+        // /** BARU **/ Fungsi Tampilkan Pilihan Akhir Level
+        function tampilkanPilihanLevelSelesai(levelSelesai) {
+            levelSelesaiPesan.textContent = `Kamu berhasil menyelesaikan Level ${levelSelesai + 1}. Mau lanjut ke Level ${levelSelesai + 2}?`;
+            levelSelesaiOverlay.style.display = 'flex';
+            setTimeout(() => levelSelesaiOverlay.classList.add('show'), 10); // Tampilkan dengan animasi
+
+            // Tambahkan event listener sekali pakai ke tombol
+            buttonLanjut.onclick = handleLanjutLevel;
+            buttonBerhenti.onclick = handleBerhenti;
+        }
+
+        // /** BARU **/ Handler untuk tombol Lanjut Level
+        function handleLanjutLevel() {
+            levelSelesaiOverlay.classList.remove('show'); // Sembunyikan dengan animasi
+            setTimeout(() => {
+                levelSelesaiOverlay.style.display = 'none';
+                // Hapus listener agar tidak menumpuk
+                buttonLanjut.onclick = null;
+                buttonBerhenti.onclick = null;
+                // Tampilkan soal pertama dari level baru (currentLevel sudah di-increment sebelumnya)
+                tampilkanSoal();
+            }, 300); // Tunggu animasi selesai
+        }
+
+        // /** BARU **/ Handler untuk tombol Berhenti
+        function handleBerhenti() {
+             levelSelesaiOverlay.classList.remove('show');
+             setTimeout(() => {
+                levelSelesaiOverlay.style.display = 'none';
+                buttonLanjut.onclick = null;
+                buttonBerhenti.onclick = null;
+                // Kembali ke halaman utama
+                location.href = 'index.html';
+             }, 300);
+        }
+
+
+        // Fungsi Update Progress Bar
         function updateProgressBar() {
              const totalSoalInLevel = soalPerLevel;
-             // Pastikan currentSoal tidak melebihi soalPerLevel untuk tampilan progress
              const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel);
              const progress = (soalTampilProgress / totalSoalInLevel) * 100;
              progressBar.style.width = `${progress}%`;
-             // Tampilkan nomor soal yang benar (1 sampai soalPerLevel)
              const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel);
+             // Tampilkan level yang sedang BERJALAN
              levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`;
         }
 
-        // 5. Fungsi untuk menampilkan Hasil Akhir
+        // Fungsi Tampilkan Hasil Akhir (Semua Level Selesai)
         function tampilkanHasilAkhir() {
             kuisContainerElem.style.display = 'none'; // Sembunyikan kuis
-            menuPilihanElem.style.display = 'none'; // Pastikan menu pilihan juga tersembunyi
-            judulElem.textContent = "Permainan Selesai!"; // Ganti judul utama
-            pesanHasilElem.textContent = `Kamu telah menyelesaikan semua ${totalLevel} level ${jenisSoal}! Pertahankan prestasimu!`;
-            hasilAkhirContainerElem.style.display = 'flex'; // Tampilkan kontainer hasil
-            playSound(pingSound); // Atau suara kemenangan lain jika ada
-             // Optional: Tampilkan notifikasi "Selesai" sebentar sebelum hasil akhir muncul
-             // tampilkanNotifikasi('Hebat! Semua level selesai!', 'selesai', 2000);
-             // setTimeout(() => { /* Tampilkan hasil akhir di sini */ }, 500); // Delay sedikit
+            menuPilihanElem.style.display = 'none'; // Sembunyikan menu
+            levelSelesaiOverlay.style.display = 'none'; // Pastikan modal pilihan juga hilang
+            judulElem.textContent = "Permainan Selesai!";
+            let namaOperasi = jenisSoal === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan';
+            pesanHasilElem.textContent = `Luar biasa! Kamu telah menyelesaikan semua ${totalLevel} level ${namaOperasi}! Pertahankan prestasimu!`;
+            hasilAkhirContainerElem.style.display = 'flex';
+            playSound(pingSound); // Atau suara kemenangan
         }
 
     </script>
