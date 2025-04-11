@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Anak Muslim</title> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Kuis Anak Muslim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #fdf0d5;
-            --primary-color: #f08080; /* Warna Tombol 1 & Judul Utama */
+            --primary-color: #f08080;
             --primary-hover: #e57373;
-            --secondary-color: #66d9ef; /* Warna Tombol 2 */
+            --secondary-color: #66d9ef;
             --secondary-hover: #4fc3f7;
             --text-color: #333;
             --white-color: #fff;
@@ -23,13 +24,14 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             margin: 0;
-            padding: 40px 20px 20px 20px; /* Padding atas sedikit disesuaikan */
+            padding: 40px 20px 20px 20px;
             min-height: 100vh;
             display: flex;
-            flex-direction: column; /* Konten ditumpuk vertikal */
-            justify-content: center; /* Pusatkan vertikal */
-            align-items: center; /* Pusatkan horizontal */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: relative;
+            overflow-x: hidden; /* Mencegah scroll horizontal jika gambar terlalu lebar */
         }
         .copyright {
             position: absolute;
@@ -40,31 +42,34 @@
             z-index: 10;
         }
 
-        /* Judul Utama Baru */
+        /* Judul Utama Baru - Disesuaikan */
         .main-title {
-            font-size: clamp(2.8rem, 10vw, 4.5rem); /* Ukuran paling besar */
-            color: var(--primary-color); /* Samakan dengan tombol Berhitung */
-            margin-bottom: 0.4em; /* Jarak ke gambar */
-            margin-top: 20px; /* Jarak dari atas/copyright */
-            font-weight: 700; /* Bold */
-            line-height: 1.2; /* Jarak antar baris jika judul wrap */
+            /* Ukuran font diperbesar 50% */
+            font-size: clamp(4.2rem, 15vw, 6.75rem); /* 2.8*1.5=4.2, 10*1.5=15, 4.5*1.5=6.75 */
+            color: var(--primary-color);
+            margin-bottom: 0.5em; /* Jarak ke gambar sedikit ditambah */
+            /* Posisi dinaikkan (kurangi margin atas) */
+            margin-top: 5px; /* Lebih dekat ke atas/copyright */
+            font-weight: 700;
+            line-height: 1.1; /* Kurangi sedikit line-height agar tidak terlalu jauh jika wrap */
         }
 
-        /* Gambar Siluet */
+        /* Gambar Siluet - Disesuaikan */
         .hero-image {
-            display: block; /* Agar margin auto efektif */
-            max-width: 180px; /* Atur lebar maksimum gambar */
-            height: auto; /* Pertahankan rasio aspek */
-            margin: 0 auto 0.8em auto; /* Jarak atas 0, L/R auto, bawah 0.8em ke sub-judul */
+            display: block;
+            /* Ukuran diperbesar 2x */
+            max-width: 360px; /* 180px * 2 = 360px */
+            height: auto;
+            margin: 0 auto 1.2em auto; /* Jarak bawah ditambah sedikit */
         }
 
-        /* Sub Judul (dulunya h1) */
+        /* Sub Judul */
         .sub-title {
-             font-size: clamp(1.5rem, 5vw, 2.2rem); /* Ukuran lebih kecil */
-             color: var(--text-color); /* Warna teks standar */
-             margin-top: 0; /* Hapus margin atas */
-             margin-bottom: 1.5em; /* Jarak ke tombol */
-             font-weight: 400; /* Bobot font normal */
+             font-size: clamp(1.5rem, 5vw, 2.2rem); /* Tetap sama */
+             color: var(--text-color);
+             margin-top: 0;
+             margin-bottom: 1.8em; /* Jarak ke tombol sedikit ditambah */
+             font-weight: 400;
         }
 
         .menu-container {
@@ -73,6 +78,7 @@
             gap: 20px;
             width: 90%;
             max-width: 500px;
+            z-index: 5; /* Pastikan tombol di atas elemen lain jika overlap (jarang terjadi) */
         }
         .button {
             padding: 20px 30px;
@@ -100,35 +106,41 @@
 
         .button i { font-size: 0.9em; }
 
-        /* Penyesuaian untuk layar kecil */
+        /* Penyesuaian untuk layar kecil - Disesuaikan */
         @media (max-width: 600px) {
              .main-title {
-                 font-size: clamp(2.5rem, 9vw, 4rem);
+                 /* 2.5*1.5=3.75, 9*1.5=13.5, 4*1.5=6 */
+                 font-size: clamp(3.75rem, 13.5vw, 6rem);
+                 margin-bottom: 0.4em;
              }
              .hero-image {
-                 max-width: 150px; /* Sedikit lebih kecil di layar sedang */
+                 max-width: 300px; /* 150px * 2 = 300px */
+                 margin-bottom: 1em;
              }
              .sub-title {
-                 font-size: clamp(1.3rem, 4.5vw, 2rem);
+                 font-size: clamp(1.3rem, 4.5vw, 2rem); /* Tetap */
+                 margin-bottom: 1.5em;
              }
         }
 
         @media (max-width: 400px) {
             body {
-                 padding-top: 50px; /* Beri ruang lebih untuk copyright */
+                 padding-top: 50px;
              }
              .main-title {
-                 font-size: clamp(2.2rem, 8vw, 3.5rem);
-                 margin-top: 25px; /* Pastikan tidak overlap copyright */
+                /* 2.2*1.5=3.3, 8*1.5=12, 3.5*1.5=5.25 */
+                 font-size: clamp(3.3rem, 12vw, 5.25rem);
+                 margin-top: 15px; /* Sedikit ruang lagi dari copyright */
+                 line-height: 1.1;
              }
              .hero-image {
-                 max-width: 120px; /* Lebih kecil lagi di layar sempit */
+                 max-width: 240px; /* 120px * 2 = 240px */
              }
               .sub-title {
-                 font-size: clamp(1.2rem, 4vw, 1.8rem);
+                 font-size: clamp(1.2rem, 4vw, 1.8rem); /* Tetap */
              }
             .copyright {
-                right: 10px; /* Tetap */
+                right: 10px;
             }
         }
     </style>
