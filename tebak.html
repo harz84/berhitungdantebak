@@ -249,19 +249,76 @@
         /** Akhir Style Notifikasi Akhir Level **/
 
         /* Responsive */
+        /* Penyesuaian untuk layar kecil (Mobile) */
         @media (max-width: 480px) {
             .copyright { right: 10px; }
              .home-btn { left: 10px; padding: 10px 15px; font-size: clamp(1rem, 3.5vw, 1.3rem); }
-             body { padding-top: 80px; }
+             body { padding-top: 80px; padding-bottom: 15px; /* Sedikit kurangi padding bawah body */ }
              h1 { margin-top: 0; }
-             #soal-container { flex-direction: column; gap: 10px; margin-bottom: 15px;} /* Kurangi margin bawah */
-             #soal { max-width: 100%; min-height: 2em;} /* Kurangi min-height */
+
+             /* Pengurangan Jarak Vertikal untuk Hewan & Buah */
+             #level-info {
+                 margin-bottom: 10px; /* Kurangi jarak bawah info level */
+             }
+             #progress-container {
+                 margin-bottom: 12px; /* Kurangi jarak bawah progress bar */
+             }
+             #soal-container {
+                 flex-direction: column; /* Tetap kolom */
+                 gap: 8px; /* Kurangi jarak antara soal dan tombol speaker */
+                 margin-bottom: 18px; /* Kurangi jarak ke opsi jawaban */
+             }
+             #soal {
+                 max-width: 100%;
+                 min-height: auto; /* Hapus min-height agar lebih fleksibel */
+                 font-size: clamp(1.4rem, 5.5vw, 2rem); /* Sedikit perkecil font soal */
+                 line-height: 1.35; /* Sedikit rapatkan baris soal */
+             }
+             #opsiJawaban {
+                 margin-bottom: 18px; /* Kurangi jarak ke tombol kembali */
+                 gap: 10px; /* Kurangi jarak antar opsi */
+             }
+             .opsi {
+                  padding: 12px 18px; /* Kurangi padding opsi */
+                  font-size: clamp(1.1rem, 4.2vw, 1.9rem); /* Sedikit perkecil font opsi */
+             }
+             .button-kembali-kategori {
+                  margin-top: 15px; /* Kurangi jarak dari opsi */
+                  padding: 13px 22px; /* Sedikit kurangi padding tombol */
+                  font-size: clamp(1.1rem, 3.8vw, 1.7rem); /* Sedikit perkecil font tombol */
+             }
+
+             /* Style Ayat Mode (Biarkan seperti sebelumnya) */
              #kuis-container.ayat-mode #soal,
              #kuis-container.ayat-mode .opsi {
-                 font-size: clamp(1.6rem, 6vw, 2.5rem); line-height: 1.7;
+                 font-size: clamp(1.6rem, 6vw, 2.5rem);
+                 line-height: 1.7;
              }
-             #opsiJawaban { margin-bottom: 15px; } /* Kurangi margin bawah */
-             .button-kembali-kategori { margin-top: 15px;} /* Kurangi margin atas */
+             /* Pastikan penyesuaian soal di atas tidak merusak ayat mode */
+             #kuis-container.ayat-mode #soal {
+                  min-height: 2.5em; /* Kembalikan min-height untuk ayat jika perlu */
+                  font-size: clamp(1.6rem, 6vw, 2.5rem); /* Ukuran font ayat */
+                  line-height: 1.7; /* Line height ayat */
+             }
+             /* Pastikan penyesuaian opsi di atas tidak merusak ayat mode */
+             #kuis-container.ayat-mode .opsi {
+                  padding: 12px 20px; /* Padding ayat */
+                  font-size: clamp(1.6rem, 6vw, 2.5rem); /* Font size ayat */
+             }
+             /* Pastikan penyesuaian layout container soal tidak merusak ayat */
+             #kuis-container.ayat-mode #soal-container {
+                  margin-bottom: 20px; /* Jarak bawah default untuk ayat */
+                  gap: 15px; /* Gap default ayat */
+             }
+             #kuis-container.ayat-mode #opsiJawaban {
+                 margin-bottom: 20px; /* Jarak bawah default untuk ayat */
+                 gap : 12px; /* Gap default ayat */
+             }
+             #kuis-container.ayat-mode .button-kembali-kategori {
+                  margin-top: 15px; /* Jarak atas default ayat */
+             }
+
+             /* Modal Level Selesai (jika ada, biarkan) */
              #level-selesai-box { padding: 20px; }
              .level-selesai-buttons { justify-content: center; }
         }
