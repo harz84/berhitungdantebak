@@ -50,7 +50,6 @@
 </head>
 <body>
     <div class="copyright">© Mas Har</div>
-
     <button class="home-btn" onclick="location.href='index.html'"><i class="fas fa-home"></i> Home</button>
 
     <h1>Pilih Berhitung</h1>
@@ -61,9 +60,7 @@
     </div>
 
     <div id="kuis-container">
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-        </div>
+        <div id="progress-container"> <div id="progress-bar"></div> </div>
         <div id="level-info"></div>
         <div id="soal"></div>
         <div id="opsiJawaban"></div>
@@ -72,9 +69,7 @@
      <div id="hasil-akhir-container">
         <h2>Selamat! Kamu Hebat! <i class="fas fa-trophy" style="color: #ffd700;"></i></h2>
         <p id="pesan-hasil-akhir"></p>
-        <button class="button-hasil-akhir" onclick="location.href='index.html'">
-            <i class="fas fa-home"></i> Kembali ke Menu Utama
-        </button>
+        <button class="button-hasil-akhir" onclick="location.href='index.html'"> <i class="fas fa-home"></i> Kembali ke Menu Utama </button>
      </div>
 
     <div id="notifikasi-overlay">
@@ -92,21 +87,15 @@
         </div>
     </div>
 
-    <audio id="pingSound" src="ping.wav" preload="auto"></audio>
-    <audio id="wrongSound" src="gameovertwew.wav" preload="auto"></audio>
-
-    <script>
+    <audio id="uiSound" src="ping.wav" preload="auto"></audio> <audio id="correctSound1" src="alhamdulillah.mp3" preload="auto"></audio> <audio id="correctSound2" src="masya_allah.mp3" preload="auto"></audio> <audio id="wrongSound" src="coba_lagi.m4a" preload="auto"></audio> <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
-        const soalPerLevel = 5; // *** DIUBAH: Jumlah soal per level ***
-        const totalLevel = 5; // Tetap 5 level
+        const soalPerLevel = 5;
+        const totalLevel = 5;
+        let useCorrectSound1 = true; // ** BARU: Untuk melacak suara benar mana yang dipakai
 
-        // *** DIHAPUS: Variabel 'levels' yang berisi data soal pre-generated ***
-        // const levels = { ... };
-
-        // Referensi Elemen DOM (Sama)
+        // Referensi Elemen DOM
         const menuPilihanElem = document.getElementById('menu-pilihan');
         const kuisContainerElem = document.getElementById('kuis-container');
-        // ... (Referensi DOM lainnya tetap sama) ...
         const hasilAkhirContainerElem = document.getElementById('hasil-akhir-container');
         const pesanHasilElem = document.getElementById('pesan-hasil-akhir');
         const judulElem = document.querySelector('h1');
@@ -117,172 +106,71 @@
         const notifikasiTeks = document.getElementById('notifikasi-teks');
         const progressBar = document.getElementById('progress-bar');
         const levelInfo = document.getElementById('level-info');
-        const pingSound = document.getElementById('pingSound');
-        const wrongSound = document.getElementById('wrongSound');
         const levelSelesaiOverlay = document.getElementById('level-selesai-overlay');
         const levelSelesaiPesan = document.getElementById('level-selesai-pesan');
         const buttonLanjut = document.getElementById('button-lanjut');
         const buttonBerhenti = document.getElementById('button-berhenti');
 
+        // ** DIUBAH: Referensi elemen audio notifikasi **
+        const uiSound = document.getElementById('uiSound');
+        const correctSound1 = document.getElementById('correctSound1');
+        const correctSound2 = document.getElementById('correctSound2');
+        const wrongSound = document.getElementById('wrongSound');
+
         // Fungsi Play Sound (Sama)
         function playSound(soundElement) { if (soundElement) { soundElement.currentTime = 0; soundElement.play().catch(error => console.log("Playback failed:", error)); } }
 
-        // Event listener klik umum (Sama)
-        document.addEventListener('click', function(event) { const button = event.target.closest('button'); if (button && !button.classList.contains('opsi') && !button.closest('#notifikasi-overlay') && !button.closest('#level-selesai-overlay') && !button.closest('#hasil-akhir-container')) { playSound(pingSound); } });
+        // Event listener klik umum (Pakai uiSound)
+        document.addEventListener('click', function(event) { const button = event.target.closest('button'); if (button && !button.classList.contains('opsi') && !button.closest('#notifikasi-overlay') && !button.closest('#level-selesai-overlay') && !button.closest('#hasil-akhir-container')) { playSound(uiSound); } });
 
         // Fungsi Acak Array (Sama)
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
-        // Fungsi Generate Opsi Jawaban (Sama - tapi pastikan correctAnswer >= 0)
-        function generateOptions(correctAnswer) {
-            let options = [correctAnswer];
-            const maxAttempts = 15; // Tingkatkan percobaan jika perlu
-            let attempts = 0;
-            const minVal = Math.max(0, correctAnswer - 10); // Batas bawah variasi
-            const maxVal = correctAnswer + 10; // Batas atas variasi
-
-            while (options.length < 4 && attempts < maxAttempts) {
-                let wrongOption = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-                // Pastikan opsi salah tidak sama dengan jawaban benar dan belum ada di opsi, dan >= 0
-                if (wrongOption !== correctAnswer && !options.includes(wrongOption) && wrongOption >= 0) {
-                    options.push(wrongOption);
-                }
-                attempts++;
-            }
-            // Jika masih kurang, tambahkan angka acak positif
-             while (options.length < 4) {
-                 let randomNum = Math.floor(Math.random() * (correctAnswer + 15)); // Angka acak positif
-                 if(!options.includes(randomNum)){
-                     options.push(randomNum)
-                 } else {
-                      // Jika masih duplikat, coba angka yang lebih acak
-                      options.push(Math.max(0, Math.floor(Math.random()*30)));
-                 }
-             }
-            shuffleArray(options);
-            return options.slice(0, 4); // Pastikan hanya 4 opsi
-        }
+        // Fungsi Generate Opsi Jawaban (Sama)
+        function generateOptions(correctAnswer) { let options = [correctAnswer]; const maxAttempts = 15; let attempts = 0; const minVal = Math.max(0, correctAnswer - 10); const maxVal = correctAnswer + 10; while (options.length < 4 && attempts < maxAttempts) { let wrongOption = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal; if (wrongOption !== correctAnswer && !options.includes(wrongOption) && wrongOption >= 0) { options.push(wrongOption); } attempts++; } while (options.length < 4) { let randomNum = Math.floor(Math.random() * (correctAnswer + 15)); if(!options.includes(randomNum)){ options.push(randomNum) } else { options.push(Math.max(0, Math.floor(Math.random()*30))); } } shuffleArray(options); return options.slice(0, 4); }
 
         // Fungsi Mulai Level (Sama)
-        function mulaiLevel(jenis) {
-            jenisSoal = jenis; currentLevel = 0; currentSoal = 0;
-            menuPilihanElem.style.display = 'none';
-            kuisContainerElem.style.display = 'block';
-            hasilAkhirContainerElem.style.display = 'none';
-            levelSelesaiOverlay.style.display = 'none';
-            judulElem.textContent = jenis === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan';
-            tampilkanSoal();
-        }
+        function mulaiLevel(jenis) { jenisSoal = jenis; currentLevel = 0; currentSoal = 0; menuPilihanElem.style.display = 'none'; kuisContainerElem.style.display = 'block'; hasilAkhirContainerElem.style.display = 'none'; levelSelesaiOverlay.style.display = 'none'; judulElem.textContent = jenis === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan'; tampilkanSoal(); }
 
-        // *** BARU: Fungsi bantu random integer ***
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1)) + min; // Termasuk min dan max
-        }
+        // Fungsi bantu random integer (Sama)
+        function getRandomInt(min, max) { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min + 1)) + min; }
 
-        // *** BARU: Fungsi generate soal Penjumlahan ***
-        function generatePenjumlahanSoal(level) {
-            let a, b, sum;
-            let targetMin, targetMax;
+        // Fungsi generate soal Penjumlahan (Sama)
+        function generatePenjumlahanSoal(level) { let a, b, sum; let targetMin, targetMax; switch (level) { case 0: targetMin = 0; targetMax = 10; break; case 1: targetMin = 11; targetMax = 15; break; case 2: targetMin = 16; targetMax = 20; break; case 3: targetMin = 21; targetMax = 25; break; case 4: targetMin = 26; targetMax = 30; break; default: targetMin = 0; targetMax = 10; } sum = getRandomInt(targetMin, targetMax); if (sum <= 1) { a = sum; b = 0; if(Math.random() < 0.5) [a, b] = [b, a]; } else { a = getRandomInt(1, sum - 1); b = sum - a; } console.log(`Generated Penjumlahan L${level+1}: ${a}+${b}=${sum}`); return { a, b }; }
 
-            switch (level) {
-                case 0: targetMin = 0; targetMax = 10; break; // Level 1: 0-10
-                case 1: targetMin = 11; targetMax = 15; break; // Level 2: 11-15
-                case 2: targetMin = 16; targetMax = 20; break; // Level 3: 16-20
-                case 3: targetMin = 21; targetMax = 25; break; // Level 4: 21-25
-                case 4: targetMin = 26; targetMax = 30; break; // Level 5: 26-30
-                default: targetMin = 0; targetMax = 10; // Default ke level 1
-            }
+        // Fungsi generate soal Pengurangan (Sama)
+        function generatePenguranganSoal(level) { let a, b; switch (level) { case 0: a = getRandomInt(1, 9); b = getRandomInt(0, a - 1); break; case 1: a = getRandomInt(11, 15); b = getRandomInt(1, 5); break; case 2: a = getRandomInt(16, 20); b = getRandomInt(1, 5); break; case 3: a = getRandomInt(21, 25); b = getRandomInt(1, 5); break; case 4: a = getRandomInt(26, 30); b = getRandomInt(1, 5); break; default: a = getRandomInt(1, 9); b = getRandomInt(0, a - 1); } console.log(`Generated Pengurangan L${level+1}: ${a}-${b}=${a-b}`); return { a, b }; }
 
-            // Generate target sum, lalu pecah jadi a dan b
-            sum = getRandomInt(targetMin, targetMax);
-            // Pastikan a dan b > 0 (jika sum > 1)
-            if (sum <= 1) {
-                 a = sum; // Bisa jadi 0+0, 1+0, 0+1
-                 b = 0;
-                 if(Math.random() < 0.5) [a, b] = [b, a]; // Acak posisi 0
-            } else {
-                 a = getRandomInt(1, sum - 1); // a minimal 1, maksimal sum-1
-                 b = sum - a; // b otomatis > 0
-            }
-            console.log(`Generated Penjumlahan L${level+1}: ${a}+${b}=${sum}`); // Debug
-            return { a, b };
-        }
-
-        // *** BARU: Fungsi generate soal Pengurangan ***
-        function generatePenguranganSoal(level) {
-            let a, b;
-            switch (level) {
-                case 0: // Level 1: pengurangan antara bilangan di bawah 10
-                    a = getRandomInt(1, 9); // Bilangan a antara 1 s/d 9
-                    b = getRandomInt(0, a - 1); // Bilangan b antara 0 s/d (a-1), agar hasil >= 0
-                    break;
-                case 1: // Level 2: a=11-15, b=1-5
-                    a = getRandomInt(11, 15);
-                    b = getRandomInt(1, 5);
-                    break;
-                case 2: // Level 3: a=16-20, b=1-5
-                    a = getRandomInt(16, 20);
-                    b = getRandomInt(1, 5);
-                    break;
-                case 3: // Level 4: a=21-25, b=1-5
-                    a = getRandomInt(21, 25);
-                    b = getRandomInt(1, 5);
-                    break;
-                case 4: // Level 5: a=26-30, b=1-5
-                    a = getRandomInt(26, 30);
-                    b = getRandomInt(1, 5);
-                    break;
-                default: // Default ke level 1
-                    a = getRandomInt(1, 9);
-                    b = getRandomInt(0, a - 1);
-            }
-            console.log(`Generated Pengurangan L${level+1}: ${a}-${b}=${a-b}`); // Debug
-            return { a, b };
-        }
-
-
-        // Fungsi Tampilkan Soal /** MODIFIKASI: Panggil generator soal baru **/
-        function tampilkanSoal() {
-             if (currentSoal >= soalPerLevel) {
-                const levelYangSelesai = currentLevel;
-                currentLevel++; currentSoal = 0;
-                 if (currentLevel >= totalLevel) { tampilkanHasilAkhir(); return; }
-                 else { tampilkanPilihanLevelSelesai(levelYangSelesai); return; }
-            }
-
-            // *** DIUBAH: Generate soal di sini ***
-            let soalData;
-            if (jenisSoal === 'penjumlahan') {
-                soalData = generatePenjumlahanSoal(currentLevel);
-            } else { // pengurangan
-                soalData = generatePenguranganSoal(currentLevel);
-            }
-
-            // Hitung jawaban benar berdasarkan soalData yang baru digenerate
-            jawabanBenar = jenisSoal === 'penjumlahan' ? soalData.a + soalData.b : soalData.a - soalData.b;
-            soalElem.innerHTML = `${soalData.a} ${jenisSoal === 'penjumlahan' ? '+' : '−'} ${soalData.b} = ?`;
-
-            // Generate opsi jawaban (tetap sama)
-            let opsiAcak = generateOptions(jawabanBenar);
-            opsiJawabanContainer.innerHTML = '';
-            opsiAcak.forEach(opsi => {
-                const button = document.createElement('button');
-                button.classList.add('opsi'); button.textContent = opsi;
-                button.onclick = () => cekJawaban(opsi);
-                opsiJawabanContainer.appendChild(button);
-            });
-
-            updateProgressBar();
-            disableOptions(false);
-        }
+        // Fungsi Tampilkan Soal (Sama)
+        function tampilkanSoal() { if (currentSoal >= soalPerLevel) { const levelYangSelesai = currentLevel; currentLevel++; currentSoal = 0; if (currentLevel >= totalLevel) { tampilkanHasilAkhir(); return; } else { tampilkanPilihanLevelSelesai(levelYangSelesai); return; } } let soalData; if (jenisSoal === 'penjumlahan') { soalData = generatePenjumlahanSoal(currentLevel); } else { soalData = generatePenguranganSoal(currentLevel); } jawabanBenar = jenisSoal === 'penjumlahan' ? soalData.a + soalData.b : soalData.a - soalData.b; soalElem.innerHTML = `${soalData.a} ${jenisSoal === 'penjumlahan' ? '+' : '−'} ${soalData.b} = ?`; let opsiAcak = generateOptions(jawabanBenar); opsiJawabanContainer.innerHTML = ''; opsiAcak.forEach(opsi => { const button = document.createElement('button'); button.classList.add('opsi'); button.textContent = opsi; button.onclick = () => cekJawaban(opsi); opsiJawabanContainer.appendChild(button); }); updateProgressBar(); disableOptions(false); }
 
         // Fungsi Nonaktifkan/Aktifkan Opsi (Sama)
         function disableOptions(disabled) { const buttons = opsiJawabanContainer.querySelectorAll('.opsi'); buttons.forEach(button => { button.disabled = disabled; }); }
 
-        // Fungsi Cek Jawaban (Sama)
-        function cekJawaban(pilihan) { disableOptions(true); if (parseInt(pilihan) === jawabanBenar) { playSound(pingSound); tampilkanNotifikasi('Benar!', 'benar', 1200); setTimeout(() => { currentSoal++; tampilkanSoal(); }, 1300); } else { playSound(wrongSound); tampilkanNotifikasi('Salah, coba lagi ya!', 'salah', 1500); setTimeout(() => { disableOptions(false); }, 1600); } }
+        // Fungsi Cek Jawaban ** DIUBAH: Pakai suara benar bergantian **
+        function cekJawaban(pilihan) {
+            disableOptions(true);
+
+            if (parseInt(pilihan) === jawabanBenar) {
+                // Logika suara benar bergantian
+                if (useCorrectSound1) {
+                    playSound(correctSound1);
+                } else {
+                    playSound(correctSound2);
+                }
+                useCorrectSound1 = !useCorrectSound1; // Toggle pilihan suara untuk selanjutnya
+
+                tampilkanNotifikasi('Benar!', 'benar', 1200);
+                setTimeout(() => {
+                    currentSoal++;
+                    tampilkanSoal();
+                }, 1300);
+            } else {
+                playSound(wrongSound); // Suara salah tetap
+                tampilkanNotifikasi('Salah, coba lagi ya!', 'salah', 1500);
+                 setTimeout(() => { disableOptions(false); }, 1600);
+            }
+        }
 
         // Fungsi Tampilkan Notifikasi Benar/Salah (Sama)
         function tampilkanNotifikasi(pesan, tipe, duration = 1200) { const ikon = notifikasiElem.querySelector('i'); notifikasiTeks.textContent = pesan; notifikasiElem.className = ''; ikon.className = ''; if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); } else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); } notifikasiOverlay.style.display = 'flex'; setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10); if (duration) { setTimeout(sembunyikanNotifikasi, duration); } }
@@ -293,17 +181,15 @@
         // Fungsi Tampilkan Pilihan Akhir Level (Sama)
         function tampilkanPilihanLevelSelesai(levelSelesai) { levelSelesaiPesan.textContent = `Kamu berhasil menyelesaikan Level ${levelSelesai + 1}. Mau lanjut ke Level ${levelSelesai + 2}?`; levelSelesaiOverlay.style.display = 'flex'; setTimeout(() => levelSelesaiOverlay.classList.add('show'), 10); buttonLanjut.onclick = handleLanjutLevel; buttonBerhenti.onclick = handleBerhenti; }
 
-        // Handler untuk tombol Lanjut Level (Sama)
-        function handleLanjutLevel() { levelSelesaiOverlay.classList.remove('show'); setTimeout(() => { levelSelesaiOverlay.style.display = 'none'; buttonLanjut.onclick = null; buttonBerhenti.onclick = null; tampilkanSoal(); }, 300); }
-
-        // Handler untuk tombol Berhenti (Sama)
-        function handleBerhenti() { levelSelesaiOverlay.classList.remove('show'); setTimeout(() => { levelSelesaiOverlay.style.display = 'none'; buttonLanjut.onclick = null; buttonBerhenti.onclick = null; location.href = 'index.html'; }, 300); }
+        // Handler tombol Lanjut & Berhenti (Pakai uiSound)
+        function handleLanjutLevel() { levelSelesaiOverlay.classList.remove('show'); setTimeout(() => { levelSelesaiOverlay.style.display = 'none'; buttonLanjut.onclick = null; buttonBerhenti.onclick = null; playSound(uiSound); tampilkanSoal(); }, 300); }
+        function handleBerhenti() { levelSelesaiOverlay.classList.remove('show'); setTimeout(() => { levelSelesaiOverlay.style.display = 'none'; buttonLanjut.onclick = null; buttonBerhenti.onclick = null; playSound(uiSound); location.href = 'index.html'; }, 300); }
 
         // Fungsi Update Progress Bar (Sama)
         function updateProgressBar() { const totalSoalInLevel = soalPerLevel; const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel); const progress = (soalTampilProgress / totalSoalInLevel) * 100; progressBar.style.width = `${progress}%`; const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel); levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`; }
 
-        // Fungsi Tampilkan Hasil Akhir (Semua Level Selesai) (Sama)
-        function tampilkanHasilAkhir() { kuisContainerElem.style.display = 'none'; menuPilihanElem.style.display = 'none'; levelSelesaiOverlay.style.display = 'none'; judulElem.textContent = "Permainan Selesai!"; let namaOperasi = jenisSoal === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan'; pesanHasilElem.textContent = `Luar biasa! Kamu telah menyelesaikan semua ${totalLevel} level ${namaOperasi}! Pertahankan prestasimu!`; hasilAkhirContainerElem.style.display = 'flex'; playSound(pingSound); }
+        // Fungsi Tampilkan Hasil Akhir (Pakai uiSound)
+        function tampilkanHasilAkhir() { kuisContainerElem.style.display = 'none'; menuPilihanElem.style.display = 'none'; levelSelesaiOverlay.style.display = 'none'; judulElem.textContent = "Permainan Selesai!"; let namaOperasi = jenisSoal === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan'; pesanHasilElem.textContent = `Luar biasa! Kamu telah menyelesaikan semua ${totalLevel} level ${namaOperasi}! Pertahankan prestasimu!`; hasilAkhirContainerElem.style.display = 'flex'; playSound(uiSound); }
 
     </script>
 </body>
