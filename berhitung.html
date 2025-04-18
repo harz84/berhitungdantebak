@@ -7,217 +7,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-         :root {
-            --bg-color: #fdf0d5;
-            --primary-color: #f08080; /* Tema Hitung */
-            --primary-hover: #e57373;
-            --secondary-color: #66d9ef; /* Warna Opsi */
-            --secondary-hover: #4fc3f7;
-            --text-color: #333;
-            --white-color: #fff;
-            --correct-color: #81c784; /* Benar & Tombol Lanjut */
-            --correct-hover: #66bb6a;
-            --wrong-color: #e57373;   /* Salah & Tombol Berhenti */
-            --wrong-hover: #d32f2f;
-            --border-radius: 15px;
-            --home-btn-bg: #ffcc80;
-            --home-btn-hover: #ffb74d;
-            --copyright-color: #555;
-        }
-
-        body {
-            background-color: var(--bg-color); font-family: 'Poppins', sans-serif;
-            color: var(--text-color); margin: 0; padding: 70px 20px 20px 20px;
-            min-height: 100vh; display: flex; flex-direction: column;
-            align-items: center; position: relative;
-        }
-
-        .copyright {
-            position: absolute; top: 10px; right: 15px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem); color: var(--copyright-color); z-index: 10;
-        }
-
-        .home-btn {
-            position: absolute; top: 15px; left: 15px; background-color: var(--home-btn-bg);
-            color: var(--text-color); padding: 13px 20px; font-size: clamp(1.1rem, 3.9vw, 1.5rem);
-            gap: 10px; border: none; border-radius: var(--border-radius); cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex;
-            align-items: center; z-index: 10; user-select: none;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-        }
-        .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.08); }
-        .home-btn:active { transform: scale(1); }
-
-        h1 {
-            font-size: clamp(2rem, 8vw, 3.5rem); color: var(--primary-color);
-            margin-bottom: 1em; text-align: center; margin-top: 10px;
-        }
-
-        #menu-pilihan {
-             display: flex; flex-direction: column; gap: 20px; width: 90%;
-             max-width: 500px; margin-bottom: 30px;
-        }
-        .button-pilihan {
-            padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem); background-color: var(--primary-color);
-            color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease; width: 100%; display: flex;
-            align-items: center; justify-content: center; gap: 10px; user-select: none;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-        }
-        .button-pilihan:hover { background-color: var(--primary-hover); transform: scale(1.03); }
-        .button-pilihan:active { transform: scale(0.98); }
-
-        #kuis-container {
-            display: none; width: 100%; max-width: 600px; text-align: center; padding-bottom: 50px;
-        }
-
-        #soal {
-            font-size: clamp(2.5rem, 10vw, 4rem); margin-bottom: 30px; font-weight: bold;
-            color: var(--primary-color); min-height: 1.5em;
-        }
-
-        #opsiJawaban {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px;
-            width: 90%; max-width: 450px; margin-left: auto; margin-right: auto;
-        }
-
-        .opsi {
-            padding: 20px 15px; font-size: clamp(1.5rem, 5vw, 2.5rem); background-color: var(--secondary-color);
-            color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease; user-select: none;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-        }
-        .opsi:hover { background-color: var(--secondary-hover); transform: scale(1.03); }
-        .opsi:active { transform: scale(0.98); }
-        .opsi:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
-
-        /* Notifikasi Benar/Salah (Auto-hide) */
-        #notifikasi-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        #notifikasi {
-            font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px; border-radius: var(--border-radius);
-            color: var(--white-color); display: flex; flex-direction: column; align-items: center; gap: 15px;
-            transform: scale(0.5); opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
-         #notifikasi i { font-size: 1.2em; }
-        .benar { background-color: var(--correct-color); }
-        .salah { background-color: var(--wrong-color); }
-        #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
-
-         #progress-container {
-            width: 80%; max-width: 400px; height: 20px; background-color: #e0e0e0;
-            border-radius: 10px; margin: 20px auto; overflow: hidden;
-        }
-        #progress-bar {
-            width: 0%; height: 100%; background-color: var(--primary-color); border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-         #level-info {
-             font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px; margin-bottom: 20px;
-             color: var(--text-color);
-         }
-
-         #hasil-akhir-container {
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            padding: 30px; margin-top: 20px; background-color: var(--white-color);
-            border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 90%; max-width: 500px; text-align: center;
-         }
-         #hasil-akhir-container h2 {
-            color: var(--primary-color); font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px;
-         }
-         #hasil-akhir-container p {
-            font-size: clamp(1rem, 4vw, 1.4rem); margin-bottom: 25px; line-height: 1.6;
-         }
-         .button-hasil-akhir {
-            padding: 15px 25px; font-size: clamp(1.2rem, 4vw, 1.8rem); background-color: var(--home-btn-bg);
-            color: var(--text-color); border: none; border-radius: var(--border-radius); cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex;
-            align-items: center; gap: 10px; user-select: none;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-         }
-         .button-hasil-akhir:hover { background-color: var(--home-btn-hover); transform: scale(1.05); }
-         .button-hasil-akhir:active { transform: scale(0.98); }
-
-        /** BARU: Style untuk Notifikasi Pilihan Akhir Level **/
-        #level-selesai-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Sedikit lebih gelap */
-            display: none; /* Sembunyi default */
-            justify-content: center; align-items: center; z-index: 1100; /* Di atas notif biasa */
-        }
-        #level-selesai-box {
-            background-color: var(--bg-color);
-            padding: 25px 30px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            text-align: center;
-            width: 90%;
-            max-width: 450px;
-            transform: scale(0.8); /* Animasi muncul */
-            opacity: 0;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
-        #level-selesai-overlay.show #level-selesai-box {
-            transform: scale(1);
-            opacity: 1;
-        }
-        #level-selesai-box h3 {
-            font-size: clamp(1.5rem, 5vw, 2.2rem);
-            color: var(--correct-color); /* Warna hijau selamat */
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-        #level-selesai-box p {
-            font-size: clamp(1rem, 3.5vw, 1.4rem);
-            color: var(--text-color);
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-        .level-selesai-buttons {
-            display: flex;
-            justify-content: space-around; /* Beri jarak antar tombol */
-            gap: 15px; /* Jarak jika wrap */
-            flex-wrap: wrap; /* Izinkan tombol wrap di layar kecil */
-        }
-        .button-level-selesai {
-            padding: 12px 20px;
-            font-size: clamp(1rem, 3.5vw, 1.3rem);
-            color: var(--white-color);
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            flex-grow: 1; /* Tombol coba penuhi ruang */
-            min-width: 120px; /* Lebar minimum tombol */
-            user-select: none;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-        }
-        .button-level-selesai:hover { transform: scale(1.05); }
-        .button-level-selesai:active { transform: scale(0.98); }
-        #button-lanjut { background-color: var(--correct-color); }
-        #button-lanjut:hover { background-color: var(--correct-hover); }
-        #button-berhenti { background-color: var(--wrong-color); }
-        #button-berhenti:hover { background-color: var(--wrong-hover); }
-        /** Akhir Style BARU **/
-
-
-        /* Style untuk HP layar kecil */
-        @media (max-width: 400px) {
-            .copyright { right: 10px; }
-             .home-btn { left: 10px; padding: 10px 15px; font-size: clamp(1rem, 3.5vw, 1.3rem); }
-             body { padding-top: 80px; }
-             h1 { margin-top: 0; }
-             /* Sesuaikan style modal di layar kecil */
-             #level-selesai-box { padding: 20px; }
-             .level-selesai-buttons { justify-content: center; } /* Pusatkan jika wrap */
-        }
+         /* CSS Tetap Sama Seperti Sebelumnya */
+         :root { --bg-color: #fdf0d5; --primary-color: #f08080; --primary-hover: #e57373; --secondary-color: #66d9ef; --secondary-hover: #4fc3f7; --text-color: #333; --white-color: #fff; --correct-color: #81c784; --correct-hover: #66bb6a; --wrong-color: #e57373; --wrong-hover: #d32f2f; --border-radius: 15px; --home-btn-bg: #ffcc80; --home-btn-hover: #ffb74d; --copyright-color: #555; }
+         body { background-color: var(--bg-color); font-family: 'Poppins', sans-serif; color: var(--text-color); margin: 0; padding: 70px 20px 20px 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; }
+         .copyright { position: absolute; top: 10px; right: 15px; font-size: clamp(0.7rem, 2vw, 0.8rem); color: var(--copyright-color); z-index: 10; }
+         .home-btn { position: absolute; top: 15px; left: 15px; background-color: var(--home-btn-bg); color: var(--text-color); padding: 13px 20px; font-size: clamp(1.1rem, 3.9vw, 1.5rem); gap: 10px; border: none; border-radius: var(--border-radius); cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex; align-items: center; z-index: 10; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+         .home-btn:hover { background-color: var(--home-btn-hover); transform: scale(1.08); } .home-btn:active { transform: scale(1); }
+         h1 { font-size: clamp(2rem, 8vw, 3.5rem); color: var(--primary-color); margin-bottom: 1em; text-align: center; margin-top: 10px; }
+         #menu-pilihan { display: flex; flex-direction: column; gap: 20px; width: 90%; max-width: 500px; margin-bottom: 30px; }
+         .button-pilihan { padding: 20px 30px; font-size: clamp(1.5rem, 5vw, 2.5rem); background-color: var(--primary-color); color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+         .button-pilihan:hover { background-color: var(--primary-hover); transform: scale(1.03); } .button-pilihan:active { transform: scale(0.98); }
+         #kuis-container { display: none; width: 100%; max-width: 600px; text-align: center; padding-bottom: 50px; }
+         #soal { font-size: clamp(2.5rem, 10vw, 4rem); margin-bottom: 30px; font-weight: bold; color: var(--primary-color); min-height: 1.5em; }
+         #opsiJawaban { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; width: 90%; max-width: 450px; margin-left: auto; margin-right: auto; }
+         .opsi { padding: 20px 15px; font-size: clamp(1.5rem, 5vw, 2.5rem); background-color: var(--secondary-color); color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+         .opsi:hover { background-color: var(--secondary-hover); transform: scale(1.03); } .opsi:active { transform: scale(0.98); }
+         .opsi:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
+         #notifikasi-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+         #notifikasi { font-size: clamp(2.5rem, 10vw, 5rem); padding: 30px 50px; border-radius: var(--border-radius); color: var(--white-color); display: flex; flex-direction: column; align-items: center; gap: 15px; transform: scale(0.5); opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+         #notifikasi i { font-size: 1.2em; } .benar { background-color: var(--correct-color); } .salah { background-color: var(--wrong-color); }
+         #notifikasi-overlay.show #notifikasi { transform: scale(1); opacity: 1; }
+         #progress-container { width: 80%; max-width: 400px; height: 20px; background-color: #e0e0e0; border-radius: 10px; margin: 20px auto; overflow: hidden; }
+         #progress-bar { width: 0%; height: 100%; background-color: var(--primary-color); border-radius: 10px; transition: width 0.5s ease; }
+         #level-info { font-size: clamp(1rem, 3.5vw, 1.3rem); margin-top: 5px; margin-bottom: 20px; color: var(--text-color); }
+         #hasil-akhir-container { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px; margin-top: 20px; background-color: var(--white-color); border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 90%; max-width: 500px; text-align: center; }
+         #hasil-akhir-container h2 { color: var(--primary-color); font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px; }
+         #hasil-akhir-container p { font-size: clamp(1rem, 4vw, 1.4rem); margin-bottom: 25px; line-height: 1.6; }
+         .button-hasil-akhir { padding: 15px 25px; font-size: clamp(1.2rem, 4vw, 1.8rem); background-color: var(--home-btn-bg); color: var(--text-color); border: none; border-radius: var(--border-radius); cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex; align-items: center; gap: 10px; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+         .button-hasil-akhir:hover { background-color: var(--home-btn-hover); transform: scale(1.05); } .button-hasil-akhir:active { transform: scale(0.98); }
+         #level-selesai-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1100; }
+         #level-selesai-box { background-color: var(--bg-color); padding: 25px 30px; border-radius: var(--border-radius); box-shadow: 0 5px 20px rgba(0,0,0,0.2); text-align: center; width: 90%; max-width: 450px; transform: scale(0.8); opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+         #level-selesai-overlay.show #level-selesai-box { transform: scale(1); opacity: 1; }
+         #level-selesai-box h3 { font-size: clamp(1.5rem, 5vw, 2.2rem); color: var(--correct-color); margin-top: 0; margin-bottom: 15px; }
+         #level-selesai-box p { font-size: clamp(1rem, 3.5vw, 1.4rem); color: var(--text-color); margin-bottom: 25px; line-height: 1.5; }
+         .level-selesai-buttons { display: flex; justify-content: space-around; gap: 15px; flex-wrap: wrap; }
+         .button-level-selesai { padding: 12px 20px; font-size: clamp(1rem, 3.5vw, 1.3rem); color: var(--white-color); border: none; border-radius: var(--border-radius); cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-grow: 1; min-width: 120px; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+         .button-level-selesai:hover { transform: scale(1.05); } .button-level-selesai:active { transform: scale(0.98); }
+         #button-lanjut { background-color: var(--correct-color); } #button-lanjut:hover { background-color: var(--correct-hover); }
+         #button-berhenti { background-color: var(--wrong-color); } #button-berhenti:hover { background-color: var(--wrong-hover); }
+         @media (max-width: 400px) { .copyright { right: 10px; } .home-btn { left: 10px; padding: 10px 15px; font-size: clamp(1rem, 3.5vw, 1.3rem); } body { padding-top: 80px; } h1 { margin-top: 0; } #level-selesai-box { padding: 20px; } .level-selesai-buttons { justify-content: center; } }
     </style>
 </head>
 <body>
@@ -250,10 +78,7 @@
      </div>
 
     <div id="notifikasi-overlay">
-        <div id="notifikasi">
-            <i class=""></i>
-            <span id="notifikasi-teks"></span>
-        </div>
+        <div id="notifikasi"> <i class=""></i> <span id="notifikasi-teks"></span> </div>
     </div>
 
     <div id="level-selesai-overlay">
@@ -261,12 +86,8 @@
             <h3><i class="fas fa-star" style="color: #ffc107;"></i> Selamat!</h3>
             <p id="level-selesai-pesan"></p>
             <div class="level-selesai-buttons">
-                <button id="button-lanjut" class="button-level-selesai">
-                    <i class="fas fa-arrow-right"></i> Lanjut Level Berikutnya
-                </button>
-                <button id="button-berhenti" class="button-level-selesai">
-                    <i class="fas fa-stop-circle"></i> Berhenti Bermain
-                </button>
+                <button id="button-lanjut" class="button-level-selesai"> <i class="fas fa-arrow-right"></i> Lanjut Level Berikutnya </button>
+                <button id="button-berhenti" class="button-level-selesai"> <i class="fas fa-stop-circle"></i> Berhenti Bermain </button>
             </div>
         </div>
     </div>
@@ -276,30 +97,16 @@
 
     <script>
         let jawabanBenar, currentLevel = 0, currentSoal = 0, jenisSoal;
-        const soalPerLevel = 10;
-        const totalLevel = 5;
+        const soalPerLevel = 5; // *** DIUBAH: Jumlah soal per level ***
+        const totalLevel = 5; // Tetap 5 level
 
-        // Data Level (Rentang Angka) - Tetap sama, sudah gradual & random
-        const levels = {
-             penjumlahan: [
-                Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 5) + 1, b: Math.floor(Math.random() * 5) + 1 })),
-                Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 10) + 1, b: Math.floor(Math.random() * 10) + 1 })),
-                Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 11) + 5, b: Math.floor(Math.random() * 11) + 5 })),
-                Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 16) + 10, b: Math.floor(Math.random() * 16) + 10 })),
-                Array(soalPerLevel).fill().map(() => ({ a: Math.floor(Math.random() * 31) + 20, b: Math.floor(Math.random() * 31) + 20 }))
-            ],
-            pengurangan: [
-                Array(soalPerLevel).fill().map(() => { let a = Math.floor(Math.random() * 9) + 2; let b = Math.floor(Math.random() * (a - 1)) + 1; return { a, b }; }),
-                Array(soalPerLevel).fill().map(() => { let a = Math.floor(Math.random() * 16) + 5; let b = Math.floor(Math.random() * (a - 2)) + 1; return { a, b }; }),
-                Array(soalPerLevel).fill().map(() => { let a = Math.floor(Math.random() * 21) + 10; let b = Math.floor(Math.random() * (a - 3)) + 1; return { a, b }; }),
-                Array(soalPerLevel).fill().map(() => { let a = Math.floor(Math.random() * 31) + 20; let b = Math.floor(Math.random() * (a - 5)) + 1; return { a, b }; }),
-                Array(soalPerLevel).fill().map(() => { let a = Math.floor(Math.random() * 41) + 30; let b = Math.floor(Math.random() * (a - 10)) + 1; return { a, b }; })
-            ]
-        };
+        // *** DIHAPUS: Variabel 'levels' yang berisi data soal pre-generated ***
+        // const levels = { ... };
 
-        // Referensi Elemen DOM
+        // Referensi Elemen DOM (Sama)
         const menuPilihanElem = document.getElementById('menu-pilihan');
         const kuisContainerElem = document.getElementById('kuis-container');
+        // ... (Referensi DOM lainnya tetap sama) ...
         const hasilAkhirContainerElem = document.getElementById('hasil-akhir-container');
         const pesanHasilElem = document.getElementById('pesan-hasil-akhir');
         const judulElem = document.querySelector('h1');
@@ -312,94 +119,152 @@
         const levelInfo = document.getElementById('level-info');
         const pingSound = document.getElementById('pingSound');
         const wrongSound = document.getElementById('wrongSound');
-
-        // /** BARU **/ Referensi Elemen Modal Akhir Level
         const levelSelesaiOverlay = document.getElementById('level-selesai-overlay');
         const levelSelesaiPesan = document.getElementById('level-selesai-pesan');
         const buttonLanjut = document.getElementById('button-lanjut');
         const buttonBerhenti = document.getElementById('button-berhenti');
 
+        // Fungsi Play Sound (Sama)
+        function playSound(soundElement) { if (soundElement) { soundElement.currentTime = 0; soundElement.play().catch(error => console.log("Playback failed:", error)); } }
 
-        // Fungsi Play Sound
-        function playSound(soundElement) {
-            if (soundElement) {
-                soundElement.currentTime = 0;
-                soundElement.play().catch(error => console.log("Playback failed:", error));
-            }
-        }
+        // Event listener klik umum (Sama)
+        document.addEventListener('click', function(event) { const button = event.target.closest('button'); if (button && !button.classList.contains('opsi') && !button.closest('#notifikasi-overlay') && !button.closest('#level-selesai-overlay') && !button.closest('#hasil-akhir-container')) { playSound(pingSound); } });
 
-        // Event listener klik umum
-        document.addEventListener('click', function(event) {
-            const button = event.target.closest('button');
-            // Kecualikan tombol opsi & tombol di modal/notif dari sound ping generik
-            if (button && !button.classList.contains('opsi') && !button.closest('#notifikasi-overlay') && !button.closest('#level-selesai-overlay') && !button.closest('#hasil-akhir-container')) {
-                 playSound(pingSound);
-            }
-        });
+        // Fungsi Acak Array (Sama)
+        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
-        // Fungsi Acak Array (untuk opsi)
-        function shuffleArray(array) {
-             for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        // Fungsi Generate Opsi Jawaban
+        // Fungsi Generate Opsi Jawaban (Sama - tapi pastikan correctAnswer >= 0)
         function generateOptions(correctAnswer) {
-             let options = [correctAnswer];
-            const maxAttempts = 10; let attempts = 0;
+            let options = [correctAnswer];
+            const maxAttempts = 15; // Tingkatkan percobaan jika perlu
+            let attempts = 0;
+            const minVal = Math.max(0, correctAnswer - 10); // Batas bawah variasi
+            const maxVal = correctAnswer + 10; // Batas atas variasi
+
             while (options.length < 4 && attempts < maxAttempts) {
-                let wrongOption; let variation = Math.floor(Math.random() * 10) + 1;
-                if (Math.random() < 0.5) { wrongOption = correctAnswer + variation; }
-                else { wrongOption = correctAnswer - variation; }
-                if (wrongOption >= 0 && !options.includes(wrongOption)) { options.push(wrongOption); }
+                let wrongOption = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                // Pastikan opsi salah tidak sama dengan jawaban benar dan belum ada di opsi, dan >= 0
+                if (wrongOption !== correctAnswer && !options.includes(wrongOption) && wrongOption >= 0) {
+                    options.push(wrongOption);
+                }
                 attempts++;
             }
+            // Jika masih kurang, tambahkan angka acak positif
              while (options.length < 4) {
-                 let randomNum = Math.max(0, correctAnswer + (Math.floor(Math.random()*21)-10));
-                 if(!options.includes(randomNum)){ options.push(randomNum) }
-                 else { options.push(Math.max(0, Math.floor(Math.random()*50))) }
+                 let randomNum = Math.floor(Math.random() * (correctAnswer + 15)); // Angka acak positif
+                 if(!options.includes(randomNum)){
+                     options.push(randomNum)
+                 } else {
+                      // Jika masih duplikat, coba angka yang lebih acak
+                      options.push(Math.max(0, Math.floor(Math.random()*30)));
+                 }
              }
-            shuffleArray(options); return options;
+            shuffleArray(options);
+            return options.slice(0, 4); // Pastikan hanya 4 opsi
         }
 
-        // Fungsi Mulai Level
+        // Fungsi Mulai Level (Sama)
         function mulaiLevel(jenis) {
             jenisSoal = jenis; currentLevel = 0; currentSoal = 0;
             menuPilihanElem.style.display = 'none';
             kuisContainerElem.style.display = 'block';
             hasilAkhirContainerElem.style.display = 'none';
-            levelSelesaiOverlay.style.display = 'none'; // Pastikan modal tersembunyi
+            levelSelesaiOverlay.style.display = 'none';
             judulElem.textContent = jenis === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan';
             tampilkanSoal();
         }
 
-        // Fungsi Tampilkan Soal /** MODIFIKASI di bagian akhir level **/
-        function tampilkanSoal() {
-             // Cek jika level SEBELUMNYA sudah selesai
-             if (currentSoal >= soalPerLevel) {
-                // Simpan level yang baru saja selesai
-                const levelYangSelesai = currentLevel;
-                currentLevel++; // Naikkan level untuk pengecekan selanjutnya
-                currentSoal = 0; // Reset nomor soal
+        // *** BARU: Fungsi bantu random integer ***
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; // Termasuk min dan max
+        }
 
-                 // Cek apakah SEMUA level sudah selesai
-                 if (currentLevel >= totalLevel) {
-                    tampilkanHasilAkhir(); // Tampilkan hasil akhir jika semua level tuntas
-                    return; // Stop proses
-                 } else {
-                    // Jika masih ada level berikutnya, tampilkan notifikasi PILIHAN
-                    tampilkanPilihanLevelSelesai(levelYangSelesai);
-                    return; // Stop proses tampilkan soal biasa, tunggu pilihan user
-                 }
+        // *** BARU: Fungsi generate soal Penjumlahan ***
+        function generatePenjumlahanSoal(level) {
+            let a, b, sum;
+            let targetMin, targetMax;
+
+            switch (level) {
+                case 0: targetMin = 0; targetMax = 10; break; // Level 1: 0-10
+                case 1: targetMin = 11; targetMax = 15; break; // Level 2: 11-15
+                case 2: targetMin = 16; targetMax = 20; break; // Level 3: 16-20
+                case 3: targetMin = 21; targetMax = 25; break; // Level 4: 21-25
+                case 4: targetMin = 26; targetMax = 30; break; // Level 5: 26-30
+                default: targetMin = 0; targetMax = 10; // Default ke level 1
             }
 
-            // --- Jika bukan akhir level ATAU lanjut dari level baru ---
-            let soal = levels[jenisSoal][currentLevel][currentSoal];
-            jawabanBenar = jenisSoal === 'penjumlahan' ? soal.a + soal.b : soal.a - soal.b;
-            soalElem.innerHTML = `${soal.a} ${jenisSoal === 'penjumlahan' ? '+' : '−'} ${soal.b} = ?`;
+            // Generate target sum, lalu pecah jadi a dan b
+            sum = getRandomInt(targetMin, targetMax);
+            // Pastikan a dan b > 0 (jika sum > 1)
+            if (sum <= 1) {
+                 a = sum; // Bisa jadi 0+0, 1+0, 0+1
+                 b = 0;
+                 if(Math.random() < 0.5) [a, b] = [b, a]; // Acak posisi 0
+            } else {
+                 a = getRandomInt(1, sum - 1); // a minimal 1, maksimal sum-1
+                 b = sum - a; // b otomatis > 0
+            }
+            console.log(`Generated Penjumlahan L${level+1}: ${a}+${b}=${sum}`); // Debug
+            return { a, b };
+        }
 
+        // *** BARU: Fungsi generate soal Pengurangan ***
+        function generatePenguranganSoal(level) {
+            let a, b;
+            switch (level) {
+                case 0: // Level 1: pengurangan antara bilangan di bawah 10
+                    a = getRandomInt(1, 9); // Bilangan a antara 1 s/d 9
+                    b = getRandomInt(0, a - 1); // Bilangan b antara 0 s/d (a-1), agar hasil >= 0
+                    break;
+                case 1: // Level 2: a=11-15, b=1-5
+                    a = getRandomInt(11, 15);
+                    b = getRandomInt(1, 5);
+                    break;
+                case 2: // Level 3: a=16-20, b=1-5
+                    a = getRandomInt(16, 20);
+                    b = getRandomInt(1, 5);
+                    break;
+                case 3: // Level 4: a=21-25, b=1-5
+                    a = getRandomInt(21, 25);
+                    b = getRandomInt(1, 5);
+                    break;
+                case 4: // Level 5: a=26-30, b=1-5
+                    a = getRandomInt(26, 30);
+                    b = getRandomInt(1, 5);
+                    break;
+                default: // Default ke level 1
+                    a = getRandomInt(1, 9);
+                    b = getRandomInt(0, a - 1);
+            }
+            console.log(`Generated Pengurangan L${level+1}: ${a}-${b}=${a-b}`); // Debug
+            return { a, b };
+        }
+
+
+        // Fungsi Tampilkan Soal /** MODIFIKASI: Panggil generator soal baru **/
+        function tampilkanSoal() {
+             if (currentSoal >= soalPerLevel) {
+                const levelYangSelesai = currentLevel;
+                currentLevel++; currentSoal = 0;
+                 if (currentLevel >= totalLevel) { tampilkanHasilAkhir(); return; }
+                 else { tampilkanPilihanLevelSelesai(levelYangSelesai); return; }
+            }
+
+            // *** DIUBAH: Generate soal di sini ***
+            let soalData;
+            if (jenisSoal === 'penjumlahan') {
+                soalData = generatePenjumlahanSoal(currentLevel);
+            } else { // pengurangan
+                soalData = generatePenguranganSoal(currentLevel);
+            }
+
+            // Hitung jawaban benar berdasarkan soalData yang baru digenerate
+            jawabanBenar = jenisSoal === 'penjumlahan' ? soalData.a + soalData.b : soalData.a - soalData.b;
+            soalElem.innerHTML = `${soalData.a} ${jenisSoal === 'penjumlahan' ? '+' : '−'} ${soalData.b} = ?`;
+
+            // Generate opsi jawaban (tetap sama)
             let opsiAcak = generateOptions(jawabanBenar);
             opsiJawabanContainer.innerHTML = '';
             opsiAcak.forEach(opsi => {
@@ -410,112 +275,35 @@
             });
 
             updateProgressBar();
-            disableOptions(false); // Pastikan opsi aktif
+            disableOptions(false);
         }
 
-        // Fungsi Nonaktifkan/Aktifkan Opsi
-        function disableOptions(disabled) {
-             const buttons = opsiJawabanContainer.querySelectorAll('.opsi');
-             buttons.forEach(button => { button.disabled = disabled; });
-         }
+        // Fungsi Nonaktifkan/Aktifkan Opsi (Sama)
+        function disableOptions(disabled) { const buttons = opsiJawabanContainer.querySelectorAll('.opsi'); buttons.forEach(button => { button.disabled = disabled; }); }
 
-        // Fungsi Cek Jawaban
-        function cekJawaban(pilihan) {
-            disableOptions(true); // Nonaktifkan opsi
+        // Fungsi Cek Jawaban (Sama)
+        function cekJawaban(pilihan) { disableOptions(true); if (parseInt(pilihan) === jawabanBenar) { playSound(pingSound); tampilkanNotifikasi('Benar!', 'benar', 1200); setTimeout(() => { currentSoal++; tampilkanSoal(); }, 1300); } else { playSound(wrongSound); tampilkanNotifikasi('Salah, coba lagi ya!', 'salah', 1500); setTimeout(() => { disableOptions(false); }, 1600); } }
 
-            if (parseInt(pilihan) === jawabanBenar) {
-                playSound(pingSound);
-                tampilkanNotifikasi('Benar!', 'benar', 1200);
-                setTimeout(() => {
-                    currentSoal++;
-                    tampilkanSoal(); // Cek lagi apakah level selesai atau lanjut soal berikutnya
-                }, 1300);
-            } else {
-                playSound(wrongSound);
-                tampilkanNotifikasi('Salah, coba lagi ya!', 'salah', 1500);
-                 setTimeout(() => { disableOptions(false); }, 1600); // Aktifkan lagi opsi
-            }
-        }
+        // Fungsi Tampilkan Notifikasi Benar/Salah (Sama)
+        function tampilkanNotifikasi(pesan, tipe, duration = 1200) { const ikon = notifikasiElem.querySelector('i'); notifikasiTeks.textContent = pesan; notifikasiElem.className = ''; ikon.className = ''; if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); } else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); } notifikasiOverlay.style.display = 'flex'; setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10); if (duration) { setTimeout(sembunyikanNotifikasi, duration); } }
 
-        // Fungsi Tampilkan Notifikasi Benar/Salah (Auto-hide)
-        function tampilkanNotifikasi(pesan, tipe, duration = 1200) {
-            const ikon = notifikasiElem.querySelector('i');
-            notifikasiTeks.textContent = pesan;
-            notifikasiElem.className = ''; ikon.className = '';
-            if (tipe === 'benar') { notifikasiElem.classList.add('benar'); ikon.classList.add('fas', 'fa-check-circle'); }
-            else if (tipe === 'salah') { notifikasiElem.classList.add('salah'); ikon.classList.add('fas', 'fa-times-circle'); }
-            // Hapus tipe 'lanjut' karena diganti modal pilihan
-            notifikasiOverlay.style.display = 'flex';
-            setTimeout(() => { notifikasiOverlay.classList.add('show'); }, 10);
-            if (duration) { setTimeout(sembunyikanNotifikasi, duration); }
-        }
+        // Fungsi Sembunyikan Notifikasi Benar/Salah (Sama)
+        function sembunyikanNotifikasi() { notifikasiOverlay.classList.remove('show'); setTimeout(() => { notifikasiOverlay.style.display = 'none'; }, 300); }
 
-        // Fungsi Sembunyikan Notifikasi Benar/Salah
-        function sembunyikanNotifikasi() {
-            notifikasiOverlay.classList.remove('show');
-             setTimeout(() => { notifikasiOverlay.style.display = 'none'; }, 300);
-             // Hapus logic panggil tampilkanSoal() dari sini
-        }
+        // Fungsi Tampilkan Pilihan Akhir Level (Sama)
+        function tampilkanPilihanLevelSelesai(levelSelesai) { levelSelesaiPesan.textContent = `Kamu berhasil menyelesaikan Level ${levelSelesai + 1}. Mau lanjut ke Level ${levelSelesai + 2}?`; levelSelesaiOverlay.style.display = 'flex'; setTimeout(() => levelSelesaiOverlay.classList.add('show'), 10); buttonLanjut.onclick = handleLanjutLevel; buttonBerhenti.onclick = handleBerhenti; }
 
-        // /** BARU **/ Fungsi Tampilkan Pilihan Akhir Level
-        function tampilkanPilihanLevelSelesai(levelSelesai) {
-            levelSelesaiPesan.textContent = `Kamu berhasil menyelesaikan Level ${levelSelesai + 1}. Mau lanjut ke Level ${levelSelesai + 2}?`;
-            levelSelesaiOverlay.style.display = 'flex';
-            setTimeout(() => levelSelesaiOverlay.classList.add('show'), 10); // Tampilkan dengan animasi
+        // Handler untuk tombol Lanjut Level (Sama)
+        function handleLanjutLevel() { levelSelesaiOverlay.classList.remove('show'); setTimeout(() => { levelSelesaiOverlay.style.display = 'none'; buttonLanjut.onclick = null; buttonBerhenti.onclick = null; tampilkanSoal(); }, 300); }
 
-            // Tambahkan event listener sekali pakai ke tombol
-            buttonLanjut.onclick = handleLanjutLevel;
-            buttonBerhenti.onclick = handleBerhenti;
-        }
+        // Handler untuk tombol Berhenti (Sama)
+        function handleBerhenti() { levelSelesaiOverlay.classList.remove('show'); setTimeout(() => { levelSelesaiOverlay.style.display = 'none'; buttonLanjut.onclick = null; buttonBerhenti.onclick = null; location.href = 'index.html'; }, 300); }
 
-        // /** BARU **/ Handler untuk tombol Lanjut Level
-        function handleLanjutLevel() {
-            levelSelesaiOverlay.classList.remove('show'); // Sembunyikan dengan animasi
-            setTimeout(() => {
-                levelSelesaiOverlay.style.display = 'none';
-                // Hapus listener agar tidak menumpuk
-                buttonLanjut.onclick = null;
-                buttonBerhenti.onclick = null;
-                // Tampilkan soal pertama dari level baru (currentLevel sudah di-increment sebelumnya)
-                tampilkanSoal();
-            }, 300); // Tunggu animasi selesai
-        }
+        // Fungsi Update Progress Bar (Sama)
+        function updateProgressBar() { const totalSoalInLevel = soalPerLevel; const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel); const progress = (soalTampilProgress / totalSoalInLevel) * 100; progressBar.style.width = `${progress}%`; const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel); levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`; }
 
-        // /** BARU **/ Handler untuk tombol Berhenti
-        function handleBerhenti() {
-             levelSelesaiOverlay.classList.remove('show');
-             setTimeout(() => {
-                levelSelesaiOverlay.style.display = 'none';
-                buttonLanjut.onclick = null;
-                buttonBerhenti.onclick = null;
-                // Kembali ke halaman utama
-                location.href = 'index.html';
-             }, 300);
-        }
-
-
-        // Fungsi Update Progress Bar
-        function updateProgressBar() {
-             const totalSoalInLevel = soalPerLevel;
-             const soalTampilProgress = Math.min(currentSoal, totalSoalInLevel);
-             const progress = (soalTampilProgress / totalSoalInLevel) * 100;
-             progressBar.style.width = `${progress}%`;
-             const nomorSoalTampil = Math.min(currentSoal + 1, totalSoalInLevel);
-             // Tampilkan level yang sedang BERJALAN
-             levelInfo.textContent = `Level ${currentLevel + 1} - Soal ${nomorSoalTampil}/${totalSoalInLevel}`;
-        }
-
-        // Fungsi Tampilkan Hasil Akhir (Semua Level Selesai)
-        function tampilkanHasilAkhir() {
-            kuisContainerElem.style.display = 'none'; // Sembunyikan kuis
-            menuPilihanElem.style.display = 'none'; // Sembunyikan menu
-            levelSelesaiOverlay.style.display = 'none'; // Pastikan modal pilihan juga hilang
-            judulElem.textContent = "Permainan Selesai!";
-            let namaOperasi = jenisSoal === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan';
-            pesanHasilElem.textContent = `Luar biasa! Kamu telah menyelesaikan semua ${totalLevel} level ${namaOperasi}! Pertahankan prestasimu!`;
-            hasilAkhirContainerElem.style.display = 'flex';
-            playSound(pingSound); // Atau suara kemenangan
-        }
+        // Fungsi Tampilkan Hasil Akhir (Semua Level Selesai) (Sama)
+        function tampilkanHasilAkhir() { kuisContainerElem.style.display = 'none'; menuPilihanElem.style.display = 'none'; levelSelesaiOverlay.style.display = 'none'; judulElem.textContent = "Permainan Selesai!"; let namaOperasi = jenisSoal === 'penjumlahan' ? 'Penjumlahan' : 'Pengurangan'; pesanHasilElem.textContent = `Luar biasa! Kamu telah menyelesaikan semua ${totalLevel} level ${namaOperasi}! Pertahankan prestasimu!`; hasilAkhirContainerElem.style.display = 'flex'; playSound(pingSound); }
 
     </script>
 </body>
